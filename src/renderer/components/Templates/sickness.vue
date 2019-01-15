@@ -86,9 +86,8 @@
                 <v-btn slot="activator" color="primary" dark class="mb-2">ادخال معلومات</v-btn>
                 <v-card>
                   <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
+                    <span class="headline">ادخال خانة جديدة</span>
                   </v-card-title>
-
                   <v-card-text>
                     <v-container grid-list-md>
                       <v-layout wrap>
@@ -175,9 +174,6 @@
                 <td class="text-xs-center">{{ props.item.medicalStartDate }}</td>
                 <td class="text-xs-center">{{ props.item.medicalEndDate}}</td>
                 <td class="text-xs-center">
-                  <!-- <v-btn icon class="ml-2" @click="editItem(props.item)">
-                    <v-icon color="info">edit</v-icon>
-                  </v-btn> -->
                   <v-btn icon @click="deleteItem(props.item)">
                     <v-icon color="error">delete</v-icon>
                   </v-btn>
@@ -311,7 +307,6 @@ export default {
         { text: 'خيارات', sortable: false, align: 'center', class: 'font-weight-bold' }
       ],
       medicalData: [],
-      editedIndex: -1,
       editedItem: {
         name: '',
         birthDate: '',
@@ -408,9 +403,6 @@ export default {
     })
   },
   computed: {
-    formTitle () {
-      return this.editedIndex === -1 ? 'ادخال خانة جديدة' : 'تعديل خانة'
-    },
     formTitle2 () {
       return this.editedIndex2 === -1 ? 'ادخال خانة جديدة' : 'تعديل خانة'
     }
@@ -427,23 +419,21 @@ export default {
     workPlace (person) {
       return person.workSector + ' - ' + person.work
     },
-    editItem (item) {
-      this.editedIndex = this.medicalData.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-
-      var memberIndex = this.family.findIndex(member => member.name === this.editedItem.name)
-      this.selected = this.family[memberIndex]
-    },
     deleteItem (item) {
       const index = this.medicalData.indexOf(item)
       confirm('هل انت متاكد من الغاء هذه الخانة؟') && this.medicalData.splice(index, 1)
+      this.updateTable2(index)
+    },
+    updateTable2 (index) {
+      const name = this.linkedFamily[index].name
+      this.linkedFamily.splice(index, 1)
+      const memberIndex = this.medicalCostsData.findIndex(member => member.name === name)
+      this.medicalCostsData.splice(memberIndex, 1)
     },
     close () {
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
         this.selected = null
       }, 300)
     },
@@ -460,12 +450,13 @@ export default {
         return
       }
 
-      if (this.editedIndex > -1) {
-        Object.assign(this.medicalData[this.editedIndex], this.editedItem)
-      } else {
-        this.medicalData.push(this.editedItem)
-        this.linkedFamily.push(this.editedItem)
-      }
+      this.medicalData.push(this.editedItem)
+      this.linkedFamily.push({
+        name: this.editedItem.name,
+        birthDate: this.editedItem.birthDate,
+        rangeOfAcquaintance: this.editedItem.rangeOfAcquaintance
+      })
+
       this.close()
     },
     updateEditedItem (item) {

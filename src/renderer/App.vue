@@ -18,7 +18,7 @@
       <router-view></router-view>
     </v-content>
     <v-footer v-if="show && !home">
-      <span class="px-3">&copy; 2018 - By Mohammad Hammoud & Ali Harakeh </span>
+      <span class="px-3">&copy; 2019 - By Mohammad Hammoud & Ali Harakeh </span>
     </v-footer>
   </v-app>
 </template>
