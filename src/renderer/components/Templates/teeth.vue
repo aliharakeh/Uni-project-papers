@@ -195,56 +195,43 @@
         <v-divider></v-divider>
         <v-card-text>
           <div>
-            <v-toolbar flat color="white">
-              <v-dialog v-model="dialog2" max-width="500px">
-                <v-btn slot="activator" color="primary" dark class="mb-2">ادخال معلومات</v-btn>
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ formTitle2 }}</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container grid-list-md>
-                      <v-layout wrap>
-                        <v-flex xs12 sm6>
-                          <v-select
-                            :items="linkedFamily"
-                            item-text="name"
-                            label="اسم المريض"
-                            return-object
-                            @change="updateEditedItem2"
-                            v-model="selected2"
-                          ></v-select>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem2.doctorsCost" label="اجور اطباء"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem2.medicineCost" label="ثمن ادوية"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem2.otherCosts" label="مختلف"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem2.acceptedCosts" label="النفقات الموافق عليها"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem2.earnedHelpValue" label="قيمة المساعدة المستحقة"></v-text-field>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-card-text>
+            <v-dialog v-model="dialog2" max-width="500px">
+              <v-card>
+                <v-card-title>
+                  <span class="headline">تعديل خانة</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <v-flex xs12 sm6>
+                        <v-text-field type="number" v-model="editedItem2.doctorsCost" label="اجور اطباء"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6>
+                        <v-text-field type="number" v-model="editedItem2.medicineCost" label="ثمن ادوية"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6>
+                        <v-text-field type="number" v-model="editedItem2.otherCosts" label="مختلف"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6>
+                        <v-text-field type="number" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6>
+                        <v-text-field type="number" v-model="editedItem2.acceptedCosts" label="النفقات الموافق عليها"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6>
+                        <v-text-field type="number" v-model="editedItem2.earnedHelpValue" label="قيمة المساعدة المستحقة"></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
 
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="error" @click.native="close2" class="mx-2">الغاء</v-btn>
-                    <v-btn color="primary" @click.native="save2">حفظ</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-toolbar>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="error" @click.native="close2" class="mx-2">الغاء</v-btn>
+                  <v-btn color="primary" @click.native="save2">حفظ</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <v-data-table
               :headers="headers2"
               :items="medicalCostsData"
@@ -263,9 +250,6 @@
                 <td class="text-xs-center">
                   <v-btn icon class="ml-2" @click="editItem2(props.item)">
                     <v-icon color="info">edit</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="deleteItem2(props.item)">
-                    <v-icon color="error">delete</v-icon>
                   </v-btn>
                 </td>
               </template>
@@ -361,7 +345,6 @@ export default {
         acceptedCosts: null,
         earnedHelpValue: null
       },
-      selected2: null,
       linkedFamily: []
     }
   },
@@ -401,11 +384,6 @@ export default {
 
       this.loading = false
     })
-  },
-  computed: {
-    formTitle2 () {
-      return this.editedIndex2 === -1 ? 'ادخال خانة جديدة' : 'تعديل خانة'
-    }
   },
   watch: {
     dialog (val) {
@@ -456,6 +434,16 @@ export default {
         birthDate: this.editedItem.birthDate,
         rangeOfAcquaintance: this.editedItem.rangeOfAcquaintance
       })
+      this.medicalCostsData.push({
+        name: this.editedItem.name,
+        doctorsCost: null,
+        medicineCost: null,
+        otherCosts: null,
+        costsSum: null,
+        externalHelpValue: null,
+        acceptedCosts: null,
+        earnedHelpValue: null
+      })
 
       this.close()
     },
@@ -470,24 +458,23 @@ export default {
       this.editedIndex2 = this.medicalCostsData.indexOf(item)
       this.editedItem2 = Object.assign({}, item)
       this.dialog2 = true
-
-      const memberIndex = this.family.findIndex(member => member.name === this.editedItem2.name)
-      this.selected2 = this.family[memberIndex]
-    },
-    deleteItem2 (item) {
-      const index = this.medicalCostsData.indexOf(item)
-      confirm('هل انت متاكد من الغاء هذه الخانة؟') && this.medicalCostsData.splice(index, 1)
     },
     close2 () {
       this.dialog2 = false
       setTimeout(() => {
         this.editedItem2 = Object.assign({}, this.defaultItem2)
         this.editedIndex2 = -1
-        this.selected2 = null
       }, 300)
     },
     save2 () {
-      if (this.editedItem2['name'] === '') {
+      var flag = 0
+      for (var property in this.editedItem2) {
+        if (property !== 'costsSum' && this.editedItem2[property] === null) {
+          flag = 1
+        }
+      }
+
+      if (flag === 1) {
         alert('لم يتم ملئ كل الخانات بعد')
         return
       }
@@ -498,15 +485,9 @@ export default {
 
       if (this.editedIndex2 > -1) {
         Object.assign(this.medicalCostsData[this.editedIndex2], this.editedItem2)
-      } else {
-        this.medicalCostsData.push(this.editedItem2)
       }
+
       this.close2()
-    },
-    updateEditedItem2 (item) {
-      if (item !== null) {
-        this.editedItem2.name = item.name
-      }
     },
     saveToJson () {
       this.loading = true
@@ -538,3 +519,6 @@ export default {
   }
 }
 </script>
+
+
+
