@@ -74,52 +74,6 @@ export default new Router({
       props: true,
       component: require('@/components/Templates/education').default
     },
-
-    // PDF files path //
-    {
-      path: '/PDFbirth',
-      name: 'birth pdf',
-      props: true,
-      component: require('@/components/PDF/birthPDF').default
-    },
-    {
-      path: '/PDFdeath',
-      name: 'death pdf',
-      props: true,
-      component: require('@/components/PDF/deathPDF').default
-    },
-    {
-      path: '/PDFeducation',
-      name: 'education pdf',
-      props: true,
-      component: require('@/components/PDF/educationPDF').default
-    },
-    {
-      path: '/PDFfamily',
-      name: 'family pdf',
-      props: true,
-      component: require('@/components/PDF/familyPDF').default
-    },
-    {
-      path: '/PDFmarriage',
-      name: 'marriage pdf',
-      props: true,
-      component: require('@/components/PDF/marriagePDF').default
-    },
-    {
-      path: '/PDFteeth',
-      name: 'teeth pdf',
-      props: true,
-      component: require('@/components/PDF/teethPDF').default
-    },
-    {
-      path: '/PDFsickness',
-      name: 'sickness pdf',
-      props: true,
-      component: require('@/components/PDF/sicknessPDF').default
-    },
-    //
-
     {
       path: '*',
       redirect: '/'
