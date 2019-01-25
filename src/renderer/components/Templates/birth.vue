@@ -182,10 +182,21 @@ export default {
       return person.workSector + ' - ' + person.work
     },
     saveToJson () {
+      if (this.child === null) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      } else if (this.prevOrOutsidePaper === null) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      } else if (this.prevOrOutsidePaper === '1' && (this.money === null || this.date === null)) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      }
       this.loading = true
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        type: 'منحة_ولادة',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
         facultySection: this.doc.facultySection,
@@ -206,7 +217,7 @@ export default {
             console.log(err.message)
             return
           }
-          this.$router.push('/')
+          this.$router.push('/PDFbirth')
         }
       )
     }

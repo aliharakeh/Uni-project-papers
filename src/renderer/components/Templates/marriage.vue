@@ -62,7 +62,7 @@
               <span class="headline font-weight-bold">قطاع العمل : </span>
               <span class="title">{{ workPlace(person) }}</span>
             </v-flex>
-            <v-flex xs12 sm5 v-if="person.insuranceNumSection">
+            <v-flex xs12 sm5 v-if="person.insuranceNum">
               <span class="headline font-weight-bold">رقم الضمان : </span>
               <span class="title">{{ person.insuranceNum }}</span>
             </v-flex>
@@ -127,7 +127,7 @@
           <v-layout row wrap>
             <v-flex xs12 sm5>
                   <v-dialog
-                      ref="dialog"
+                      ref="dialogA"
                       v-model="marriageDateModal"
                       :return-value.sync="marriageDate"
                       persistent
@@ -145,7 +145,7 @@
                       <v-date-picker v-model="marriageDate" scrollable locale="ar-lb">
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="marriageDateModal = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.dialog.save(marriageDate)">OK</v-btn>
+                        <v-btn flat color="primary" @click="$refs.dialogA.save(marriageDate)">OK</v-btn>
                       </v-date-picker>
                     </v-dialog>
                 </v-flex>
@@ -199,10 +199,21 @@ export default {
       return person.workSector + ' - ' + person.work
     },
     saveToJson () {
+      if (this.marriageDate === null) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      } else if (this.prevOrOutsidePaper === null) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      } else if (this.prevOrOutsidePaper === '1' && (this.money === null || this.date === null)) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      }
       this.loading = true
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        type: 'منحة_زواج',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
         facultySection: this.doc.facultySection,
@@ -223,7 +234,7 @@ export default {
             console.log(err.message)
             return
           }
-          this.$router.push('/')
+          this.$router.push('/PDFmarriage')
         }
       )
     }

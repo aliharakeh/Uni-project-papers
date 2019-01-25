@@ -274,6 +274,7 @@ export default {
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        type: 'مساعدة_وفاة',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
         facultySection: this.doc.facultySection,

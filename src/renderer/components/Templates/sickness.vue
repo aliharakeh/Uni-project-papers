@@ -65,7 +65,7 @@
               <span class="headline font-weight-bold">قطاع العمل : </span>
               <span class="title">{{ workPlace(person) }}</span>
             </v-flex>
-            <v-flex xs12 sm5 v-if="person.insuranceNumSection">
+            <v-flex xs12 sm5 v-if="person.insuranceNum">
               <span class="headline font-weight-bold">رقم الضمان : </span>
               <span class="title">{{ person.insuranceNum }}</span>
             </v-flex>
@@ -215,12 +215,12 @@
                       <v-flex xs12 sm6>
                         <v-text-field type="number" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر"></v-text-field>
                       </v-flex>
-                      <v-flex xs12 sm6>
+                      <!-- <v-flex xs12 sm6>
                         <v-text-field type="number" v-model="editedItem2.acceptedCosts" label="النفقات الموافق عليها"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
                         <v-text-field type="number" v-model="editedItem2.earnedHelpValue" label="قيمة المساعدة المستحقة"></v-text-field>
-                      </v-flex>
+                      </v-flex> -->
                     </v-layout>
                   </v-container>
                 </v-card-text>
@@ -331,9 +331,9 @@ export default {
         medicineCost: null,
         otherCosts: null,
         costsSum: null,
-        externalHelpValue: null,
-        acceptedCosts: null,
-        earnedHelpValue: null
+        externalHelpValue: null
+        // acceptedCosts: null,
+        // earnedHelpValue: null
       },
       defaultItem2: {
         name: '',
@@ -341,9 +341,9 @@ export default {
         medicineCost: null,
         otherCosts: null,
         costsSum: null,
-        externalHelpValue: null,
-        acceptedCosts: null,
-        earnedHelpValue: null
+        externalHelpValue: null
+        // acceptedCosts: null,
+        // earnedHelpValue: null
       },
       linkedFamily: []
     }
@@ -440,9 +440,9 @@ export default {
         medicineCost: null,
         otherCosts: null,
         costsSum: null,
-        externalHelpValue: null,
-        acceptedCosts: null,
-        earnedHelpValue: null
+        externalHelpValue: null
+        // acceptedCosts: null,
+        // earnedHelpValue: null
       })
 
       this.close()
@@ -494,6 +494,7 @@ export default {
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        type: 'مساعدة_مرضية',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
         facultySection: this.doc.facultySection,
@@ -512,7 +513,7 @@ export default {
             console.log(err.message)
             return
           }
-          this.$router.push('/')
+          this.$router.push('/PDFsickness')
         }
       )
     }

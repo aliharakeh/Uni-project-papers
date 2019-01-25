@@ -340,6 +340,7 @@ export default {
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        type: 'منحة_تعليم',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
         facultySection: this.doc.facultySection,
