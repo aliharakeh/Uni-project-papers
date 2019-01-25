@@ -3,14 +3,17 @@
     <v-toolbar app fixed clipped-left v-if="show">
       <v-icon large>assignment</v-icon>
       <v-toolbar-title>
-        <h1>Project 2</h1>
+        <h1>صندوق التعاضد</h1>
       </v-toolbar-title>
       <v-toolbar-items>
         <v-btn flat to="/">
           <h2>الصفحة الرئيسية</h2>
         </v-btn>
         <v-btn flat to="/doctors">
-          <h2>الاساتذة</h2>
+          <h2>الأساتذة</h2>
+        </v-btn>
+        <v-btn absolute dark fab bottom left color="primary" v-if="showButton" @click="pdf()">
+          <h1>طباعة</h1>
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -26,15 +29,29 @@
 <script>
   import {remote} from 'electron'
   import fs from 'fs'
+  import path from 'path'
   export default {
     data () {
       return {
-        show: true
+        show: true,
+        doc: ''
       }
+    },
+    created () {
+      // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+        if (err) throw err
+        this.doc = JSON.parse(data)
+        console.log(this.doc)
+      })
     },
     computed: {
       home () {
         return this.$route.path === '/'
+      },
+
+      showButton () {
+        return this.$route.path.startsWith('/PDF')
       }
     },
     methods: {
@@ -43,7 +60,7 @@
         remote.getCurrentWindow().webContents.printToPDF({
           pageSize: 'A4',
           marginsType: 2,
-          printBackground: true,
+          printBackground: false,
           landscape: false
         }, (err, data) => {
           if (err) {
@@ -53,7 +70,7 @@
             remote.getCurrentWindow(),
             {
               title: 'Save Destination',
-              defaultPath: remote.app.getPath('downloads'),
+              defaultPath: remote.app.getPath('documents') + '//' + this.doc.name + '_' + this.doc.number + '_' + this.doc.type + '.pdf', // --> give a default name
               filters: [{
                 name: 'PDF File',
                 extensions: ['pdf']
@@ -64,9 +81,12 @@
               fs.writeFile(filename, data, (err) => {
                 if (err) {
                   alert(err.message)
+                  this.show = true
+                  this.$router.push('/')
                 }
-                alert('PDF was successfully saved !!')
+                alert('PDF saved !!')
                 this.show = true
+                this.$router.push('/')
               })
             }
           )
