@@ -107,7 +107,7 @@
             أرجو اعطائي منحة الولادة عن ولدي {{ doc.child }} , المنصوص عنها في المادة 14 من المرسوم رقم 8681 من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
             واني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة ولادة من أي مصدر آخر. <br>
             <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ doc.money }} &nbsp; &nbsp; &nbsp; &nbsp; التاريخ : {{ doc.date }}</p>
-            <p style="text-align: left; margin-top: 10px; margin-bottom: 25px; margin-left:30px">توقيع <b>طالب المحنة</b></p>
+            <p style="text-align: left; margin-top: 10px; margin-bottom: 25px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
         </div>
     </v-layout>
 

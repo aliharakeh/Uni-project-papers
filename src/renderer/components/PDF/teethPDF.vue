@@ -129,12 +129,12 @@
         </tr>
         <tr v-for="medicData in doc.medicalData" :key="medicData.name">
           <td>{{ medicData.name }}</td>
-          <td>{{ GetDate(medicData.birthDate, 2) }}</td>
-          <td>{{ GetDate(medicData.birthDate, 1) }}</td>
-          <td>{{ GetDate(medicData.birthDate, 0) }}</td>
+          <td style="width: 60px;">{{ GetDate(ConvertToArabic(medicData.birthDate), 2) }}</td>
+          <td style="width: 60px;">{{ GetDate(ConvertToArabic(medicData.birthDate), 1) }}</td>
+          <td style="width: 60px;">{{ GetDate(ConvertToArabic(medicData.birthDate), 0) }}</td>
           <td>{{ medicData.rangeOfAcquaintance }}</td>
-          <td>{{ medicData.medicalStartDate }}</td>
-          <td>{{ medicData.medicalEndDate }}</td>
+          <td>{{ ConvertToArabic(medicData.medicalStartDate) }}</td>
+          <td>{{ ConvertToArabic(medicData.medicalEndDate) }}</td>
         </tr>
       </table>
     </v-layout>
@@ -217,7 +217,7 @@ export default{
 
   methods: {
     GetDate (date, index) {
-      const d = date.split('-')
+      const d = date.split('/')
       return d[index]
     },
 
@@ -229,6 +229,31 @@ export default{
         return 2
       }
       return false
+    },
+
+    ConvertToArabic (date) {
+      var dd = date.split('-')
+      var year = ''
+      var month = ''
+      var day = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+
+      var y = dd[0].split('') // year
+      y.forEach(element => {
+        year += arnum[element]
+      })
+
+      var m = dd[1].split('') // month
+      m.forEach(element => {
+        month += arnum[element]
+      })
+
+      var d = dd[2].split('') // day
+      d.forEach(element => {
+        day += arnum[element]
+      })
+
+      return year + '/' + month + '/' + day
     }
   }
 }
