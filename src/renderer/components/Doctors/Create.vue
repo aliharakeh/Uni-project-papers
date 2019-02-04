@@ -105,6 +105,23 @@
             <v-flex xs5 v-if="partner.insuranceNumSection">
               <v-text-field type="number" label="رقم الضمان" v-model="partner.insuranceNum"></v-text-field>
             </v-flex>
+            <v-flex xs12>
+              <h1>هل تم تقاضي اي مساعدة من اي مصدر اخر؟</h1>
+            </v-flex>
+            <v-flex xs12>
+              <h1>
+                <v-radio-group v-model="partner.externalHelp" :mandatory="true">
+                  <v-radio label="نعم" value=1></v-radio>
+                  <v-radio label="لا" value=0></v-radio>
+                </v-radio-group>
+              </h1>
+            </v-flex>
+            <v-flex xs12 sm5 v-if="partner.externalHelp == 1" class="ml-4">
+              <v-text-field label="مصدر المساعدة" v-model="partner.externalHelpSource"></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm5 v-if="partner.externalHelp == 1" class="ml-4">
+              <v-text-field label="قيمة المساعدة" type="number" v-model="partner.externalHelpMoney"></v-text-field>
+            </v-flex>
           </v-layout>
         </div>
 
@@ -244,18 +261,19 @@ export default {
         family: [],
         logs: [] // in Log.vue
       },
-      workStates: ['متقاعد', 'لا يعمل', 'خيارات اخرى'],
+      workStates: ['متعاقد', 'لا يعمل'],
       workSector: ['ادارة عامة', 'مؤسسة عامة', 'بلدية', 'قطاع خاص'],
       defaultPartner: {
         name: '',
         birthDate: null,
-        work: '',
+        isWorking: true,
         workSector: '',
         insuranceNum: null,
-        modal: false,
-        workStateExtra: false,
         insuranceNumSection: true,
-        isWorking: true
+        modal: false,
+        externalHelp: null,
+        externalHelpSource: '',
+        externalHelpMoney: null
       },
       defaultChild: {
         name: '',
@@ -279,19 +297,11 @@ export default {
   },
   methods: {
     checkWorkState (selectedValue, partnerIndex) {
-      if (selectedValue === this.workStates[2]) {
-        this.doc.partners[partnerIndex].workStateExtra = true
-        this.doc.partners[partnerIndex].work = null
-        this.doc.partners[partnerIndex].insuranceNumSection = true
-        this.doc.partners[partnerIndex].isWorking = true
-      } else if (selectedValue === this.workStates[0]) {
-        this.doc.partners[partnerIndex].workStateExtra = false
-        this.doc.partners[partnerIndex].work = selectedValue
-        this.doc.partners[partnerIndex].insuranceNumSection = true
+      if (selectedValue === this.workStates[0]) {
         this.doc.partners[partnerIndex].isWorking = true
       } else {
-        this.doc.partners[partnerIndex].insuranceNumSection = false
         this.doc.partners[partnerIndex].isWorking = false
+        this.doc.partners[partnerIndex].insuranceNumSection = false
       }
     },
     checkWorkSector (selectedValue, partnerIndex) {

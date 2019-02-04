@@ -29,21 +29,13 @@
 <script>
   import {remote} from 'electron'
   import fs from 'fs'
-  import path from 'path'
+
   export default {
     data () {
       return {
         show: true,
         doc: ''
       }
-    },
-    created () {
-      // get data from data.json
-      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
-        if (err) throw err
-        this.doc = JSON.parse(data)
-        console.log(this.doc)
-      })
     },
     computed: {
       home () {
