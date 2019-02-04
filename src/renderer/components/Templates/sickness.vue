@@ -172,7 +172,7 @@
                 <td class="text-xs-center">{{ props.item.birthDate }}</td>
                 <td class="text-xs-center">{{ props.item.rangeOfAcquaintance }}</td>
                 <td class="text-xs-center">{{ props.item.medicalStartDate }}</td>
-                <td class="text-xs-center">{{ props.item.medicalEndDate}}</td>
+                <td class="text-xs-center">{{ props.item.medicalEndDate }}</td>
                 <td class="text-xs-center">
                   <v-btn icon @click="deleteItem(props.item)">
                     <v-icon color="error">delete</v-icon>
@@ -516,7 +516,33 @@ export default {
           this.$router.push('/PDFsickness')
         }
       )
+    },
+
+    ConvertToArabic (date) {
+      var dd = date.split('-')
+      var year = ''
+      var month = ''
+      var day = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+
+      var y = dd[0].split('') // year
+      y.forEach(element => {
+        year += arnum[element]
+      })
+
+      var m = dd[1].split('') // month
+      m.forEach(element => {
+        month += arnum[element]
+      })
+
+      var d = dd[2].split('') // day
+      d.forEach(element => {
+        day += arnum[element]
+      })
+
+      return year + '/' + month + '/' + day
     }
+
   }
 }
 </script>
