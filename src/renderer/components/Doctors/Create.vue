@@ -92,7 +92,7 @@
                 @change="checkWorkState($event, i)"
               ></v-select>
             </v-flex>
-            <v-flex xs5 v-if="partner.workStateExtra">
+            <v-flex xs5 v-if="partner.workStateExtra && partner.isWorking">
               <v-text-field label="يعمل في" v-model="partner.work"></v-text-field>
             </v-flex>
             <v-flex xs5 v-if="partner.isWorking">
