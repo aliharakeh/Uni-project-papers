@@ -129,12 +129,12 @@
         </tr>
         <tr v-for="medicData in doc.medicalData" :key="medicData.name">
           <td>{{ medicData.name }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabic(medicData.birthDate), 2) }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabic(medicData.birthDate), 1) }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabic(medicData.birthDate), 0) }}</td>
+          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(medicData.birthDate), 2) }}</td>
+          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(medicData.birthDate), 1) }}</td>
+          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(medicData.birthDate), 0) }}</td>
           <td>{{ medicData.rangeOfAcquaintance }}</td>
-          <td>{{ ConvertToArabic(medicData.medicalStartDate) }}</td>
-          <td>{{ ConvertToArabic(medicData.medicalEndDate) }}</td>
+          <td>{{ ConvertToArabicDate(medicData.medicalStartDate) }}</td>
+          <td>{{ ConvertToArabicDate(medicData.medicalEndDate) }}</td>
         </tr>
       </table>
     </v-layout>
@@ -247,7 +247,7 @@ export default{
       })
       return ar
     },
-    ConvertToArabic (date) {
+    ConvertToArabicDate (date) {
       if (!date) {
         return ''
       }

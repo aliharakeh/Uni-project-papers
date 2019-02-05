@@ -105,7 +105,7 @@
         <div style="border: 2px solid black; padding: 10px;">
             أرجو اعطائي منحة الزواج المنصوص عنها في المادة ١٣ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
             واني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة زواج من أي مصدر آخر كما أني لم أتقاض هذه المنحة سابقاً. <br>
-            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ ConvertToArabicNum(doc.money) }} <br> التاريخ : {{ ConvertToArabic(doc.date) }}</p>
+            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ ConvertToArabicNum(doc.money) }} <br> التاريخ : {{ ConvertToArabicDate(doc.date) }}</p>
             <p style="text-align: left; margin-top: -20px; margin-bottom: 30px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
         </div>
     </v-layout>
@@ -115,9 +115,9 @@
         <div style="border: 2px solid black; padding: 10px;">
            يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : <br>
            ان الراتب الأساسي الصافي للأستاذ : ... ل.ل <br>
-           تاريخ حصول الزواج : {{ ConvertToArabic(doc.marriageDate) }}
+           تاريخ حصول الزواج : {{ ConvertToArabicDate(doc.marriageDate) }}
            <p style="text-align: left; margin-top: -40px; margin-left:110px; margin-bottom: 30px;">
-             التاريخ : {{ ConvertToArabic(GetDateToday(date)) }} <br>
+             التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br>
              توقيع <b>الرئيس المباشر</b><br><br>
              الاسم : 
            </p>
@@ -203,7 +203,7 @@ export default{
       })
       return ar
     },
-    ConvertToArabic (date) {
+    ConvertToArabicDate (date) {
       if (!date) {
         return ''
       }

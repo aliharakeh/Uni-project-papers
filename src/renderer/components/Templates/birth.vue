@@ -86,6 +86,30 @@
                 v-model="child"
               ></v-select>
             </v-flex>
+            <v-flex xs12 sm5>
+              <v-dialog
+                ref="dialogA"
+                v-model="birthdateModal"
+                :return-value.sync="birthdate"
+                persistent
+                lazy
+                full-width
+                width="290px"
+                >
+                <v-text-field
+                  slot="activator"
+                  v-model="birthdate"
+                  label="التاريخ"
+                  prepend-icon="event"
+                  readonly
+                ></v-text-field>
+                <v-date-picker v-model="birthdate" scrollable locale="ar-lb">
+                  <v-spacer></v-spacer>
+                  <v-btn flat color="primary" @click="birthdateModal = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="$refs.dialogA.save(birthdate)">OK</v-btn>
+                </v-date-picker>
+              </v-dialog>
+              </v-flex>
           </v-layout>
         </v-card-text>
       </v-card>
@@ -93,7 +117,7 @@
       <!-- prev certificate verification -->
       <v-card class="mt-4">
         <v-card-title>
-          <h1>هل تم تقاضي هذه المنحة سابقا او من اي مصدر اخر؟</h1>
+          <h1>هل تم تقاضي هذه المنحة سابقا او من اي مصدر آخر ؟</h1>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
@@ -160,6 +184,8 @@ export default {
       prevOrOutsidePaper: null,
       money: null,
       date: null,
+      birthdate: null,
+      birthdateModal: false,
       dateModal: false,
       child: null
     }
@@ -187,7 +213,7 @@ export default {
     },
 
     saveToJson () {
-      if (this.child === null) {
+      if (this.child === null || this.birthdate === null) {
         alert('لم يتم ملئ كل الخانات بعد')
         return
       } else if (this.prevOrOutsidePaper === null) {
@@ -209,6 +235,7 @@ export default {
         partners: this.doc.partners,
         prevOrOutsidePaper: this.prevOrOutsidePaper,
         date: this.date,
+        birthdate: this.birthdate,
         money: this.money,
         child: this.child
       }

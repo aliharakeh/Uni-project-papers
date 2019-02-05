@@ -169,10 +169,10 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ ConvertToArabic(props.item.birthDate) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicDate(props.item.birthDate) }}</td>
                 <td class="text-xs-center">{{ props.item.rangeOfAcquaintance }}</td>
-                <td class="text-xs-center">{{ ConvertToArabic(props.item.medicalStartDate) }}</td>
-                <td class="text-xs-center">{{ ConvertToArabic(props.item.medicalEndDate) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicDate(props.item.medicalStartDate) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicDate(props.item.medicalEndDate) }}</td>
                 <td class="text-xs-center">
                   <v-btn icon @click="deleteItem(props.item)">
                     <v-icon color="error">delete</v-icon>
@@ -533,7 +533,7 @@ export default {
       })
       return ar
     },
-    ConvertToArabic (date) {
+    ConvertToArabicDate (date) {
       if (!date) {
         return ''
       }
