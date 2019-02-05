@@ -9,7 +9,7 @@
         <h3>التعليميّة في الجامعة اللبنانية</h3>
       </div>
         <div dir="rtl" style="text-align: center;border: 2px solid black;" class="px-4 py-3">
-          <h4>نموذج رقم<br>(10)<br>أسنان</h4>
+          <h4>نموذج رقم<br>(١٠)<br>أسنان</h4>
         </div>
     </v-layout>
 
@@ -31,7 +31,7 @@
             <th style="height: 35px;width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="height: 35px;width: 200px; text-align: center">{{ doc.number }}</td>
+            <td style="height: 35px;width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -55,7 +55,7 @@
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style=" text-align: center;">اسم المنتسب وشهرته : {{ doc.name }}</td>
-          <td>الهاتف : {{ doc.phone }}</td>
+          <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
         </tr>
         <tr>
           <td style=" text-align: center;">الكلية/المعهد : {{ doc.faculty }}</td>
@@ -72,32 +72,32 @@
       <table style="width: 100%;" dir="rtl" class="mb-3" 
           v-for="partner in doc.partners" :key="partner.name">
 
-        <tr v-if="checkWork(partner) === 1">
+        <tr v-if="checkWork(partner) === 'متعاقد'">
           <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
           <td>
-              متقاعد <i class="material-icons icons">check_box</i> <!-- لا يعمل <i class="material-icons icons">check_box_outline_blank</i> -->
+              متعاقد <i class="material-icons icons">check_box</i>
           </td>
           <td> يعمل في : &nbsp;
-            <!-- <bdi>ادارة عامة <i class="material-icons icons">{{ checkWorkSector(partner, 'ادارة عامة') }}</i> </bdi> <bdi> مؤسّسة عامة <i class="material-icons icons">{{ checkWorkSector(partner, 'مؤسسة عامة') }}</i> </bdi> <br> <bdi> بلدية <i class="material-icons icons">{{ checkWorkSector(partner, 'بلدية') }}</i> </bdi> &nbsp; <bdi> قطاع خاص <i class="material-icons icons">{{ checkWorkSector(partner, 'قطاع خاص') }}</i> </bdi> -->
             <bdi>{{ partner.workSector }} <i class="material-icons icons">check_box</i></bdi>
           </td>
         </tr>
 
-        <tr v-else-if="checkWork(partner) === 2">
+        <tr v-else-if="checkWork(partner) === 'لا يعمل'">
           <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
           <td>
-              لا يعمل <i class="material-icons icons">check_box</i> <!-- متقاعد <i class="material-icons icons">check_box_outline_blank</i> -->
+            لا يعمل <i class="material-icons icons">check_box</i> <!-- متقاعد <i class="material-icons icons">check_box_outline_blank</i> -->
           </td>
+          <td></td>
         </tr>
 
-        <tr v-if="checkWork(partner) === 1">
+        <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
           <td style=" text-align: center;">رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : </td>
-          <td colspan="2">{{ partner.insuranceNum }}</td>
+          <td colspan="2">{{ ConvertToArabicNum(partner.insuranceNum) }}</td>
         </tr>
 
-        <tr v-if="checkWork(partner) === 1">
-          <td style=" text-align: center;">المساعدة من مصادر اخرى : </td>
-          <td colspan="2">قيمتها : </td>
+        <tr v-if="partner.externalHelp === '1'">
+          <td style=" text-align: center;">المساعدة من مصادر اخرى : {{ partner.externalHelpSource }}</td>
+          <td colspan="2">قيمتها : {{ ConvertToArabicNum(partner.externalHelpMoney) }}</td>
         </tr>
       </table>
     </v-layout>
@@ -157,11 +157,11 @@
           </tr>
           <tr v-for="medicCost in doc.medicalCostsData" :key="medicCost.name">
               <td>{{ medicCost.name }}</td>
-              <td>{{ medicCost.doctorsCost }}</td>
-              <td>{{ medicCost.medicineCost }}</td>
-              <td>{{ medicCost.otherCosts }}</td>
-              <td>{{ medicCost.costsSum }}</td>
-              <td>{{ medicCost.externalHelpValue }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.doctorsCost) }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.medicineCost) }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.otherCosts) }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.costsSum) }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.externalHelpValue) }}</td>
               <td></td>
               <td></td>
           </tr>
@@ -222,15 +222,31 @@ export default{
     },
 
     checkWork (partner) {
-      if (partner.work === 'متقاعد') {
-        return 1
+      if (partner.workSector === '') {
+        return 'لا يعمل'
       }
-      if (partner.work === 'لا يعمل') {
-        return 2
-      }
-      return false
+      return 'متعاقد'
     },
 
+    checkWorkSector (partner, workSector) {
+      if (partner.workSector === workSector) {
+        return 1
+      }
+      return 0
+    },
+
+    ConvertToArabicNum (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        ar += arnum[element]
+      })
+      return ar
+    },
     ConvertToArabic (date) {
       var dd = date.split('-')
       var year = ''

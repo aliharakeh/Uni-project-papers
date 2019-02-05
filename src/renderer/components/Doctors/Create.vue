@@ -92,9 +92,6 @@
                 @change="checkWorkState($event, i)"
               ></v-select>
             </v-flex>
-            <v-flex xs5 v-if="partner.workStateExtra && partner.isWorking">
-              <v-text-field label="يعمل في" v-model="partner.work"></v-text-field>
-            </v-flex>
             <v-flex xs5 v-if="partner.isWorking">
               <v-select
                 :items="workSector"
@@ -319,7 +316,7 @@ export default {
     save () {
       var flag = 0
       for (var property in this.doc) {
-        if (property === 'family' || property === 'partners' || property === 'logs' || property === 'children') {
+        if (property === 'family' || property === 'logs' || property === 'children') { // property === 'partners'
           for (var i in this.doc[property]) {
             var item = this.doc[property][i]
             for (var prop in item) {
@@ -332,6 +329,7 @@ export default {
           flag = 1
         }
       }
+
       if (flag === 1) {
         alert('لم يتم ملئ كل الخانات بعد')
         return

@@ -35,7 +35,7 @@
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ doc.phone }}</span>
+              <span class="title">{{ ConvertToArabicNum(doc.phone) }}</span>
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الكلية / المعهد : </span>
@@ -58,7 +58,7 @@
         <v-card-text>
           <v-layout row wrap v-for="(person, i) in doc.partners" :key="i">
             <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم : </span>
+              <span class="headline font-weight-bold">- الاسم :</span>
               <span class="title">{{ person.name }}</span>
             </v-flex>
             <v-flex xs12 sm5>
@@ -67,7 +67,7 @@
             </v-flex>
             <v-flex xs12 sm5 v-if="person.insuranceNum">
               <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ person.insuranceNum }}</span>
+              <span class="title">{{ ConvertToArabicNum(person.insuranceNum) }}</span>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -169,10 +169,10 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ props.item.birthDate }}</td>
+                <td class="text-xs-center">{{ ConvertToArabic(props.item.birthDate) }}</td>
                 <td class="text-xs-center">{{ props.item.rangeOfAcquaintance }}</td>
-                <td class="text-xs-center">{{ props.item.medicalStartDate }}</td>
-                <td class="text-xs-center">{{ props.item.medicalEndDate }}</td>
+                <td class="text-xs-center">{{ ConvertToArabic(props.item.medicalStartDate) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabic(props.item.medicalEndDate) }}</td>
                 <td class="text-xs-center">
                   <v-btn icon @click="deleteItem(props.item)">
                     <v-icon color="error">delete</v-icon>
@@ -240,11 +240,11 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ props.item.doctorsCost }}</td>
-                <td class="text-xs-center">{{ props.item.medicineCost }}</td>
-                <td class="text-xs-center">{{ props.item.otherCosts }}</td>
-                <td class="text-xs-center">{{ props.item.costsSum}}</td>
-                <td class="text-xs-center">{{ props.item.externalHelpValue}}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.doctorsCost) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.medicineCost) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.otherCosts) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.costsSum) }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.externalHelpValue) }}</td>
                 <td class="text-xs-center">{{ props.item.acceptedCosts}}</td>
                 <td class="text-xs-center">{{ props.item.earnedHelpValue}}</td>
                 <td class="text-xs-center">
@@ -395,7 +395,10 @@ export default {
   },
   methods: {
     workPlace (person) {
-      return person.workSector + ' - ' + person.work
+      if (person.workSector === '') {
+        return 'لا يعمل'
+      }
+      return person.workSector
     },
     deleteItem (item) {
       const index = this.medicalData.indexOf(item)
@@ -481,7 +484,7 @@ export default {
 
       this.editedItem2.costsSum = Number(this.editedItem2.doctorsCost) +
                                   Number(this.editedItem2.otherCosts) +
-                                  Number(this.editedItem2.medicineCost)
+                                  Number(this.editedItem2.medicineCost) + ''
 
       if (this.editedIndex2 > -1) {
         Object.assign(this.medicalCostsData[this.editedIndex2], this.editedItem2)
@@ -518,6 +521,18 @@ export default {
       )
     },
 
+    ConvertToArabicNum (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        ar += arnum[element]
+      })
+      return ar
+    },
     ConvertToArabic (date) {
       var dd = date.split('-')
       var year = ''
@@ -542,7 +557,6 @@ export default {
 
       return year + '/' + month + '/' + day
     }
-
   }
 }
 </script>

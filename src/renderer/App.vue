@@ -21,7 +21,7 @@
       <router-view></router-view>
     </v-content>
     <v-footer v-if="show && !home">
-      <span class="px-3">&copy; 2019 - By Mohammad Hammoud & Ali Harakeh </span>
+      <span class="px-3">&copy; 2018/2019 - By Mohammad Hammoud & Ali Harakeh </span>
     </v-footer>
   </v-app>
 </template>
@@ -29,6 +29,7 @@
 <script>
   import {remote} from 'electron'
   import fs from 'fs'
+  import path from 'path'
 
   export default {
     data () {
@@ -37,6 +38,16 @@
         doc: ''
       }
     },
+
+    created () {
+      // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+        if (err) throw err
+        this.doc = JSON.parse(data)
+        console.log(this.doc)
+      })
+    },
+
     computed: {
       home () {
         return this.$route.path === '/'
@@ -49,6 +60,12 @@
     methods: {
       pdf () {
         this.show = false
+        // get data from data.json
+        fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+          if (err) throw err
+          this.doc = JSON.parse(data)
+          console.log(this.doc)
+        })
         remote.getCurrentWindow().webContents.printToPDF({
           pageSize: 'A4',
           marginsType: 2,
