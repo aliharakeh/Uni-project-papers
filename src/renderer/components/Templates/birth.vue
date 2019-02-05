@@ -266,7 +266,7 @@ export default {
       })
       return ar
     },
-    ConvertToArabic (date) {
+    ConvertToArabicDate (date) {
       if (!date) {
         return ''
       }

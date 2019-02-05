@@ -83,7 +83,7 @@
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
           <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
           <td>
-            لا يعمل <i class="material-icons icons">check_box</i> <!-- متقاعد <i class="material-icons icons">check_box_outline_blank</i> -->
+            لا يعمل <i class="material-icons icons">check_box</i>
           </td>
           <td></td>
         </tr>

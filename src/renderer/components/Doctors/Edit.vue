@@ -233,7 +233,7 @@ export default {
       loading: false,
       loadingDialog: false,
       doc: null,
-      workStates: ['متقاعد', 'لا يعمل', 'خيارات اخرى'],
+      workStates: ['متعاقد', 'لا يعمل'],
       workSector: ['ادارة عامة', 'مؤسسة عامة', 'بلدية', 'قطاع خاص'],
       defaultPartner: {
         name: '',
@@ -307,6 +307,7 @@ export default {
           faculty: this.doc.faculty,
           facultySection: this.doc.facultySection,
           partners: this.doc.partners,
+          family: this.doc.family,
           children: this.doc.children
         }
       },
