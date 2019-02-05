@@ -248,6 +248,9 @@ export default{
       return ar
     },
     ConvertToArabic (date) {
+      if (!date) {
+        return ''
+      }
       var dd = date.split('-')
       var year = ''
       var month = ''

@@ -32,7 +32,7 @@
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ doc.phone }}</span>
+              <span class="title">{{ ConvertToArabicNum(doc.phone) }}</span>
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الكلية / المعهد : </span>
@@ -64,7 +64,7 @@
             </v-flex>
             <v-flex xs12 sm5 v-if="person.insuranceNum">
               <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ person.insuranceNum }}</span>
+              <span class="title">{{ ConvertToArabicNum(person.insuranceNum) }}</span>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -86,10 +86,10 @@
                 </v-radio-group>
               </h1>
             </v-flex>
-            <v-flex xs12 sm5 v-if="prevOrOutsidePaper == 1" class="ml-4">
+            <v-flex xs12 sm5 v-if="prevOrOutsidePaper === '1'" class="ml-4">
               <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="number" v-model="money"></v-text-field>
             </v-flex>
-            <v-flex xs12 sm5 v-if="prevOrOutsidePaper == 1">
+            <v-flex xs12 sm5 v-if="prevOrOutsidePaper === '1'">
               <v-dialog
                   ref="dialog"
                   v-model="dateModal"
@@ -188,16 +188,19 @@ export default {
         console.log(err.message)
         return
       }
-
       this.doc = doc
-
       this.loading = false
     })
   },
   methods: {
+
     workPlace (person) {
-      return person.workSector + ' - ' + person.work
+      if (person.workSector === '') {
+        return 'لا يعمل'
+      }
+      return person.workSector
     },
+
     saveToJson () {
       if (this.marriageDate === null) {
         alert('لم يتم ملئ كل الخانات بعد')
@@ -205,7 +208,7 @@ export default {
       } else if (this.prevOrOutsidePaper === null) {
         alert('لم يتم ملئ كل الخانات بعد')
         return
-      } else if (this.prevOrOutsidePaper === '1' && (this.money === null || this.date === null)) {
+      } else if (this.prevOrOutsidePaper === '1' && (!this.money || !this.date)) {
         alert('لم يتم ملئ كل الخانات بعد')
         return
       }
@@ -237,6 +240,46 @@ export default {
           this.$router.push('/PDFmarriage')
         }
       )
+    },
+
+    ConvertToArabicNum (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabic (date) {
+      if (!date) {
+        return ''
+      }
+      var dd = date.split('-')
+      var year = ''
+      var month = ''
+      var day = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+
+      var y = dd[0].split('') // year
+      y.forEach(element => {
+        year += arnum[element]
+      })
+
+      var m = dd[1].split('') // month
+      m.forEach(element => {
+        month += arnum[element]
+      })
+
+      var d = dd[2].split('') // day
+      d.forEach(element => {
+        day += arnum[element]
+      })
+
+      return year + '/' + month + '/' + day
     }
   }
 }

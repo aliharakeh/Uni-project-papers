@@ -9,7 +9,7 @@
         <h2>التعليمية في الجامعة اللبنانية</h2>
       </div>
         <div dir="rtl" style="text-align: center;border: 2px solid black;" class="px-4 py-3">
-          <h4>نموذج رقم<br>(6)<br>ولادة</h4>
+          <h4>نموذج رقم<br>(٦)<br>ولادة</h4>
         </div>
     </v-layout>
 
@@ -30,7 +30,7 @@
             <th style="height: 35px;width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="height: 35px;width: 200px; text-align: center">{{ doc.number }}</td>
+            <td style="height: 35px;width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -54,7 +54,7 @@
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style=" text-align: center;">اسم المنتسب وشهرته : {{ doc.name }}</td>
-          <td>الهاتف : {{ doc.phone }}</td>
+          <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
         </tr>
         <tr>
           <td style=" text-align: center;">الكلية/المعهد : {{ doc.faculty }}</td>
@@ -71,54 +71,54 @@
       <table style="width: 100%;" dir="rtl" class="mb-3" 
           v-for="partner in doc.partners" :key="partner.name">
 
-        <tr v-if="checkWork(partner) === 1">
+        <tr v-if="checkWork(partner) === 'متعاقد'">
           <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
           <td>
-              متقاعد <i class="material-icons icons">check_box</i> <!-- لا يعمل <i class="material-icons icons">check_box_outline_blank</i> -->
+              متعاقد <i class="material-icons icons">check_box</i>
           </td>
           <td> يعمل في : &nbsp;
-            <!-- <bdi>ادارة عامة <i class="material-icons icons">{{ checkWorkSector(partner, 'ادارة عامة') }}</i> </bdi> <bdi> مؤسّسة عامة <i class="material-icons icons">{{ checkWorkSector(partner, 'مؤسسة عامة') }}</i> </bdi> <br> <bdi> بلدية <i class="material-icons icons">{{ checkWorkSector(partner, 'بلدية') }}</i> </bdi> &nbsp; <bdi> قطاع خاص <i class="material-icons icons">{{ checkWorkSector(partner, 'قطاع خاص') }}</i> </bdi> -->
             <bdi>{{ partner.workSector }} <i class="material-icons icons">check_box</i></bdi>
           </td>
         </tr>
 
-        <tr v-else-if="checkWork(partner) === 2">
+        <tr v-else-if="checkWork(partner) === 'لا يعمل'">
           <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
           <td>
-              لا يعمل <i class="material-icons icons">check_box</i> <!-- متقاعد <i class="material-icons icons">check_box_outline_blank</i> -->
+            لا يعمل <i class="material-icons icons">check_box</i> <!-- متقاعد <i class="material-icons icons">check_box_outline_blank</i> -->
           </td>
+          <td></td>
         </tr>
 
-        <tr v-if="checkWork(partner) === 1">
+        <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
           <td style=" text-align: center;">رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : </td>
-          <td colspan="2">{{ partner.insuranceNum }}</td>
+          <td colspan="2">{{ ConvertToArabicNum(partner.insuranceNum) }}</td>
         </tr>
 
-        <tr v-if="checkWork(partner) === 1">
-          <td style=" text-align: center;">المساعدة من مصادر اخرى : </td>
-          <td colspan="2">قيمتها : </td>
+        <tr v-if="partner.externalHelp === '1'">
+          <td style=" text-align: center;">المساعدة من مصادر اخرى : {{ partner.externalHelpSource }}</td>
+          <td colspan="2">قيمتها : {{ ConvertToArabicNum(partner.externalHelpMoney) }}</td>
         </tr>
       </table>
     </v-layout>
     
     <!-- section 6 -->
     <v-layout column class="mt-3" style="font-size: 20px; page-break-inside: avoid;">
-        <div style="border: 2px solid black; padding: 5px;">
-            أرجو اعطائي منحة الولادة عن ولدي {{ doc.child }} , المنصوص عنها في المادة 14 من المرسوم رقم 8681 من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
+        <div style="border: 2px solid black; padding: 10px;">
+            أرجو اعطائي منحة الولادة عن ولدي {{ doc.child }} , المنصوص عنها في المادة ١٤ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
             واني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة ولادة من أي مصدر آخر. <br>
-            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ doc.money }} &nbsp; &nbsp; &nbsp; &nbsp; التاريخ : {{ doc.date }}</p>
-            <p style="text-align: left; margin-top: 10px; margin-bottom: 25px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
+            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ ConvertToArabicNum(doc.money) }} <br> التاريخ : {{ ConvertToArabic(doc.date) }}</p>
+            <p style="text-align: left; margin-top: -20px; margin-bottom: 30px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
         </div>
     </v-layout>
 
     <!-- section 7 -->
    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
-        <div style="border: 2px solid black; padding: 5px;">
+        <div style="border: 2px solid black; padding: 10px;">
            يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : <br>
            ان الراتب الأساسي الصافي للأستاذ : ... ل.ل <br>
-           تاريخ حصول الولادة : {{ doc.date }}
-           <p style="text-align: left; margin-top: -40px; margin-left:110px">
-             التاريخ : {{ date.getDate() }} / {{ date.getMonth() + 1 }} / {{ date.getFullYear() }} <br>
+           تاريخ حصول الزواج : {{ ConvertToArabic(doc.date) }}
+           <p style="text-align: left; margin-top: -40px; margin-left:110px; margin-bottom: 30px;">
+             التاريخ : {{ ConvertToArabic(GetDateToday(date)) }} <br>
              توقيع <b>الرئيس المباشر</b><br><br>
              الاسم : 
            </p>
@@ -133,7 +133,7 @@
               <li>وثيقة ولادة , غيره من المستندات عند الاقتضاء.</li>
               <li>مستند عدم استفادة عن الزوج (الزوجة) من المرجع المسؤول عن عمله.</li>
               <li>مستند عن قيمة المبلغ المقبوض من المرجع الآخر.</li>
-              <li>اخراج قيد جديد يظهر اسم الزوجة.</li>
+              <li>اخراج قيد عائلي جديد يظهر اسم المولود.</li>
            </ul>
         </div>
     </v-layout>
@@ -166,19 +166,24 @@ export default{
   },
 
   methods: {
-    GetDate (date, index) {
-      const d = date.split('-')
-      return d[index]
+
+    GetDateToday (d) {
+      var month = d.getMonth() + 1
+      return d.getFullYear() + '-' + month + '-' + d.getDate()
     },
 
     checkWork (partner) {
-      if (partner.work === 'متقاعد') {
+      if (partner.workSector === '') {
+        return 'لا يعمل'
+      }
+      return 'متعاقد'
+    },
+
+    checkWorkSector (partner, workSector) {
+      if (partner.workSector === workSector) {
         return 1
       }
-      if (partner.work === 'لا يعمل') {
-        return 2
-      }
-      return false
+      return 0
     },
 
     checkPapers () {
@@ -186,6 +191,46 @@ export default{
         return 'أتقاضى'
       }
       return 'لم أتقاض'
+    },
+
+    ConvertToArabicNum (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabic (date) {
+      if (!date) {
+        return ''
+      }
+      var dd = date.split('-')
+      var year = ''
+      var month = ''
+      var day = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+
+      var y = dd[0].split('') // year
+      y.forEach(element => {
+        year += arnum[element]
+      })
+
+      var m = dd[1].split('') // month
+      m.forEach(element => {
+        month += arnum[element]
+      })
+
+      var d = dd[2].split('') // day
+      d.forEach(element => {
+        day += arnum[element]
+      })
+
+      return year + '/' + month + '/' + day
     }
 
   }
