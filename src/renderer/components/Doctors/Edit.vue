@@ -281,7 +281,7 @@ export default {
     this.loading = true
     this.$db.findOne({_id: this.id}, (err, doc) => {
       if (err) {
-        alert('لم يتم العثور علئ الاستاذ')
+        alert('لم يتم العثور على الاستاذ')
         return
       }
 

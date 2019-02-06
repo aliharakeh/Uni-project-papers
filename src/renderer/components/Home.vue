@@ -25,13 +25,21 @@
     <!-- choose template -->
     <v-layout row wrap justify-space-around v-if="docID">
       <v-flex xs6 v-for="template in templates" :key="template.title">
-        <v-card class="ma-3">
-          <v-card-actions>
-            <h3 class="headline mr-4">{{ template.title }}</h3>
-            <v-spacer></v-spacer>
-            <v-btn flat color="orange" :to="template.link + '/' + docID._id">اختيار</v-btn>
-          </v-card-actions>
-        </v-card>
+        <v-hover>
+          <v-card
+          class="ma-3"
+          :to="template.link + '/' + docID._id"
+          raised
+          slot-scope="{ hover }"
+          :class="`elevation-${hover ? 12 + ' blue lighten-4' : 5}`"
+          >
+            <v-card-title>
+              <v-layout columns justify-center>
+                <h3 class="headline mr-4">{{ template.title }}</h3>
+              </v-layout>
+            </v-card-title>
+          </v-card>
+        </v-hover>
       </v-flex>
     </v-layout>
   </v-container>
@@ -80,7 +88,7 @@
       this.loading = true
       this.$db.find({}, {_id: 1, name: 1, number: 1}, (err, docs) => {
         if (err) {
-          console.log(err.message)
+          alert('لم يتم العثور على الاساتذة')
           return
         }
         this.docs = docs
