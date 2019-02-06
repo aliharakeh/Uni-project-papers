@@ -89,22 +89,36 @@
                 :items="workStates"
                 label="العمل"
                 @change="checkWorkState($event, i)"
-                :value="partner.workStateExtra === false ? partner.work : workStates[2]"
+                v-model="partner.workState"
               ></v-select>
             </v-flex>
-            <v-flex xs5 v-if="partner.workStateExtra">
-              <v-text-field label="يعمل في" v-model="partner.work"></v-text-field>
-            </v-flex>
-            <v-flex xs5>
+            <v-flex xs5 v-if="partner.isWorking">
               <v-select
                 :items="workSector"
                 label="قطاع العمل"
                 @change="checkWorkSector($event, i)"
-                :value="partner.workSector"
+                v-model="partner.workSector"
               ></v-select>
             </v-flex>
-            <v-flex xs5 v-if="partner.insuranceNumSection">
+            <v-flex xs5 v-if="partner.insuranceNumSection && partner.isWorking">
               <v-text-field type="number" label="رقم الضمان" v-model="partner.insuranceNum"></v-text-field>
+            </v-flex>
+            <v-flex xs12>
+              <h1>هل تم تقاضي اي مساعدة من اي مصدر اخر؟</h1>
+            </v-flex>
+            <v-flex xs12>
+              <h1>
+                <v-radio-group v-model="partner.externalHelp">
+                  <v-radio label="نعم" value='1'></v-radio>
+                  <v-radio label="لا" value='0'></v-radio>
+                </v-radio-group>
+              </h1>
+            </v-flex>
+            <v-flex xs12 sm5 v-if="partner.externalHelp == 1" class="ml-4">
+              <v-text-field label="مصدر المساعدة" v-model="partner.externalHelpSource"></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm5 v-if="partner.externalHelp == 1" class="ml-4">
+              <v-text-field label="قيمة المساعدة" type="number" v-model="partner.externalHelpMoney"></v-text-field>
             </v-flex>
           </v-layout>
         </div>
@@ -238,12 +252,15 @@ export default {
       defaultPartner: {
         name: '',
         birthDate: null,
-        work: '',
+        isWorking: false,
+        workState: '',
         workSector: '',
         insuranceNum: null,
+        insuranceNumSection: true,
         modal: false,
-        workStateExtra: false,
-        insuranceNumSection: true
+        externalHelp: '0',
+        externalHelpSource: '',
+        externalHelpMoney: null
       },
       defaultChild: {
         name: '',
@@ -264,7 +281,7 @@ export default {
     this.loading = true
     this.$db.findOne({_id: this.id}, (err, doc) => {
       if (err) {
-        console.log(err.message)
+        alert('لم يتم العثور علئ الاستاذ')
         return
       }
 
@@ -274,12 +291,13 @@ export default {
   },
   methods: {
     checkWorkState (selectedValue, partnerIndex) {
-      if (selectedValue === this.workStates[2]) {
-        this.doc.partners[partnerIndex].workStateExtra = true
-        this.doc.partners[partnerIndex].work = ''
+      if (selectedValue === this.workStates[0]) {
+        this.doc.partners[partnerIndex].isWorking = true
       } else {
-        this.doc.partners[partnerIndex].workStateExtra = false
-        this.doc.partners[partnerIndex].work = selectedValue
+        this.doc.partners[partnerIndex].isWorking = false
+        this.doc.partners[partnerIndex].insuranceNumSection = false
+        this.doc.partners[partnerIndex].insuranceNum = null
+        this.doc.partners[partnerIndex].workSector = ''
       }
     },
     checkWorkSector (selectedValue, partnerIndex) {
@@ -294,7 +312,63 @@ export default {
     saveDate (refKey, refIndex, date) {
       this.$refs[refKey][refIndex].save(date)
     },
+    confirm (propertyName) {
+      if (propertyName === 'partners') {
+        var confirmed = true
+        for (var index in this.doc.partners) {
+          var partner = this.doc.partners[index]
+          confirmed = partner.name !== '' && partner.birthDate !== null
+          if (confirmed === false) {
+            return false
+          }
+          if (partner.isWorking === true) {
+            confirmed = partner.workState !== '' && partner.workSector !== ''
+            if (confirmed !== false) {
+              if (partner.insuranceNumSection === true) {
+                confirmed = partner.insuranceNum !== null && partner.insuranceNum !== ''
+              }
+            }
+            if (confirmed === false) {
+              return false
+            }
+          }
+          if (partner.externalHelp === '1') {
+            confirmed = partner.externalHelpSource !== '' && partner.externalHelpMoney !== null && partner.externalHelpMoney !== ''
+            if (confirmed === false) {
+              return false
+            }
+          }
+        }
+      } else if (this.doc[propertyName].length !== 0) {
+        for (var index1 in this.doc[propertyName]) {
+          var item = this.doc[propertyName][index1]
+          for (var prop in item) {
+            if (item[prop] === '' || item[prop] === null) {
+              return false
+            }
+          }
+        }
+      }
+      return true
+    },
     update () {
+      var flag = true
+      for (var property in this.doc) {
+        if (property === 'partners' || property === 'family' || property === 'logs' || property === 'children') {
+          flag = this.confirm(property)
+          if (flag === false) {
+            break
+          }
+        } else if (this.doc[property] === '' || this.doc[property] === null) {
+          flag = false
+          break
+        }
+      }
+      if (flag === false) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      }
+
       this.loading = true
       this.$db.update({
         _id: this.id
@@ -314,7 +388,7 @@ export default {
       {},
       (err, numReplaced) => {
         if (err) {
-          console.log(err.message)
+          alert('لم يتم حفظ الاستاذ! الرجاء اعادة الحفظ')
           return
         }
         this.loading = false

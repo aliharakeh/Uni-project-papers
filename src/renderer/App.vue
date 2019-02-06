@@ -38,19 +38,15 @@
         doc: ''
       }
     },
-
     computed: {
       home () {
         return this.$route.path === '/'
       },
-
       showButton () {
         return this.$route.path.startsWith('/PDF')
       }
     },
-
     methods: {
-
       Get_JSON_File_Data () {
         // get data from data.json
         fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
@@ -62,7 +58,6 @@
           }
         })
       },
-
       pdf () {
         this.Get_JSON_File_Data()
         this.show = false

@@ -99,7 +99,7 @@
                 @change="checkWorkSector($event, i)"
               ></v-select>
             </v-flex>
-            <v-flex xs5 v-if="partner.insuranceNumSection">
+            <v-flex xs5 v-if="partner.insuranceNumSection && partner.isWorking">
               <v-text-field type="number" label="رقم الضمان" v-model="partner.insuranceNum"></v-text-field>
             </v-flex>
             <v-flex xs12>
@@ -107,9 +107,9 @@
             </v-flex>
             <v-flex xs12>
               <h1>
-                <v-radio-group v-model="partner.externalHelp" :mandatory="true">
-                  <v-radio label="نعم" value=1></v-radio>
-                  <v-radio label="لا" value=0></v-radio>
+                <v-radio-group v-model="partner.externalHelp">
+                  <v-radio label="نعم" value='1'></v-radio>
+                  <v-radio label="لا" value='0'></v-radio>
                 </v-radio-group>
               </h1>
             </v-flex>
@@ -247,7 +247,7 @@ export default {
       loading: false,
       loadingDialog: false,
       doc: {
-        number: '',
+        number: null,
         name: '',
         phone: '',
         faculty: '',
@@ -263,12 +263,13 @@ export default {
       defaultPartner: {
         name: '',
         birthDate: null,
-        isWorking: true,
+        isWorking: false,
+        workState: '',
         workSector: '',
         insuranceNum: null,
         insuranceNumSection: true,
         modal: false,
-        externalHelp: null,
+        externalHelp: '0',
         externalHelpSource: '',
         externalHelpMoney: null
       },
@@ -287,18 +288,16 @@ export default {
       }
     }
   },
-  created () {
-    this.doc.partners.push(Object.assign({}, this.defaultPartner))
-    this.doc.children.push(Object.assign({}, this.defaultChild))
-    this.doc.family.push(Object.assign({}, this.defaultFamily))
-  },
   methods: {
     checkWorkState (selectedValue, partnerIndex) {
+      this.doc.partners[partnerIndex].workState = selectedValue
       if (selectedValue === this.workStates[0]) {
         this.doc.partners[partnerIndex].isWorking = true
       } else {
         this.doc.partners[partnerIndex].isWorking = false
         this.doc.partners[partnerIndex].insuranceNumSection = false
+        this.doc.partners[partnerIndex].insuranceNum = null
+        this.doc.partners[partnerIndex].workSector = ''
       }
     },
     checkWorkSector (selectedValue, partnerIndex) {
@@ -313,31 +312,67 @@ export default {
     saveDate (refKey, refIndex, date) {
       this.$refs[refKey][refIndex].save(date)
     },
-    save () {
-      var flag = 0
-      for (var property in this.doc) {
-        if (property === 'family' || property === 'logs' || property === 'children') { // property === 'partners'
-          for (var i in this.doc[property]) {
-            var item = this.doc[property][i]
-            for (var prop in item) {
-              if (item[prop] === '' || item[prop] === null) {
-                flag = 1
+    confirm (propertyName) {
+      if (propertyName === 'partners') {
+        var confirmed = true
+        for (var index in this.doc.partners) {
+          var partner = this.doc.partners[index]
+          confirmed = partner.name !== '' && partner.birthDate !== null
+          if (confirmed === false) {
+            return false
+          }
+          if (partner.isWorking === true) {
+            confirmed = partner.workState !== '' && partner.workSector !== ''
+            if (confirmed !== false) {
+              if (partner.insuranceNumSection === true) {
+                confirmed = partner.insuranceNum !== null && partner.insuranceNum !== ''
               }
             }
+            if (confirmed === false) {
+              return false
+            }
           }
-        } else if (this.doc[property] === '' || this.doc[property] === null) {
-          flag = 1
+          if (partner.externalHelp === '1') {
+            confirmed = partner.externalHelpSource !== '' && partner.externalHelpMoney !== null && partner.externalHelpMoney !== ''
+            if (confirmed === false) {
+              return false
+            }
+          }
+        }
+      } else if (this.doc[propertyName].length !== 0) {
+        for (var index1 in this.doc[propertyName]) {
+          var item = this.doc[propertyName][index1]
+          for (var prop in item) {
+            if (item[prop] === '' || item[prop] === null) {
+              return false
+            }
+          }
         }
       }
-
-      if (flag === 1) {
+      return true
+    },
+    save () {
+      var flag = true
+      for (var property in this.doc) {
+        if (property === 'partners' || property === 'family' || property === 'logs' || property === 'children') {
+          flag = this.confirm(property)
+          if (flag === false) {
+            break
+          }
+        } else if (this.doc[property] === '' || this.doc[property] === null) {
+          flag = false
+          break
+        }
+      }
+      if (flag === false) {
         alert('لم يتم ملئ كل الخانات بعد')
         return
       }
+
       this.loading = true
       this.$db.insert(this.doc, (err, newDoc) => {
         if (err) {
-          console.log(err.message)
+          alert('لم يتم حفظ الاستاذ! الرجاء اعادة الحفظ')
           return
         }
         this.loading = false
