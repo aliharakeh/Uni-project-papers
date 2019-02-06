@@ -86,7 +86,7 @@
                 <v-btn slot="activator" color="primary" dark class="mb-2">ادخال معلومات</v-btn>
                 <v-card>
                   <v-card-title>
-                    <span class="headline">ادخال خانة جديدة</span>
+                    <span class="headline">المعلومات الصحية</span>
                   </v-card-title>
                   <v-card-text>
                     <v-container grid-list-md>
@@ -215,12 +215,6 @@
                       <v-flex xs12 sm6>
                         <v-text-field type="number" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر"></v-text-field>
                       </v-flex>
-                      <!-- <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.acceptedCosts" label="النفقات الموافق عليها"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.earnedHelpValue" label="قيمة المساعدة المستحقة"></v-text-field>
-                      </v-flex> -->
                     </v-layout>
                   </v-container>
                 </v-card-text>
@@ -240,13 +234,13 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.doctorsCost) }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.medicineCost) }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.otherCosts) }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.costsSum) }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.externalHelpValue) }}</td>
-                <td class="text-xs-center">{{ props.item.acceptedCosts}}</td>
-                <td class="text-xs-center">{{ props.item.earnedHelpValue}}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.doctorsCost) }} ل.ل</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.medicineCost) }} ل.ل</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.otherCosts) }} ل.ل</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.costsSum) }} ل.ل</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.externalHelpValue) }} ل.ل</td>
+                <td></td>
+                <td></td>
                 <td class="text-xs-center">
                   <v-btn icon class="ml-2" @click="editItem2(props.item)">
                     <v-icon color="info">edit</v-icon>
@@ -261,8 +255,9 @@
         </v-card-text>
       </v-card>
 
-      <v-layout column justify-center align-center class="mt-2">
-          <v-btn color="primary" @click="saveToJson">طباعة</v-btn>
+      <v-layout row justify-center align-center class="mt-2">
+        <v-btn color="primary" @click="saveToJson">حفظ</v-btn>
+        <v-btn color="error" to="/">الغاء</v-btn>
       </v-layout>
 
     </div>
@@ -402,7 +397,11 @@ export default {
     },
     deleteItem (item) {
       const index = this.medicalData.indexOf(item)
-      confirm('هل انت متاكد من الغاء هذه الخانة؟') && this.medicalData.splice(index, 1)
+      if (confirm('هل انت متاكد من الغاء هذه الخانة ؟')) {
+        this.medicalData.splice(index, 1)
+      } else {
+        return
+      }
       this.updateTable2(index)
     },
     updateTable2 (index) {

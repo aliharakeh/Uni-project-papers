@@ -161,8 +161,9 @@
         </v-card-text>
       </v-card>
 
-      <v-layout column justify-center align-center class="mt-2">
-          <v-btn color="primary" @click="saveToJson">طباعة</v-btn>
+      <v-layout row justify-center align-center class="mt-2">
+        <v-btn color="primary" @click="saveToJson">حفظ</v-btn>
+        <v-btn color="error" to="/">الغاء</v-btn>
       </v-layout>
 
     </div>

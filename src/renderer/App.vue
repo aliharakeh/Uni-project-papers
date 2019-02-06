@@ -39,15 +39,6 @@
       }
     },
 
-    created () {
-      // get data from data.json
-      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
-        if (err) throw err
-        this.doc = JSON.parse(data)
-        console.log(this.doc)
-      })
-    },
-
     computed: {
       home () {
         return this.$route.path === '/'
@@ -57,16 +48,25 @@
         return this.$route.path.startsWith('/PDF')
       }
     },
+
     methods: {
-      pdf () {
-        this.show = false
+
+      Get_JSON_File_Data () {
         // get data from data.json
         fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
-          if (err) throw err
-          this.doc = JSON.parse(data)
-          console.log(this.doc)
+          if (err) {
+            alert(err.message)
+          } else {
+            this.doc = JSON.parse(data)
+            console.log(this.doc)
+          }
         })
-        remote.getCurrentWindow().webContents.printToPDF({
+      },
+
+      pdf () {
+        this.Get_JSON_File_Data()
+        this.show = false
+        remote.getCurrentWindow().webContents.printToPDF({ // try print function
           pageSize: 'A4',
           marginsType: 2,
           printBackground: false,
@@ -91,14 +91,17 @@
                 if (err) {
                   alert(err.message)
                   this.show = true
+                  this.doc = ''
                   this.$router.push('/')
                 }
                 alert('PDF saved !!')
                 this.show = true
+                this.doc = ''
                 this.$router.push('/')
               })
             }
           )
+          this.show = true
         })
       }
     }

@@ -64,7 +64,7 @@
       </table>
     </v-layout>
 
-    <!-- section 5 -->
+    <!-- section 5 --> <!-- <i class="material-icons icons">check_box</i> --> <!-- <i class="material-icons icons">check_box</i></bdi> -->
     <div style="text-align:center; margin-top: 15px;">
       <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
     </div>
@@ -73,31 +73,31 @@
           v-for="partner in doc.partners" :key="partner.name">
 
         <tr v-if="checkWork(partner) === 'متعاقد'">
-          <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
-          <td>
-              متعاقد <i class="material-icons icons">check_box</i>
-          </td>
-          <td> يعمل في : &nbsp;
-            <bdi>{{ partner.workSector }} <i class="material-icons icons">check_box</i></bdi>
+          <td style=" text-align: center;">
+            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+            <b>متعاقد </b>&nbsp;&nbsp;-&nbsp;&nbsp;
+            يعمل في : <b>{{ partner.workSector }}</b>
           </td>
         </tr>
 
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
-          <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
-          <td>
-            لا يعمل <i class="material-icons icons">check_box</i>
+          <td style=" text-align: center;">
+            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+            <b>لا يعمل</b>
           </td>
-          <td></td>
         </tr>
 
         <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
-          <td style=" text-align: center;">رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : </td>
-          <td colspan="2">{{ ConvertToArabicNum(partner.insuranceNum) }}</td>
+          <td style=" text-align: center;">
+            رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} ل.ل </b>
+          </td>
         </tr>
 
         <tr v-if="partner.externalHelp === '1'">
-          <td style=" text-align: center;">المساعدة من مصادر اخرى : {{ partner.externalHelpSource }}</td>
-          <td colspan="2">قيمتها : {{ ConvertToArabicNum(partner.externalHelpMoney) }}</td>
+          <td style=" text-align: center;">
+            المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+            قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
+          </td>
         </tr>
       </table>
     </v-layout>
@@ -157,11 +157,11 @@
           </tr>
           <tr v-for="medicCost in doc.medicalCostsData" :key="medicCost.name">
               <td>{{ medicCost.name }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.doctorsCost) }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.medicineCost) }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.otherCosts) }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.costsSum) }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.externalHelpValue) }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.doctorsCost) }} ل.ل</td>
+              <td>{{ ConvertToArabicNum(medicCost.medicineCost) }} ل.ل</td>
+              <td>{{ ConvertToArabicNum(medicCost.otherCosts) }} ل.ل</td>
+              <td>{{ ConvertToArabicNum(medicCost.costsSum) }} ل.ل</td>
+              <td>{{ ConvertToArabicNum(medicCost.externalHelpValue) }} ل.ل</td>
               <td></td>
               <td></td>
           </tr>
@@ -182,14 +182,26 @@
     </v-layout><br>
 
     <!-- section 9 -->
-    <div style="text-align:center; page-break-inside: avoid;">
-        <h2>
-            التاريخ : <br>
-            توقيع المنتسب : <br>
-            ختم وتوقيع الرئيس المباشر : <br>
-            الاسم : 
-        </h2>
-    </div>
+    <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+        <table style="border: 0px; margin-top: -20px; font-weight: bold;" width="100%;" dir="rtl">
+          <tr>
+            <td>
+              التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
+            </td>
+            <td>
+              الاسم : <br><br>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              توقيع المنتسب :
+            </td>
+            <td>
+              ختم وتوقيع الرئيس المباشر :
+            </td>
+          </tr>
+        </table>
+    </v-layout>
     
   </v-container>
 </template>
@@ -202,7 +214,8 @@ import { remote } from 'electron'
 export default{
   data () {
     return {
-      doc: ''
+      doc: '',
+      date: null
     }
   },
 
@@ -213,9 +226,17 @@ export default{
       this.doc = JSON.parse(data)
       console.log(this.doc)
     })
+
+    this.date = new Date()
   },
 
   methods: {
+
+    GetDateToday (d) {
+      var month = d.getMonth() + 1
+      return d.getFullYear() + '-' + month + '-' + d.getDate()
+    },
+
     GetDate (date, index) {
       const d = date.split('/')
       return d[index]

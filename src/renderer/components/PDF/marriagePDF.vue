@@ -62,7 +62,7 @@
       </table>
     </v-layout>
 
-    <!-- section 5 -->
+    <!-- section 5 --> <!-- <i class="material-icons icons">check_box</i> --> <!-- <i class="material-icons icons">check_box</i></bdi> -->
     <div style="text-align:center; margin-top: 15px;">
       <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
     </div>
@@ -71,31 +71,31 @@
           v-for="partner in doc.partners" :key="partner.name">
 
         <tr v-if="checkWork(partner) === 'متعاقد'">
-          <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
-          <td>
-              متعاقد <i class="material-icons icons">check_box</i>
-          </td>
-          <td> يعمل في : &nbsp;
-            <bdi>{{ partner.workSector }} <i class="material-icons icons">check_box</i></bdi>
+          <td style=" text-align: center;">
+            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+            <b>متعاقد </b>&nbsp;&nbsp;-&nbsp;&nbsp;
+            يعمل في : <b>{{ partner.workSector }}</b>
           </td>
         </tr>
 
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
-          <td style=" text-align: center;"> ان الزوج (ة) : {{ partner.name }}</td>
-          <td>
-            لا يعمل <i class="material-icons icons">check_box</i>
+          <td style=" text-align: center;">
+            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+            <b>لا يعمل</b>
           </td>
-          <td></td>
         </tr>
 
         <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
-          <td style=" text-align: center;">رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : </td>
-          <td colspan="2">{{ ConvertToArabicNum(partner.insuranceNum) }}</td>
+          <td style=" text-align: center;">
+            رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} ل.ل </b>
+          </td>
         </tr>
 
         <tr v-if="partner.externalHelp === '1'">
-          <td style=" text-align: center;">المساعدة من مصادر اخرى : {{ partner.externalHelpSource }}</td>
-          <td colspan="2">قيمتها : {{ ConvertToArabicNum(partner.externalHelpMoney) }}</td>
+          <td style=" text-align: center;">
+            المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+            قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
+          </td>
         </tr>
       </table>
     </v-layout>
@@ -105,8 +105,8 @@
         <div style="border: 2px solid black; padding: 10px;">
             أرجو اعطائي منحة الزواج المنصوص عنها في المادة ١٣ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
             واني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة زواج من أي مصدر آخر كما أني لم أتقاض هذه المنحة سابقاً. <br>
-            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ ConvertToArabicNum(doc.money) }} <br> التاريخ : {{ ConvertToArabicDate(doc.date) }}</p>
-            <p style="text-align: left; margin-top: -20px; margin-bottom: 30px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
+            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ ConvertToArabicNum(doc.money) }} ل.ل <br> التاريخ : {{ ConvertToArabicDate(doc.date) }}</p>
+            <p style="text-align: left; margin-top: -20px; margin-bottom: 55px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
         </div>
     </v-layout>
 
@@ -114,12 +114,15 @@
    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
            يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : <br>
-           ان الراتب الأساسي الصافي للأستاذ : ... ل.ل <br>
-           تاريخ حصول الزواج : {{ ConvertToArabicDate(doc.marriageDate) }}
-           <p style="text-align: left; margin-top: -40px; margin-left:110px; margin-bottom: 30px;">
-             التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br>
-             توقيع <b>الرئيس المباشر</b><br><br>
-             الاسم : 
+           ان الراتب الأساسي الصافي للأستاذ : 
+           <div style="width: 450px;height: 40px; border: 1px solid black;">
+             <p style="text-align: left;">ل.ل &nbsp;</p>
+           </div>
+           <p style="text-align: justify;">
+            تاريخ حصول الزواج : {{ ConvertToArabicDate(doc.marriageDate) }} <br>
+            التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
+            الاسم : <br><br>
+            توقيع <b>الرئيس المباشر :</b> <br><br><br>
            </p>
         </div>
     </v-layout>
@@ -127,7 +130,7 @@
     <!-- section 8 -->
     <v-layout column class="mt-2" style="font-size: 20px; page-break-inside: avoid;">
         <div style="margin-right: 25px;">
-           <b>المستندات المطلوبة : </b>
+           <u><b>المستندات المطلوبة : </b></u>
            <ul>
               <li>وثيقة زواج , غيره من المستندات عند الاقتضاء.</li>
               <li>مستند عدم استفادة عن الزوج (الزوجة) من المرجع المسؤول عن عمله.</li>

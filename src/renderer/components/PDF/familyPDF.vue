@@ -62,7 +62,7 @@
         <tr>
             <td style=" text-align: center;" colspan="2">
                 <p>أرجو ادراج عهدة والدي و/أو والدتي و/أو أخوتي على صفحتي الاسمية واعتبارهم على عاتقي وذلك وفقاً للمستندات الثبوتية المرفقة في تاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}</p><br>
-                <p style=" text-align: left; margin-top: -40px; margin-left:60px; margin-bottom: 40px;" colspan="2">
+                <p style=" text-align: left; margin-top: -40px; margin-left:60px; margin-bottom: 60px;" colspan="2">
                     توقيع <b>الرئيس المباشر</b>
                 </p>
             </td>
@@ -103,8 +103,8 @@
     <!-- section 6 -->
     <v-layout column class="mt-3" style="font-size: 20px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
-            <p> أنا الموقع أدناه أتعهد بأن كامل المعلومات الواردة أعلاه هي صحيحة , وعلى مسؤوليتي القانونية الجزائية والمدنية , وأن ذوي عهدتي المذكورة أعلاه عاجزين عن كسب العيش وليس باستطاعتهم تحمل نفقات المعالجات الصحية والإستشفائية. </p>
-            <p style="text-align: left; margin-top: -20px; margin-bottom: 30px; margin-left:100px"> التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br> توقيع <b>المنتسب</b></p>
+            <p> أنا الموقع أدناه أتعهد بأن كامل المعلومات الواردة أعلاه هي صحيحة , وعلى مسؤوليتي القانونية الجزائية والمدنية , وأن ذوي عهدتي المذكورة أعلاه عاجزين عن كسب العيش وليس باستطاعتهم تحمل نفقات المعالجات الصحية والإستشفائية. </p><br>
+            <p style="text-align: left; margin-top: -20px; margin-bottom: 50px; margin-left:100px"> التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br> توقيع <b>المنتسب</b></p>
         </div>
     </v-layout><br>
 
