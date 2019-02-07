@@ -32,7 +32,7 @@
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ doc.phone }}</span>
+              <span class="title">{{ ConvertToArabicNum(doc.phone) }}</span>
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الكلية / المعهد : </span>
@@ -64,7 +64,7 @@
             </v-flex>
             <v-flex xs12 sm5 v-if="person.insuranceNumSection">
               <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ person.insuranceNum }}</span>
+              <span class="title">{{ ConvertToArabicNum(person.insuranceNum) }}</span>
             </v-flex>
             <v-flex xs12 class="mt-4">
               <h2>هل تم تقاضي هذه المنحة سابقا او من اي مصدر اخر؟</h2>
@@ -159,13 +159,13 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ props.item.birthDate }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicDate(props.item.birthDate) }}</td>
                 <td class="text-xs-center">{{ props.item.educationPlace }}</td>
                 <td class="text-xs-center">{{ props.item.educationType }}</td>
                 <td class="text-xs-center">{{ props.item.educationLevel}}</td>
                 <td class="text-xs-center">{{ props.item.class}}</td>
-                <td class="text-xs-center">{{ props.item.outsideCertificateMoney}}</td>
-                <td class="text-xs-center">{{ props.item.allowedCertificateMoney}}</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.outsideCertificateMoney) }} ل.ل</td>
+                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.allowedCertificateMoney) }} ل.ل</td>
                 <td class="text-xs-center">
                   <v-btn icon class="ml-2" @click="editItem(props.item)">
                     <v-icon color="info">edit</v-icon>
@@ -183,8 +183,9 @@
         </v-card-text>
       </v-card>
 
-      <v-layout column justify-center align-center class="mt-2">
-          <v-btn color="primary" @click="saveToJson">طباعة</v-btn>
+      <v-layout row justify-center align-center class="mt-2">
+        <v-btn color="primary" @click="saveToJson">حفظ</v-btn>
+        <v-btn color="error" to="/">الغاء</v-btn>
       </v-layout>
 
     </div>
@@ -277,7 +278,10 @@ export default {
   },
   methods: {
     workPlace (person) {
-      return person.workSector + ' - ' + person.work
+      if (person.workSector === '') {
+        return 'لا يعمل'
+      }
+      return person.workSector
     },
     editItem (item) {
       this.editedIndex = this.childrenData.indexOf(item)
@@ -358,9 +362,49 @@ export default {
             console.log(err.message)
             return
           }
-          this.$router.push('/')
+          this.$router.push('/PDFeducation')
         }
       )
+    },
+
+    ConvertToArabicNum (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabicDate (date) {
+      if (!date) {
+        return ''
+      }
+      var dd = date.split('-')
+      var year = ''
+      var month = ''
+      var day = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+
+      var y = dd[0].split('') // year
+      y.forEach(element => {
+        year += arnum[element]
+      })
+
+      var m = dd[1].split('') // month
+      m.forEach(element => {
+        month += arnum[element]
+      })
+
+      var d = dd[2].split('') // day
+      d.forEach(element => {
+        day += arnum[element]
+      })
+
+      return year + '/' + month + '/' + day
     }
   }
 }
