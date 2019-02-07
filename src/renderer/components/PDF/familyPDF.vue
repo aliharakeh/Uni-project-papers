@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid style="width: 21cm; height: 29.7cm;">
     
     <!-- section 1 -->
     <v-layout row justify-space-between class="mt-2">
