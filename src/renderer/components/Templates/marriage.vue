@@ -154,8 +154,8 @@
       </v-card>
 
       <v-layout row justify-center align-center class="mt-2">
-        <v-btn color="primary" @click="saveToJson">حفظ</v-btn>
-        <v-btn color="error" to="/">الغاء</v-btn>
+        <v-btn color="primary" @click="saveToJsonCheck">حفظ</v-btn>
+        <v-btn color="error" @click="goBack">الغاء</v-btn>
       </v-layout>
 
     </div>
@@ -201,7 +201,16 @@ export default {
       }
       return person.workSector
     },
-
+    goBack () {
+      if (confirm('هل انت متاكد من الخروج من هذه الصفحة ؟')) {
+        this.$router.push('/')
+      }
+    },
+    saveToJsonCheck () {
+      if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
+        this.saveToJson()
+      }
+    },
     saveToJson () {
       if (this.marriageDate === null) {
         alert('لم يتم ملئ كل الخانات بعد')
