@@ -50,15 +50,17 @@
       </div>
     </v-layout>
 
-    <!-- section 4 -->
+        <!-- section 4 -->
     <v-layout row class="mt-3" style="font-size: 20px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
-          <td style=" text-align: center;">اسم المنتسب وشهرته : {{ doc.name }}</td>
+          <td style="width: 15%;"></td>
+          <td>اسم المنتسب وشهرته : {{ doc.name }}</td>
           <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
         </tr>
         <tr>
-          <td style=" text-align: center;">الكلية/المعهد : {{ doc.faculty }}</td>
+          <td style="width: 15%;"></td>
+          <td>الكلية/المعهد : {{ doc.faculty }}</td>
           <td>الفرع : {{ doc.facultySection }}</td>
         </tr>
       </table>
@@ -73,35 +75,39 @@
           v-for="partner in doc.partners" :key="partner.name">
 
         <tr v-if="checkWork(partner) === 'متعاقد'">
-          <td style=" text-align: center;">
-            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <!-- <td style="width:20%;"></td> -->
+          <td>
+            - ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>متعاقد </b>&nbsp;&nbsp;-&nbsp;&nbsp;
             يعمل في : <b>{{ partner.workSector }}</b>
           </td>
         </tr>
 
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
-          <td style=" text-align: center;">
-            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <!-- <td style="width:20%;"></td> -->
+          <td>
+            - ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>لا يعمل</b>
           </td>
         </tr>
 
         <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
-          <td style=" text-align: center;">
-            رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
+          <!-- <td style="width:20%;"></td> -->
+          <td>
+            - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
         </tr>
 
         <tr v-if="partner.externalHelp === '1'">
-          <td style=" text-align: center;">
-            المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <!-- <td style="width:20%;"></td> -->
+          <td>
+            - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
       </table>
     </v-layout>
-    
+
     <!-- section 6 -->
     <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
       <table class="t" dir="rtl">

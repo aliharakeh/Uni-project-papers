@@ -54,11 +54,13 @@
     <v-layout row class="mt-3" style="font-size: 20px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
-          <td style=" text-align: center;">اسم المنتسب وشهرته : {{ doc.name }}</td>
+          <td style="width: 15%;"></td>
+          <td>اسم المنتسب وشهرته : {{ doc.name }}</td>
           <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
         </tr>
         <tr>
-          <td style=" text-align: center;">الكلية/المعهد : {{ doc.faculty }}</td>
+          <td style="width: 15%;"></td>
+          <td>الكلية/المعهد : {{ doc.faculty }}</td>
           <td>الفرع : {{ doc.facultySection }}</td>
         </tr>
       </table>
@@ -111,38 +113,44 @@
           v-for="partner in doc.partners" :key="partner.name">
 
         <tr v-if="checkWork(partner) === 'متعاقد'">
-          <td style=" text-align: center;">
-            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <!-- <td style="width:18%;"></td> -->
+          <td>
+           - ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>متعاقد </b>&nbsp;&nbsp;-&nbsp;&nbsp;
             يعمل في : <b>{{ partner.workSector }}</b>
           </td>
         </tr>
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
-          <td style=" text-align: center;">
-            ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <!-- <td style="width:18%;"></td> -->
+          <td>
+           - ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>لا يعمل</b>
           </td>
         </tr>
         <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
-          <td style=" text-align: center;">
-            رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
+          <!-- <td style="width:18%;"></td> -->
+          <td>
+           - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
         </tr>
         <tr v-if="partner.externalHelp === '1'">
-          <td style=" text-align: center;">
-            المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <!-- <td style="width:18%;"></td> -->
+          <td>
+           - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
         <tr v-if="partner.prevOrOutsidePaper === '1'">
-            <td style="text-align: center;">
-                تقاضى (ت) الزوج (ة) مساعدة أو منحة تعليم عن أولاده أو عن أحدهم المذكور أسماؤهم أعلاه , قيمتها : <b>{{ ConvertToArabicNum(partner.money) }} ل.ل </b>
-            </td>
+          <!-- <td style="width:18%;"></td> -->
+          <td>
+           - تقاضى (ت) الزوج (ة) مساعدة أو منحة تعليم عن أولاده أو عن أحدهم المذكور أسماؤهم أعلاه , قيمتها : <b>{{ ConvertToArabicNum(partner.money) }} ل.ل </b>
+          </td>
         </tr>
         <tr v-else>
-            <td style="text-align: center;">
-                لم يتقاضى (ت) الزوج (ة) مساعدة أو منحة تعليم عن أولاده أو عن أحدهم المذكور أسماؤهم أعلاه.
-            </td>
+          <!-- <td style="width:18%;"></td> -->
+          <td>
+             - لم يتقاضى (تتقاضى) الزوج (ة) مساعدة أو منحة تعليم عن أولاده أو عن أحدهم المذكور أسماؤهم أعلاه.
+          </td>
         </tr>
       </table>
     </v-layout>
@@ -150,9 +158,9 @@
 		<!-- section 7 -->
 		<v-layout column class="mt-4" style="font-size: 20px; margin-bottom: 50px; page-break-inside: avoid;">
 			<p>
-				أصرّح على مسؤوليّتي الشّخصية والقانونية بأن أولادي المذكورة أسماؤهم في هذا الطلب لا يتعاطون أي عمل مأجور ولا زالوا في عهدتي ولا أزال أتقاضى التعويض العائلي عنهم , ولا أستفيد من أية منحة دراسية عنهم من مصادر أخرى. <br>
-				التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
-				<b>التوقيع : </b>
+			-	أصرّح على مسؤوليّتي الشّخصية والقانونية بأن أولادي المذكورة أسماؤهم في هذا الطلب لا يتعاطون أي عمل مأجور ولا زالوا في عهدتي ولا أزال أتقاضى التعويض العائلي عنهم , ولا أستفيد من أية منحة دراسية عنهم من مصادر أخرى. <br>
+			-	التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
+			-	<b>التوقيع : </b>
 			</p>
 		</v-layout>
 
@@ -167,14 +175,14 @@
 							٣- <br>
 							٤- <br>
 							٥- <br>
-							٦-
+							٦- 
 						</td>
 						<td>
 							<p style="padding: 5px;">
-								مع التأكيد أن الدكتور : {{ doc.name }} <br>
-								كان في الخدمة الفعلية خلال العام الدراسي موضوع هذا الطلب <br>
-								<b>الرئيس المباشر</b><br><br>
-								<b>التوقيع :</b><br><br>
+							-	مع التأكيد أن الدكتور : {{ doc.name }} <br>
+							-	كان في الخدمة الفعلية خلال العام الدراسي موضوع هذا الطلب. <br>
+							-	<b>الرئيس المباشر :</b><br><br>
+							-	<b>التوقيع :</b><br><br>
 							</p>
 						</td>
 					</tr>
