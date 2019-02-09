@@ -26,7 +26,7 @@
             <v-text-field label="الاسم" v-model="doc.name"></v-text-field>
           </v-flex>
           <v-flex xs5>
-            <v-text-field label="الهاتف" v-model="doc.phone"></v-text-field>
+            <v-text-field type="number" label="الهاتف" v-model="doc.phone"></v-text-field>
           </v-flex>
           <v-flex xs5>
             <v-text-field label="الكلية" v-model="doc.faculty"></v-text-field>

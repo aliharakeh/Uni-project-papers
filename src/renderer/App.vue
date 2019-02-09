@@ -12,15 +12,18 @@
         <v-btn flat to="/doctors">
           <h2>الأساتذة</h2>
         </v-btn>
+        <v-btn color="error" v-if="showButton" @click="goBack">
+          <h1>رجوع</h1>
+        </v-btn>
         <v-btn absolute dark fab bottom left color="primary" v-if="showButton" @click="pdf()">
-          <h1>طباعة</h1>
+          <h1>حفظ</h1>
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
     </v-content>
-    <v-footer v-if="show && !home">
+    <v-footer v-if="show && !showButton">
       <span class="px-3">&copy; 2018/2019 - By Mohammad Hammoud & Ali Harakeh </span>
     </v-footer>
   </v-app>
@@ -34,69 +37,83 @@
   export default {
     data () {
       return {
-        show: true,
-        doc: ''
+        show: true
       }
     },
     computed: {
-      home () {
-        return this.$route.path === '/'
-      },
       showButton () {
         return this.$route.path.startsWith('/PDF')
       }
     },
     methods: {
-      Get_JSON_File_Data () {
-        // get data from data.json
+      goBack () {
+        var doc = ''
         fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
           if (err) {
             alert(err.message)
           } else {
-            this.doc = JSON.parse(data)
-            console.log(this.doc)
+            doc = JSON.parse(data)
+            // console.log(doc)
+            this.$db.find({name: doc.name, number: doc.number}, {}, (err, data) => {
+              if (err) {
+                alert('لم يتم العثور على الاساتذة')
+                return
+              }
+              var route = this.$route.path
+              var docID = data[0]._id
+              var pageName = route.substr(4, route.length)
+              this.$router.push('/' + pageName + '/' + docID)
+            })
           }
         })
       },
       pdf () {
-        this.Get_JSON_File_Data()
-        this.show = false
-        remote.getCurrentWindow().webContents.printToPDF({ // try print function
-          pageSize: 'A4',
-          marginsType: 2,
-          printBackground: false,
-          landscape: false
-        }, (err, data) => {
+        var doc = ''
+        var name = ''
+        fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
           if (err) {
             alert(err.message)
-          }
-          remote.dialog.showSaveDialog(
-            remote.getCurrentWindow(),
-            {
-              title: 'Save Destination',
-              defaultPath: remote.app.getPath('documents') + '//' + this.doc.name + '_' + this.doc.number + '_' + this.doc.type + '.pdf', // --> give a default name
-              filters: [{
-                name: 'PDF File',
-                extensions: ['pdf']
-              }]
-            },
-            filename => {
-              console.log(filename)
-              fs.writeFile(filename, data, (err) => {
-                if (err) {
-                  alert(err.message)
-                  this.show = true
-                  this.doc = ''
-                  this.$router.push('/')
+          } else {
+            doc = JSON.parse(data)
+            name = doc.name + '_' + doc.number + '_' + doc.type + '.pdf'
+            // console.log(name)
+            this.show = false
+            remote.getCurrentWindow().webContents.printToPDF({ // try print function
+              pageSize: 'A4',
+              marginsType: 2,
+              printBackground: false,
+              landscape: false
+            }, (err, data) => {
+              if (err) {
+                alert(err.message)
+              }
+              remote.dialog.showSaveDialog(
+                remote.getCurrentWindow(),
+                {
+                  title: 'Save Destination',
+                  defaultPath: remote.app.getPath('documents') + '//' + name, // --> give a default name
+                  filters: [{
+                    name: 'PDF File',
+                    extensions: ['pdf']
+                  }]
+                },
+                filename => {
+                  console.log(filename)
+                  fs.writeFile(filename, data, (err) => {
+                    if (err) {
+                      alert(err.message)
+                      this.show = true
+                      this.$router.push('/')
+                    }
+                    alert('PDF saved !!')
+                    this.show = true
+                    this.$router.push('/')
+                  })
                 }
-                alert('PDF saved !!')
-                this.show = true
-                this.doc = ''
-                this.$router.push('/')
-              })
-            }
-          )
-          this.show = true
+              )
+              this.show = true
+            })
+          }
         })
       }
     }

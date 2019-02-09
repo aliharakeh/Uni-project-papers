@@ -275,33 +275,6 @@ export default {
         ar += arnum[element]
       })
       return ar
-    },
-    ConvertToArabicDate (date) {
-      if (!date) {
-        return ''
-      }
-      var dd = date.split('-')
-      var year = ''
-      var month = ''
-      var day = ''
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-
-      var y = dd[0].split('') // year
-      y.forEach(element => {
-        year += arnum[element]
-      })
-
-      var m = dd[1].split('') // month
-      m.forEach(element => {
-        month += arnum[element]
-      })
-
-      var d = dd[2].split('') // day
-      d.forEach(element => {
-        day += arnum[element]
-      })
-
-      return year + '/' + month + '/' + day
     }
   }
 }
