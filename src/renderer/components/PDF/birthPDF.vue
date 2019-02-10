@@ -5,8 +5,8 @@
     <v-layout row justify-space-between class="mt-2">
       <div dir="rtl">
         <h1>الجمهورية اللبنانية</h1>
-        <h2>صندوق تعاضد أفراد الهيئة</h2>
-        <h2>التعليمية في الجامعة اللبنانية</h2>
+        <h3>صندوق تعاضد أفراد الهيئة</h3>
+        <h3>التعليمية في الجامعة اللبنانية</h3>
       </div>
         <div dir="rtl" style="text-align: center;border: 2px solid black;" class="px-4 py-3">
           <h4>نموذج رقم<br>(٦)<br>ولادة</h4>
