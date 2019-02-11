@@ -49,7 +49,7 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 20px;">
+    <v-layout row class="mt-3" style="font-size: 18px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 14%;"></td>
@@ -74,7 +74,7 @@
     </v-layout>
 
     <!-- section 5 -->
-    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table dir="rtl" class="t">
         <tr>
             <th colspan="5">
@@ -104,7 +104,7 @@
     </v-layout>
 
     <!-- section 6 -->
-    <v-layout column class="mt-3" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-3" style="font-size: 18px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
             <p>- أنا الموقع أدناه أتعهد بأن كامل المعلومات الواردة أعلاه هي صحيحة , وعلى مسؤوليتي القانونية الجزائية والمدنية , وأن ذوي عهدتي المذكورة أعلاه عاجزين عن كسب العيش وليس باستطاعتهم تحمل نفقات المعالجات الصحية والإستشفائية. </p><br>
             <p style="text-align: left; margin-top: -20px; margin-bottom: 50px; margin-left:100px"> التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br> توقيع <b>المنتسب</b></p>
@@ -112,7 +112,7 @@
     </v-layout><br>
 
     <!-- section 7 -->
-    <v-layout column class="mt-2" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-2" style="font-size: 18px; page-break-inside: avoid;">
         <div style="margin-right: 25px;">
            <u><b>المستندات المطلوبة : </b></u>
            <ul>
@@ -274,7 +274,7 @@ export default{
   }
 
   .icons{
-    font-size: 19px;
+    font-size: 15px;
     margin-top: 5px;
   }
 

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid style="width: 21cm; height: 29.7cm;">
-    
+
     <!-- section 1 -->
     <v-layout row justify-space-between class="mt-2">
       <div dir="rtl">
@@ -51,7 +51,7 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 20px;">
+    <v-layout row class="mt-3" style="font-size: 18px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
@@ -70,7 +70,7 @@
     <div style="text-align:center; margin-top: 15px;">
       <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
     </div>
-    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table style="width: 100%;" dir="rtl" class="mb-3" 
           v-for="partner in doc.partners" :key="partner.name">
 
@@ -109,21 +109,14 @@
     </v-layout>
     
     <!-- section 6 -->
-    <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table class="t" dir="rtl">
         <tr>
           <th colspan="8"><h1 class="display-1 font-weight-bold">معلومات عن المرضى موضوع المساعدة</h1></th>
         </tr>
         <tr>
           <th>اسم المريض</th>
-          <th colspan="3">
-            <bdi>تاريخ الولادة</bdi>
-            <v-layout row justify-space-around>
-              <bdi>يوم</bdi>
-              <bdi>شهر</bdi>
-              <bdi>سنة</bdi>
-            </v-layout>
-          </th>
+          <th>تاريخ الولادة</th>
           <th>درجة القرابة للمنتسب</th>
           <th colspan="2">
             <bdi>تاريخ ابتداء وانتهاء العلاج</bdi>
@@ -135,9 +128,7 @@
         </tr>
         <tr v-for="medicData in doc.medicalData" :key="medicData.name">
           <td>{{ medicData.name }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(medicData.birthDate), 2) }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(medicData.birthDate), 1) }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(medicData.birthDate), 0) }}</td>
+          <td>{{ ConvertToArabicDate(medicData.birthDate) }}</td>
           <td>{{ medicData.rangeOfAcquaintance }}</td>
           <td>{{ ConvertToArabicDate(medicData.medicalStartDate) }}</td>
           <td>{{ ConvertToArabicDate(medicData.medicalEndDate) }}</td>
@@ -146,10 +137,10 @@
     </v-layout><br>
 
     <!-- section 7 -->
-    <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
         <table class="t" dir="rtl">
           <tr>
-            <th colspan="8"><h1 class="display-1 font-weight-bold">نفقات المعالجة حسب نوعها</h1></th>
+            <th colspan="8"><h1 class="display-1 font-weight-bold">نفقات المعالجة حسب نوعها (ل.ل)</h1></th>
           </tr>
           <tr>
               <th>اسم المريض</th>
@@ -162,12 +153,12 @@
               <th>قيمة المساعدة المستحقة</th>
           </tr>
           <tr v-for="medicCost in doc.medicalCostsData" :key="medicCost.name">
-              <td>{{ medicCost.name }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.doctorsCost) }} ل.ل</td>
-              <td>{{ ConvertToArabicNum(medicCost.medicineCost) }} ل.ل</td>
-              <td>{{ ConvertToArabicNum(medicCost.otherCosts) }} ل.ل</td>
-              <td>{{ ConvertToArabicNum(medicCost.costsSum) }} ل.ل</td>
-              <td>{{ ConvertToArabicNum(medicCost.externalHelpValue) }} ل.ل</td>
+              <td style="width: 100px;">{{ medicCost.name }}</td>
+              <td>{{ ConvertToArabicNum(medicCost.doctorsCost) }} </td>
+              <td>{{ ConvertToArabicNum(medicCost.medicineCost) }} </td>
+              <td>{{ ConvertToArabicNum(medicCost.otherCosts) }} </td>
+              <td>{{ ConvertToArabicNum(medicCost.costsSum) }} </td>
+              <td>{{ ConvertToArabicNum(medicCost.externalHelpValue) }} </td>
               <td></td>
               <td></td>
           </tr>
@@ -175,10 +166,10 @@
     </v-layout><br>
 
     <!-- section 8 -->
-    <v-layout row class="mt-4" style="font-size: 22px; page-break-inside: avoid;">
+    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
         <table dir="rtl" style="width: 100%;">
             <tr>
-                <th colspan="2"><h1 class="display-1 font-weight-bold">المستندات المرافقة</h1></th>
+              <th colspan="2"><h1 class="display-1 font-weight-bold">المستندات المرافقة</h1></th>
             </tr>
             <tr> <td>١-</td> <td class="rightborder">٥-</td> </tr>
             <tr> <td>٢-</td> <td class="rightborder">٦-</td> </tr>
@@ -188,7 +179,7 @@
     </v-layout><br>
 
     <!-- section 9 -->
-    <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
         <table style="border: 0px; margin-top: -20px; font-weight: bold;" width="100%;" dir="rtl">
           <tr>
             <td>
@@ -241,11 +232,6 @@ export default{
     GetDateToday (d) {
       var month = d.getMonth() + 1
       return d.getFullYear() + '-' + month + '-' + d.getDate()
-    },
-
-    GetDate (date, index) {
-      const d = date.split('/')
-      return d[index]
     },
 
     checkWork (partner) {
@@ -355,7 +341,7 @@ export default{
   }
 
   .icons{
-    font-size: 19px;
+    font-size: 15px;
     margin-top: 5px;
   }
 

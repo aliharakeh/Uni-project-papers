@@ -49,7 +49,7 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 20px;">
+    <v-layout row class="mt-3" style="font-size: 18px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
@@ -68,7 +68,7 @@
     <div style="text-align:center; margin-top: 15px;">
       <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
     </div>
-    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table style="width: 100%;" dir="rtl" class="mb-3" 
           v-for="partner in doc.partners" :key="partner.name">
 
@@ -107,7 +107,7 @@
     </v-layout>
 
     <!-- section 6 -->
-    <v-layout column class="mt-3" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-3" style="font-size: 18px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
            - أرجو اعطائي منحة الزواج المنصوص عنها في المادة ١٣ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
            - وإني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة زواج من أي مصدر آخر كما أني لم أتقاض هذه المنحة سابقاً. <br>
@@ -117,7 +117,7 @@
     </v-layout>
 
     <!-- section 7 -->
-   <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+   <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
           - يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : <br>
           - إن الراتب الأساسي الصافي للأستاذ : 
@@ -128,7 +128,7 @@
             - تاريخ حصول الزواج : {{ ConvertToArabicDate(doc.marriageDate) }} <br>
             - التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
             - الإسم : <br><br>
-            - توقيع <b>الرئيس المباشر :</b> <br><br><br>
+            - توقيع <b>الرئيس المباشر </b> <br><br><br>
            </p>
         </div>
     </v-layout>
@@ -293,7 +293,7 @@ export default{
   }
 
   .icons{
-    font-size: 19px;
+    font-size: 15px;
     margin-top: 5px;
   }
 

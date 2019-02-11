@@ -50,7 +50,7 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 20px;">
+    <v-layout row class="mt-3" style="font-size: 18px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
@@ -69,7 +69,7 @@
     <div style="text-align:center; margin-top: 15px;">
       <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
     </div>
-    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table style="width: 100%;" dir="rtl" class="mb-3" 
           v-for="partner in doc.partners" :key="partner.name">
 
@@ -108,7 +108,7 @@
     </v-layout>
     
     <!-- section 6 -->
-    <v-layout column class="mt-3" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-3" style="font-size: 18px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
            - أرجو اعطائي منحة الولادة عن ولدي {{ doc.child }} , المنصوص عنها في المادة ١٤ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
            - وإني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة ولادة من أي مصدر آخر. <br>
@@ -118,7 +118,7 @@
     </v-layout>
 
     <!-- section 7 -->
-   <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+   <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
         <div style="border: 2px solid black; padding: 10px;">
           - يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : <br>
           - إن الراتب الأساسي الشهري للأستاذ : 
@@ -135,7 +135,7 @@
     </v-layout>
 
     <!-- section 8 -->
-    <v-layout column class="mt-2" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-2" style="font-size: 18px; page-break-inside: avoid;">
         <div style="margin-right: 25px;">
            <u><b>المستندات المطلوبة : </b></u>
            <ul>
@@ -295,7 +295,7 @@ export default{
   }
 
   .icons{
-    font-size: 19px;
+    font-size: 15px;
     margin-top: 5px;
   }
 

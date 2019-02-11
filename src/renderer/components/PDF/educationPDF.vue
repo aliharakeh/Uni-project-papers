@@ -51,7 +51,7 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 20px;">
+    <v-layout row class="mt-3" style="font-size: 18px;">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
@@ -68,20 +68,13 @@
 
     <!-- section 5 -->
 		<div style="text-align:center; margin-top: 15px;">
-			<h1 class="display-1 font-weight-bold">أسماء الأولاد المستفيدين</h1>
+			<h1 class="display-1 font-weight-bold">أسماء الأولاد المستفيدين (ل.ل)</h1>
 		</div>
-    <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table class="t" dir="rtl">
         <tr>
           <th>اسم الولد</th>
-          <th colspan="3">
-            <bdi>تاريخ الولادة</bdi>
-            <v-layout row justify-space-around>
-              <bdi>اليوم</bdi>
-              <bdi>الشهر</bdi>
-              <bdi>السنة</bdi>
-            </v-layout>
-          </th>
+          <th>تاريخ الولادة</th>
           <th>اسم المدرسة أو الجامعة</th>
           <th>نوع التعليم</th>
 					<th>مرحلة التعليم</th>
@@ -91,15 +84,13 @@
         </tr>
         <tr v-for="childrenData in doc.childrenData" :key="childrenData.name">
           <td>{{ childrenData.name }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(childrenData.birthDate), 2) }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(childrenData.birthDate), 1) }}</td>
-          <td style="width: 60px;">{{ GetDate(ConvertToArabicDate(childrenData.birthDate), 0) }}</td>
+          <td>{{ ConvertToArabicDate(childrenData.birthDate) }}</td>
           <td>{{ childrenData.educationPlace }}</td>
           <td>{{ childrenData.educationType }}</td>
           <td>{{ childrenData.educationLevel }}</td>
 					<td>{{ childrenData.class }}</td>
-					<td>{{ ConvertToArabicNum(childrenData.outsideCertificateMoney) }} ل.ل</td>
-					<td>{{ ConvertToArabicNum(childrenData.allowedCertificateMoney) }} ل.ل</td>
+					<td>{{ ConvertToArabicNum(childrenData.outsideCertificateMoney) }} </td>
+					<td>{{ ConvertToArabicNum(childrenData.allowedCertificateMoney) }} </td>
         </tr>
       </table>
     </v-layout>
@@ -108,7 +99,7 @@
     <div style="text-align:center; margin-top: 15px;">
       <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
     </div>
-    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
       <table style="width: 100%;" dir="rtl" class="mb-3" 
           v-for="partner in doc.partners" :key="partner.name">
 
@@ -156,7 +147,7 @@
     </v-layout>
 
 		<!-- section 7 -->
-		<v-layout column class="mt-4" style="font-size: 20px; margin-bottom: 50px; page-break-inside: avoid;">
+		<v-layout column class="mt-4" style="font-size: 18px; margin-bottom: 50px; page-break-inside: avoid;">
 			<p>
 			-	أصرّح على مسؤوليّتي الشّخصية والقانونية بأن أولادي المذكورة أسماؤهم في هذا الطلب لا يتعاطون أي عمل مأجور ولا زالوا في عهدتي ولا أزال أتقاضى التعويض العائلي عنهم , ولا أستفيد من أية منحة دراسية عنهم من مصادر أخرى. <br>
 			-	التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
@@ -165,7 +156,7 @@
 		</v-layout>
 
 		<!-- section 8 -->
-    <v-layout row class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
         <table dir="rtl" style="width: 100%;">
 					<tr>
 						<td style="border: 2px solid black; width: 50%;">
@@ -221,11 +212,6 @@ export default{
     GetDateToday (d) {
       var month = d.getMonth() + 1
       return d.getFullYear() + '-' + month + '-' + d.getDate()
-    },
-
-    GetDate (date, index) {
-      const d = date.split('/')
-      return d[index]
     },
 
     checkWork (partner) {
@@ -335,7 +321,7 @@ export default{
   }
 
   .icons{
-    font-size: 19px;
+    font-size: 15px;
     margin-top: 5px;
   }
 
