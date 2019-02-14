@@ -11,13 +11,13 @@
     <!-- content to show -->
     <v-card v-else>
       <v-card-title>
-        <h1>تعديل معلومات الاستاذ</h1>
+        <h1>اضافة استاذ جديد</h1>
       </v-card-title>
       <v-divider></v-divider>
       <v-card-text>
-
         <!-- doctor's info -->
         <h1 class="mr-4">الاستاذ</h1>
+
         <v-layout row wrap justify-space-around>
           <v-flex xs5>
             <v-text-field type="number" label="رقم الاستاذ" v-model="doc.number"></v-text-field>
@@ -37,13 +37,20 @@
           <v-flex xs5>
             <v-text-field label="مكان السكن" v-model="doc.address"></v-text-field>
           </v-flex>
+          <v-flex xs5>
+            <v-select
+              :items="genders"
+              label="الجنس"
+              v-model="doc.gender"
+            ></v-select>
+          </v-flex>
         </v-layout>
 
         <v-divider class="my-3"></v-divider>
 
         <!-- partners -->
         <h1 class="mr-4">
-          الزوج / الزوجة
+          {{ partnerTitle }}
           <v-btn
             color="primary"
             @click="doc.partners.push(Object.assign({}, defaultPartner))"
@@ -127,11 +134,12 @@
 
         <!-- children -->
         <h1 class="mr-4">
-          الاولاد
+          معلومات عن الاولاد
           <v-btn
           color="primary"
           @click="doc.children.push(Object.assign({}, defaultChild))"
-          >اضافة خانة</v-btn></h1>
+          >اضافة خانة</v-btn>
+        </h1>
         <div v-for="(child, j) in doc.children" :key="'child' + j">
           <h2 class="mr-4">
             ({{ j + 1 }})
@@ -167,6 +175,13 @@
                 </v-date-picker>
               </v-dialog>
             </v-flex>
+            <v-flex xs5>
+              <v-select
+                :items="genders"
+                label="الجنس"
+                v-model="child.gender"
+              ></v-select>
+            </v-flex>
           </v-layout>
         </div>
 
@@ -174,7 +189,7 @@
 
         <!-- family -->
         <h1 class="mr-4">
-          العائلة
+           معلومات عن العائلة
           <v-btn
           color="primary"
           @click="doc.family.push(Object.assign({}, defaultFamily))"
@@ -229,7 +244,7 @@
         </div>
 
         <v-layout row wrap justify-center class="mt-3">
-          <v-btn color="primary" @click="update">تعديل</v-btn>
+          <v-btn color="primary" @click="update">حفظ</v-btn>
           <v-btn color="error" to="/doctors">الغاء</v-btn>
         </v-layout>
 
@@ -247,6 +262,7 @@ export default {
       loading: false,
       loadingDialog: false,
       doc: null,
+      genders: ['ذكر', 'انثى'],
       workStates: ['متعاقد', 'لا يعمل'],
       workSector: ['ادارة عامة', 'مؤسسة عامة', 'بلدية', 'قطاع خاص'],
       defaultPartner: {
@@ -264,6 +280,7 @@ export default {
       },
       defaultChild: {
         name: '',
+        gender: '',
         birthDate: null,
         modal: false
       },
@@ -288,6 +305,14 @@ export default {
       this.doc = doc
       this.loading = false
     })
+  },
+  computed: {
+    partnerTitle () {
+      if (this.doc.gender === this.genders[0]) {
+        return 'معلومات عن الزوجة'
+      }
+      return 'معلومات عن الزوج'
+    }
   },
   methods: {
     checkWorkState (selectedValue, partnerIndex) {
@@ -380,6 +405,7 @@ export default {
           phone: this.doc.phone,
           faculty: this.doc.faculty,
           facultySection: this.doc.facultySection,
+          gender: this.doc.gender,
           partners: this.doc.partners,
           family: this.doc.family,
           children: this.doc.children

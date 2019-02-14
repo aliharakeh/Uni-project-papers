@@ -18,7 +18,6 @@
         <!-- doctor's info -->
         <h1 class="mr-4">الاستاذ</h1>
 
-        <!-- name and phone -->
         <v-layout row wrap justify-space-around>
           <v-flex xs5>
             <v-text-field type="number" label="رقم الاستاذ" v-model="doc.number"></v-text-field>
@@ -38,13 +37,20 @@
           <v-flex xs5>
             <v-text-field label="مكان السكن" v-model="doc.address"></v-text-field>
           </v-flex>
+          <v-flex xs5>
+            <v-select
+              :items="genders"
+              label="الجنس"
+              v-model="doc.gender"
+            ></v-select>
+          </v-flex>
         </v-layout>
 
         <v-divider class="my-3"></v-divider>
 
         <!-- partners -->
         <h1 class="mr-4">
-          الزوج / الزوجة
+          {{ partnerTitle }}
           <v-btn
             color="primary"
             @click="doc.partners.push(Object.assign({}, defaultPartner))"
@@ -126,7 +132,7 @@
 
         <!-- children -->
         <h1 class="mr-4">
-          الاولاد
+          معلومات عن الاولاد
           <v-btn
           color="primary"
           @click="doc.children.push(Object.assign({}, defaultChild))"
@@ -167,6 +173,13 @@
                 </v-date-picker>
               </v-dialog>
             </v-flex>
+            <v-flex xs5>
+              <v-select
+                :items="genders"
+                label="الجنس"
+                v-model="child.gender"
+              ></v-select>
+            </v-flex>
           </v-layout>
         </div>
 
@@ -174,7 +187,7 @@
 
         <!-- family -->
         <h1 class="mr-4">
-          العائلة
+           معلومات عن العائلة
           <v-btn
           color="primary"
           @click="doc.family.push(Object.assign({}, defaultFamily))"
@@ -246,6 +259,7 @@ export default {
     return {
       loading: false,
       loadingDialog: false,
+      genders: ['ذكر', 'انثى'],
       doc: {
         number: null,
         name: '',
@@ -253,6 +267,7 @@ export default {
         faculty: '',
         facultySection: '',
         address: '',
+        gender: '',
         partners: [],
         children: [],
         family: [],
@@ -275,6 +290,7 @@ export default {
       },
       defaultChild: {
         name: '',
+        gender: '',
         birthDate: null,
         modal: false
       },
@@ -286,6 +302,14 @@ export default {
         type: '',
         modal: false
       }
+    }
+  },
+  computed: {
+    partnerTitle () {
+      if (this.doc.gender === this.genders[0]) {
+        return 'معلومات عن الزوجة'
+      }
+      return 'معلومات عن الزوج'
     }
   },
   methods: {
