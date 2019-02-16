@@ -215,12 +215,6 @@
                       <v-flex xs12 sm6>
                         <v-text-field type="number" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر"></v-text-field>
                       </v-flex>
-                      <!-- <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.acceptedCosts" label="النفقات الموافق عليها"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.earnedHelpValue" label="قيمة المساعدة المستحقة"></v-text-field>
-                      </v-flex> -->
                     </v-layout>
                   </v-container>
                 </v-card-text>
@@ -240,13 +234,11 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.doctorsCost) }} ل.ل</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.medicineCost) }} ل.ل</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.otherCosts) }} ل.ل</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.costsSum) }} ل.ل</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.externalHelpValue) }} ل.ل</td>
-                <td></td>
-                <td></td>
+                <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.doctorsCost) }} </td>
+                <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.medicineCost) }} </td>
+                <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.otherCosts) }} </td>
+                <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.costsSum) }} </td>
+                <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.externalHelpValue) }} </td>
                 <td class="text-xs-center">
                   <v-btn icon class="ml-2" @click="editItem2(props.item)">
                     <v-icon color="info">edit</v-icon>
@@ -318,8 +310,6 @@ export default {
         { text: 'مختلف', sortable: false, align: 'center', class: 'font-weight-bold' },
         { text: 'مجموع النفقات', sortable: false, align: 'center', class: 'font-weight-bold' },
         { text: 'قيمة المساعدة من مصادر اخر', sortable: false, align: 'center', class: 'font-weight-bold' },
-        { text: 'النفقات الموافق عليها', sortable: false, align: 'center', class: 'font-weight-bold' },
-        { text: 'قيمة المساعدة المستحقة', sortable: false, align: 'center', class: 'font-weight-bold' },
         { text: 'خيارات', sortable: false, align: 'center', class: 'font-weight-bold' }
       ],
       medicalCostsData: [],
@@ -331,8 +321,6 @@ export default {
         otherCosts: null,
         costsSum: null,
         externalHelpValue: null
-        // acceptedCosts: null,
-        // earnedHelpValue: null
       },
       defaultItem2: {
         name: '',
@@ -341,13 +329,13 @@ export default {
         otherCosts: null,
         costsSum: null,
         externalHelpValue: null
-        // acceptedCosts: null,
-        // earnedHelpValue: null
       },
       linkedFamily: []
     }
   },
   created () {
+    var rangeOfAcquaintance = ''
+    var childAcquaintance = ''
     this.loading = true
     this.$db.findOne({_id: this.id}, (err, doc) => {
       if (err) {
@@ -357,19 +345,21 @@ export default {
 
       this.doc = doc
 
+      this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
       doc.partners.forEach(partner => {
         this.family.push({
           name: partner.name,
           birthDate: partner.birthDate,
-          rangeOfAcquaintance: 'زوجته / زوجها'
+          rangeOfAcquaintance: rangeOfAcquaintance
         })
       })
 
       doc.children.forEach(child => {
+        child.gender === 'ذكر' ? childAcquaintance = 'ابنه' : childAcquaintance = 'ابنته'
         this.family.push({
           name: child.name,
           birthDate: child.birthDate,
-          rangeOfAcquaintance: 'ابنه / ابنته'
+          rangeOfAcquaintance: childAcquaintance
         })
       })
 
@@ -447,8 +437,6 @@ export default {
         otherCosts: null,
         costsSum: null,
         externalHelpValue: null
-        // acceptedCosts: null,
-        // earnedHelpValue: null
       })
 
       this.close()
@@ -487,8 +475,9 @@ export default {
 
       this.editedItem2.costsSum = Number(this.editedItem2.doctorsCost) +
                                   Number(this.editedItem2.otherCosts) +
-                                  Number(this.editedItem2.medicineCost) + ''
+                                  Number(this.editedItem2.medicineCost)
 
+      this.editedItem2.costsSum += ''
       if (this.editedIndex2 > -1) {
         Object.assign(this.medicalCostsData[this.editedIndex2], this.editedItem2)
       }
@@ -510,6 +499,7 @@ export default {
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        gender: this.doc.gender,
         type: 'مساعدة_أسنان',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
@@ -543,6 +533,23 @@ export default {
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {
         ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabicNumMoney (nn) {
+      if (!nn) {
+        return ''
+      }
+      var q = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      var n = q.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        if (element === ',') {
+          ar += '،'
+        } else {
+          ar += arnum[element]
+        }
       })
       return ar
     },

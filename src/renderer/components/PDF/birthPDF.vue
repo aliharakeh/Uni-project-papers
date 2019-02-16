@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid style="width: 21cm; height: 29.7cm;">
+  <v-container fluid style="width: 21cm; height: 29cm;">
     
     <!-- section 1 -->
-    <v-layout row justify-space-between class="mt-2">
+    <v-layout row justify-space-between class="mt-1">
       <div dir="rtl">
         <h1>الجمهورية اللبنانية</h1>
         <h3>صندوق تعاضد أفراد الهيئة</h3>
@@ -14,23 +14,23 @@
     </v-layout>
 
     <!-- section 2 -->
-    <v-layout column class="mt-4">
+    <v-layout column class="mt-1">
       <v-flex xs6 offset-xs-3>
         <div style="text-align:center;">
-          <h1 class="display-1 font-weight-bold">طلب منحة ولادة</h1>
+          <h1 style="font-size: 31px;">طلب منحة ولادة</h1>
          </div>
       </v-flex>
     </v-layout>
 
     <!-- section 3 -->
-    <v-layout row justify-space-between class="mt-4" style="font-size: 18px;">
+    <v-layout row justify-space-between class="mt-1 fontsize">
         <div>
         <table dir="rtl">
           <tr>
-            <th style="height: 35px;width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
+            <th style="width: 200px; text-align: center; padding: 2px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="height: 35px;width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
+            <td style="text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -50,101 +50,133 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 18px;">
+    <v-layout row class="mt-1 fontsize">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
-          <td>اسم المنتسب وشهرته : {{ doc.name }}</td>
-          <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
+          <td>اسم المنتسب وشهرته : <b>{{ doc.name }}</b></td>
+          <td>الهاتف : <b>{{ ConvertToArabicNum(doc.phone) }}</b></td>
         </tr>
         <tr>
           <td style="width: 15%;"></td>
-          <td>الكلية/المعهد : {{ doc.faculty }}</td>
-          <td>الفرع : {{ doc.facultySection }}</td>
+          <td>الكلية/المعهد : <b>{{ doc.faculty }}</b></td>
+          <td>الفرع : <b>{{ doc.facultySection }}</b></td>
         </tr>
       </table>
     </v-layout>
 
     <!-- section 5 --> <!-- <i class="material-icons icons">check_box</i> --> <!-- <i class="material-icons icons">check_box</i></bdi> -->
-    <div style="text-align:center; margin-top: 15px;">
-      <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
+    <div style="text-align:center; margin-top: 10px;">
+      <h1 style="font-size: 25px;">{{ getGender(1) }}</h1>
     </div>
-    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
-      <table style="width: 100%;" dir="rtl" class="mb-3" 
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <table style="width: 100%;" dir="rtl" class="mb-2" 
           v-for="partner in doc.partners" :key="partner.name">
 
         <tr v-if="checkWork(partner) === 'متعاقد'">
-          <!-- <td style="width:18%;"></td> -->
           <td>
-           - إن الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+           - {{ getGender(2) }} : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>متعاقد </b>&nbsp;&nbsp;-&nbsp;&nbsp;
             يعمل في : <b>{{ partner.workSector }}</b>
+          </td>
+          <td v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
+           - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
         </tr>
 
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
-          <!-- <td style="width:18%;"></td> -->
           <td>
-           - إن الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+           - {{ getGender(2) }} : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>لا يعمل</b>
           </td>
-        </tr>
-
-        <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
-          <!-- <td style="width:18%;"></td> -->
-          <td>
+          <td v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
            - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
         </tr>
 
         <tr v-if="partner.externalHelp === '1'">
-          <!-- <td style="width:18%;"></td> -->
-          <td>
+          <td colspan="2">
            - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
       </table>
     </v-layout>
-    
+
     <!-- section 6 -->
-    <v-layout column class="mt-3" style="font-size: 18px; page-break-inside: avoid;">
-        <div style="border: 2px solid black; padding: 10px;">
-           - أرجو اعطائي منحة الولادة عن ولدي {{ doc.child }} , المنصوص عنها في المادة ١٤ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق. <br>
-           - وإني أصرّح على مسؤوليّتي بأني {{ checkPapers() }} أنا أو زوجتي (زوجي) منحة ولادة من أي مصدر آخر. <br>
-            <p v-if="doc.money && doc.date">قيمة المبلغ المقبوض من المصدر الآخر : {{ ConvertToArabicNum(doc.money) }} ل.ل <br> التاريخ : {{ ConvertToArabicDate(doc.date) }}</p>
-            <p style="text-align: left; margin-top: 10px; margin-bottom: 50px; margin-left:30px">توقيع <b>طالب المنحة</b></p>
-        </div>
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <table style="width: 100%;" dir="rtl">
+        <tr>
+          <td colspan="2">
+            - أرجو إعطائي منحة الولادة عن ولدي {{ doc.child }} , المنصوص عنها في المادة ١٤ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق.
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            - إني أصرّح على مسؤوليّتي بأني <b>{{ checkPapers() }}</b> أنا أو {{ getGender(3) }} منحة ولادة من أي مصدر آخر.
+          </td>
+        </tr>
+        <tr v-if="checkPapers() === 'أتقاضى'">
+          <td colspan="2">
+            - قيمة المبلغ المقبوض من المصدر الآخر : <b> {{ ConvertToArabicNumMoney(doc.money) }} ل.ل </b> &nbsp;-&nbsp; في تاريخ : {{ ConvertToArabicDate(doc.date) }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align: left; padding-bottom: 40px; padding-left: 100px;">
+             توقيع <b>طالب المنحة</b>
+          </td>
+        </tr>
+      </table>
     </v-layout>
 
     <!-- section 7 -->
-   <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
-        <div style="border: 2px solid black; padding: 10px;">
-          - يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : <br>
-          - إن الراتب الأساسي الشهري للأستاذ : 
-           <div style="width: 450px;height: 40px; border: 1px solid black;">
-             <p style="text-align: left;">ل.ل &nbsp;</p>
-           </div>
-           <p style="text-align: justify;">
-           - تاريخ حصول الولادة : {{ ConvertToArabicDate(doc.birthdate) }} <br>
-           - التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
-           - الإسم : <br><br>
-           - توقيع <b>الرئيس المباشر :</b> <br><br><br>
-           </p>
-        </div>
+   <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+     <table style="width: 100%;" dir="rtl" class="mb-2">
+       <tr>
+         <td colspan="2">
+            - يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : 
+         </td>
+       </tr>
+       <tr>
+         <td>
+           - إن الراتب الأساسي الشهري للأستاذ : 
+         </td>
+         <td>
+           <div style="width: 450px;height: 30px; border: 1px solid black;">
+            <p style="text-align: left;">ل.ل &nbsp;</p>
+          </div>
+         </td>
+       </tr>
+       <tr>
+         <td>
+           - تاريخ حصول الولادة : {{ ConvertToArabicDate(doc.birthdate) }}
+         </td>
+         <td style="text-align: center;">
+           التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}
+         </td>
+       </tr>
+       <tr>
+         <td style="padding-bottom: 45px;">
+           - <b> الإسم : </b>
+         </td>
+         <td style="text-align: center; padding-bottom: 45px;">
+           توقيع <b>الرئيس المباشر </b>
+         </td>
+       </tr>
+     </table>
     </v-layout>
 
     <!-- section 8 -->
-    <v-layout column class="mt-2" style="font-size: 18px; page-break-inside: avoid;">
-        <div style="margin-right: 25px;">
-           <u><b>المستندات المطلوبة : </b></u>
-           <ul>
-              <li>وثيقة ولادة , غيره من المستندات عند الاقتضاء.</li>
-              <li>مستند عدم استفادة عن الزوج (الزوجة) من المرجع المسؤول عن عمله.</li>
-              <li>مستند عن قيمة المبلغ المقبوض من المرجع الآخر.</li>
-              <li>اخراج قيد عائلي جديد يظهر اسم المولود.</li>
-           </ul>
-        </div>
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <div style="margin-right: 25px;">
+        <u><b>المستندات المطلوبة : </b></u>
+        <ul>
+          <li>وثيقة ولادة , غيره من المستندات عند الاقتضاء.</li>
+          <li>مستند عدم استفادة عن الزوج (الزوجة) من المرجع المسؤول عن عمله.</li>
+          <li>مستند عن قيمة المبلغ المقبوض من المرجع الآخر.</li>
+          <li>اخراج قيد عائلي جديد يظهر اسم المولود.</li>
+        </ul>
+      </div>
     </v-layout>
 
   </v-container>
@@ -202,6 +234,15 @@ export default{
       return 'لم أتقاض'
     },
 
+    getGender (flag) {
+      if (flag === 1) {
+        return this.doc.gender === 'ذكر' ? 'إفادة بعمل الزّوجة' : 'إفادة بعمل الزّوج'
+      } else if (flag === 2) {
+        return this.doc.gender === 'ذكر' ? 'إن الزّوجة' : 'إن الزّوج'
+      }
+      return this.doc.gender === 'ذكر' ? 'زوجتي' : 'زوجي'
+    },
+
     ConvertToArabicNum (nn) {
       if (!nn) {
         return ''
@@ -214,6 +255,24 @@ export default{
       })
       return ar
     },
+
+    ConvertToArabicNumMoney (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        if (element === ',') {
+          ar += '،'
+        } else {
+          ar += arnum[element]
+        }
+      })
+      return ar
+    },
+
     ConvertToArabicDate (date) {
       if (!date) {
         return ''
@@ -267,19 +326,18 @@ export default{
 
 <style scoped>
 
+  .fontsize{
+    font-size: 15px;
+  }
+
   table {
     border-collapse: collapse;
     border: 2px solid black;
   }
 
   td {
-    padding: 5px;
+    padding: 3px;
   }
-
-  /*table tr{
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-  }*/
 
   .t {
     border: 2px solid black;
@@ -290,8 +348,8 @@ export default{
 
   .t td, .t th {
     border: 2px solid black;
-    height: 35px;
-    padding: 5px;
+    height: 28px;
+    padding: 3px;
   }
 
   .icons{

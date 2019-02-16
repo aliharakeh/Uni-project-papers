@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="width: 21cm; height: 29.7cm;">
+  <v-container fluid style="width: 21cm; height: 29cm;">
     
     <!-- section 1 -->
     <v-layout row justify-space-between class="mt-2">
@@ -13,23 +13,23 @@
     </v-layout>
 
     <!-- section 2 -->
-    <v-layout column class="mt-4">
+    <v-layout column class="mt-2">
       <v-flex xs6 offset-xs-3>
         <div style="text-align:center;">
-          <h1 class="display-1 font-weight-bold">تعهد من المنتسب حول ذوي عهدته</h1>
+          <h1 style="font-size: 31px;">تعهّد من المنتسب حول ذوي عهدته</h1>
          </div>
       </v-flex>
     </v-layout>
 
     <!-- section 3 -->
-    <v-layout row justify-space-between class="mt-4" style="font-size: 18px;">
+    <v-layout row justify-space-between class="mt-1 fontsize">
         <div>
         <table dir="rtl">
           <tr>
-            <th style="height: 35px;width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
+            <th style="width: 200px; text-align: center; padding: 2px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="height: 35px;width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
+            <td style="text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -49,49 +49,51 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 18px;">
+    <v-layout row class="mt-1 fontsize">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 14%;"></td>
-          <td>اسم المنتسب وشهرته : {{ doc.name }}</td>
-          <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
+          <td>اسم المنتسب وشهرته : <b>{{ doc.name }}</b></td>
+          <td>الهاتف : <b>{{ ConvertToArabicNum(doc.phone) }}</b></td>
         </tr>
         <tr>
           <td style="width: 14%;"></td>
-          <td>الكلية/المعهد : {{ doc.faculty }}</td>
-          <td>الفرع : {{ doc.facultySection }}</td>
+          <td>الكلية/المعهد : <b>{{ doc.faculty }}</b></td>
+          <td>الفرع : <b>{{ doc.facultySection }}</b></td>
         </tr>
         <tr>
-          <!-- <td style="width: 14%;"></td> -->
-          <td colspan="3" style="padding-top : 20px;">
-              <p>- أرجو ادراج عهدة والدي و/أو والدتي و/أو أخوتي على صفحتي الاسمية واعتبارهم على عاتقي وذلك وفقاً للمستندات الثبوتية المرفقة في تاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}</p><br>
-              <p style=" text-align: left; margin-top: -40px; margin-left:60px; margin-bottom: 60px;" colspan="2">
-                  توقيع <b>الرئيس المباشر </b>
-              </p>
+          <td colspan="3" style="padding-top : 10px;">
+            أرجو ادراج عهدة والدي و/أو والدتي و/أو أخوتي على صفحتي الاسمية واعتبارهم على عاتقي وذلك وفقاً للمستندات الثبوتية المرفقة في :
+            {{ ConvertToArabicDate(GetDateToday(date)) }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align: left; padding-left: 60px; padding-bottom: 50px;">
+            توقيع <b>الرئيس المباشر </b>
           </td>
         </tr>
       </table>
     </v-layout>
 
     <!-- section 5 -->
-    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
+    <v-layout column class="mt-2 fontsize" style="page-break-inside: avoid;">
       <table dir="rtl" class="t">
         <tr>
-            <th colspan="5">
-                <h1 class="display-1 font-weight-bold">معلومات تتعلق بذوي العهدة</h1>
-            </th>
+          <th colspan="5" style="font-size: 20px;">
+            معلومات تتعلق بذوي العهدة
+          </th>
         </tr>
         <tr>
-            <td colspan="5">
-                <h4>المطلوب من المنتسب أن يذكر في هذه الفقرة المعلومات التالية حول الذين في عهدته والذين يقوم المنتسب بتقديم الرعاية والنفقة القانونية لهم , مصحوبة بتوقيع المعنيين.</h4>
-            </td>
+          <td colspan="5" style="font-size: 15px; text-align: right;">
+            - المطلوب من المنتسب أن يذكر في هذه الفقرة المعلومات التالية حول الذين في عهدته والذين يقوم المنتسب بتقديم الرعاية والنفقة القانونية لهم ، مصحوبة بتوقيع المعنيين.
+          </td>
         </tr>
         <tr>
-            <th>الاسم والشهرة</th>
-            <th>تاريخ الولادة</th>
-            <th>صلة القربى</th>
-            <th>عنوان السكن</th>
-            <th>التوقيع</th>
+          <th>الاسم والشهرة</th>
+          <th>تاريخ الولادة</th>
+          <th>صلة القربى</th>
+          <th>عنوان السكن</th>
+          <th>التوقيع</th>
         </tr>
         <tr v-for="family in doc.family" :key="family.name">
             <td> {{ family.name }}</td>
@@ -104,28 +106,27 @@
     </v-layout>
 
     <!-- section 6 -->
-    <v-layout column class="mt-3" style="font-size: 18px; page-break-inside: avoid;">
-        <div style="border: 2px solid black; padding: 10px;">
-            <p>- أنا الموقع أدناه أتعهد بأن كامل المعلومات الواردة أعلاه هي صحيحة , وعلى مسؤوليتي القانونية الجزائية والمدنية , وأن ذوي عهدتي المذكورة أعلاه عاجزين عن كسب العيش وليس باستطاعتهم تحمل نفقات المعالجات الصحية والإستشفائية. </p><br>
-            <p style="text-align: left; margin-top: -20px; margin-bottom: 50px; margin-left:100px"> التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br> توقيع <b>المنتسب</b></p>
-        </div>
-    </v-layout><br>
-
-    <!-- section 7 -->
-    <v-layout column class="mt-2" style="font-size: 18px; page-break-inside: avoid;">
-        <div style="margin-right: 25px;">
-           <u><b>المستندات المطلوبة : </b></u>
-           <ul>
-             <li>اخراج قيد عائلي للمنتسب يتضمن من هم في عهدته , يعود تاريخه لثلاثة أشهر على الأكثر.</li>
-             <li>افادة من المؤسسات الرسمية الضامنة (تعاونية, ضمان, أمن) , عن الأخوة والأخوات العاملات الذين بلغوا السن القانوني , بأنهم لا يستفيدون عن الوالدين من أية رعاية صحية.</li>
-           </ul>
-           <u><b>ملاحظة :</b></u>
-           <ul>
-               <li> تحول هذه الإستمارة لتحقيق اجتماعي تقوم به ادارة الصندوق أو تكلف القيام به إحدى المؤسسات الرسمية المعنية بذلك. </li>
-           </ul>
-        </div>
+    <v-layout column class="mt-2 fontsize" style="page-break-inside: avoid;">
+      <div style="border: 2px solid black; padding: 5px;">
+          <p>- أنا الموقع أدناه أتعهد بأن كامل المعلومات الواردة أعلاه هي صحيحة ، وعلى مسؤوليتي القانونية الجزائية والمدنية ، وأن ذوي عهدتي المذكورة أعلاه عاجزين عن كسب العيش وليس باستطاعتهم تحمل نفقات المعالجات الصحية والإستشفائية. </p><br>
+          <p style="text-align: left; margin-top: -40px; margin-bottom: 40px; margin-left: 60px"> التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br> توقيع <b>المنتسب</b></p>
+      </div>
     </v-layout>
 
+    <!-- section 7 -->
+    <v-layout column class="mt-2 fontsize" style="page-break-inside: avoid;">
+        <div style="padding-right: 25px;">
+          <u><b>المستندات المطلوبة : </b></u>
+          <ul>
+            <li>اخراج قيد عائلي للمنتسب يتضمن من هم في عهدته ، يعود تاريخه لثلاثة أشهر على الأكثر.</li>
+            <li>افادة من المؤسسات الرسمية الضامنة (تعاونية ، ضمان ، أمن) ، عن الأخوة والأخوات العاملات الذين بلغوا السن القانوني ، بأنهم لا يستفيدون عن الوالدين من أية رعاية صحية.</li>
+          </ul>
+          <u><b>ملاحظة :</b></u>
+          <ul>
+          <li> تحول هذه الإستمارة لتحقيق اجتماعي تقوم به ادارة الصندوق أو تكلف القيام به إحدى المؤسسات الرسمية المعنية بذلك. </li>
+          </ul>
+        </div>
+    </v-layout>
   </v-container>
 </template>
 
@@ -246,19 +247,18 @@ export default{
 
 <style scoped>
 
+  .fontsize{
+    font-size: 15px;
+  }
+
   table {
     border-collapse: collapse;
     border: 2px solid black;
   }
 
   td {
-    padding: 5px;
+    padding: 3px;
   }
-
-  /*table tr{
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-  }*/
 
   .t {
     border: 2px solid black;
@@ -269,8 +269,8 @@ export default{
 
   .t td, .t th {
     border: 2px solid black;
-    height: 35px;
-    padding: 5px;
+    height: 30px;
+    padding: 3px;
   }
 
   .icons{

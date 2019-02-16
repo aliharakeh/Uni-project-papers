@@ -104,10 +104,11 @@
                       alert(err.message)
                       this.show = true
                       this.$router.push('/')
+                    } else {
+                      alert('PDF saved !!')
+                      this.show = true
+                      // this.$router.push('/')
                     }
-                    alert('PDF saved !!')
-                    this.show = true
-                    this.$router.push('/')
                   })
                 }
               )

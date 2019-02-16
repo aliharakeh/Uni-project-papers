@@ -87,7 +87,7 @@
               </h1>
             </v-flex>
             <v-flex xs12 sm5 v-if="prevOrOutsidePaper === '1'" class="ml-4">
-              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="number" v-model="money"></v-text-field>
+              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="text" v-model="money"></v-text-field>
             </v-flex>
             <v-flex xs12 sm5 v-if="prevOrOutsidePaper === '1'">
               <v-dialog
@@ -193,6 +193,12 @@ export default {
       this.loading = false
     })
   },
+  watch: {
+    money: function (newValue) {
+      const result = newValue.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      this.money = result
+    }
+  },
   methods: {
 
     workPlace (person) {
@@ -226,6 +232,7 @@ export default {
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        gender: this.doc.gender,
         type: 'منحة_زواج',
         phone: this.doc.phone,
         faculty: this.doc.faculty,

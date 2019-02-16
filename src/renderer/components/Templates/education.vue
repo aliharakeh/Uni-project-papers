@@ -133,12 +133,6 @@
                         <v-flex xs12 sm6>
                           <v-text-field v-model="editedItem.class" label="الصف"></v-text-field>
                         </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem.outsideCertificateMoney" label="قيمة المنحة المقبوضة من مصدر اخر"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                          <v-text-field type="number" v-model="editedItem.allowedCertificateMoney" label="قيمة المنحة المستحقة"></v-text-field>
-                        </v-flex>
                       </v-layout>
                     </v-container>
                   </v-card-text>
@@ -164,8 +158,6 @@
                 <td class="text-xs-center">{{ props.item.educationType }}</td>
                 <td class="text-xs-center">{{ props.item.educationLevel}}</td>
                 <td class="text-xs-center">{{ props.item.class}}</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.outsideCertificateMoney) }} ل.ل</td>
-                <td class="text-xs-center">{{ ConvertToArabicNum(props.item.allowedCertificateMoney) }} ل.ل</td>
                 <td class="text-xs-center">
                   <v-btn icon class="ml-2" @click="editItem(props.item)">
                     <v-icon color="info">edit</v-icon>
@@ -205,6 +197,7 @@ export default {
       loading: false,
       doc: null,
       partners: null,
+      batata: 0,
       dialog: false,
       headers: [
         { text: 'اسم الولد', sortable: false, align: 'center', class: 'font-weight-bold' },
@@ -213,8 +206,6 @@ export default {
         { text: 'نوع التعليم', sortable: false, align: 'center', class: 'font-weight-bold' },
         { text: 'مرحلة التعليم', sortable: false, align: 'center', class: 'font-weight-bold' },
         { text: 'الصف', sortable: false, align: 'center', class: 'font-weight-bold' },
-        { text: 'قيمة المنحة المقبوضة من مصدر اخر', sortable: false, align: 'center', class: 'font-weight-bold' },
-        { text: 'قيمة المنحة المستحقة', sortable: false, align: 'center', class: 'font-weight-bold' },
         { text: 'خيارات', sortable: false, align: 'center', class: 'font-weight-bold' }
       ],
       types: ['خاص مجاني', 'خاص غير مجاني', 'رسمي'],
@@ -226,9 +217,7 @@ export default {
         educationPlace: '',
         educationType: '',
         educationLevel: '',
-        class: '',
-        outsideCertificateMoney: null,
-        allowedCertificateMoney: null
+        class: ''
       },
       defaultItem: {
         name: '',
@@ -236,9 +225,7 @@ export default {
         educationPlace: '',
         educationType: '',
         educationLevel: '',
-        class: '',
-        outsideCertificateMoney: null,
-        allowedCertificateMoney: null
+        class: ''
       },
       childrenData: [],
       selectedChild: null,
@@ -259,8 +246,6 @@ export default {
       this.partners.forEach(partner => {
         this.$set(partner, 'money', null)
         this.$set(partner, 'prevOrOutsidePaper', null)
-        // partner['money'] = null
-        // partner['prevOrOutsidePaper'] = 'false'
       })
 
       this.loading = false
@@ -354,6 +339,7 @@ export default {
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        gender: this.doc.gender,
         type: 'منحة_تعليم',
         phone: this.doc.phone,
         faculty: this.doc.faculty,

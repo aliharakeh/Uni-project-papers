@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid style="width: 21cm; height: 29.7cm;">
+  <v-container fluid style="width: 21cm; height: 29cm;">
 
     <!-- section 1 -->
-    <v-layout row justify-space-between class="mt-2">
+    <v-layout row justify-space-between class="mt-1">
       <div dir="rtl">
         <h1>الجمهورية اللبنانية</h1>
         <h3>صندوق تعاضد أفراد الهيئة</h3>
@@ -14,24 +14,24 @@
     </v-layout>
 
     <!-- section 2 -->
-    <v-layout column class="mt-4">
+    <v-layout column class="mt-1">
       <v-flex xs6 offset-xs-3>
         <div style="text-align:center;">
-          <h1 class="display-1 font-weight-bold">طلب مساعدة مرضيّة</h1>
-          <h1 class="display-1 font-weight-bold">Demande d'aide medicale</h1>
+          <h1 style="font-size: 35px;">طلب مساعدة مرضيّة</h1>
+          <h1 style="font-size: 30px;">Demande d'aide medicale</h1>
         </div>
       </v-flex>
     </v-layout>
 
     <!-- section 3 -->
-    <v-layout row justify-space-between class="mt-4" style="font-size: 18px;">
+    <v-layout row justify-space-between class="mt-1 fontsize">
         <div>
         <table dir="rtl">
           <tr>
-            <th style="height: 35px;width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
+            <th style="width: 200px; text-align: center; padding: 2px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="height: 35px;width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
+            <td style="text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -51,57 +51,53 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 18px;">
+    <v-layout row class="mt-1 fontsize">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
-          <td>اسم المنتسب وشهرته : {{ doc.name }}</td>
-          <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
+          <td>اسم المنتسب وشهرته : <b>{{ doc.name }}</b></td>
+          <td>الهاتف : <b>{{ ConvertToArabicNum(doc.phone) }}</b></td>
         </tr>
         <tr>
           <td style="width: 15%;"></td>
-          <td>الكلية/المعهد : {{ doc.faculty }}</td>
-          <td>الفرع : {{ doc.facultySection }}</td>
+          <td>الكلية/المعهد : <b>{{ doc.faculty }}</b></td>
+          <td>الفرع : <b>{{ doc.facultySection }}</b></td>
         </tr>
       </table>
     </v-layout>
 
     <!-- section 5 --> <!-- <i class="material-icons icons">check_box</i> --> <!-- <i class="material-icons icons">check_box</i></bdi> -->
-    <div style="text-align:center; margin-top: 15px;">
-      <h1 class="display-1 font-weight-bold">افادة بعمل الزوج (ة) </h1>
+    <div style="text-align:center; margin-top: 10px;">
+      <h1 style="font-size: 25px;">{{ getGender(1) }}</h1>
     </div>
-    <v-layout column class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
-      <table style="width: 100%;" dir="rtl" class="mb-3" 
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <table style="width: 100%;" dir="rtl" class="mb-2" 
           v-for="partner in doc.partners" :key="partner.name">
 
         <tr v-if="checkWork(partner) === 'متعاقد'">
-          <!-- <td style="width:20%;"></td> -->
           <td>
-            - ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+           - {{ getGender(2) }} : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>متعاقد </b>&nbsp;&nbsp;-&nbsp;&nbsp;
             يعمل في : <b>{{ partner.workSector }}</b>
+          </td>
+          <td v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
+           - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
         </tr>
 
         <tr v-else-if="checkWork(partner) === 'لا يعمل'">
-          <!-- <td style="width:20%;"></td> -->
           <td>
-            - ان الزوج (ة) : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+           - {{ getGender(2) }} : <b>{{ partner.name }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             <b>لا يعمل</b>
           </td>
-        </tr>
-
-        <tr v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
-          <!-- <td style="width:20%;"></td> -->
-          <td>
-            - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
+          <td v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
+           - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
         </tr>
 
         <tr v-if="partner.externalHelp === '1'">
-          <!-- <td style="width:20%;"></td> -->
-          <td>
-            - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
+          <td colspan="2">
+           - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
             قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
@@ -109,22 +105,17 @@
     </v-layout>
     
     <!-- section 6 -->
-    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
+    <v-layout row class="mt-1 fontsize" style="page-break-inside: avoid;">
       <table class="t" dir="rtl">
         <tr>
-          <th colspan="8"><h1 class="display-1 font-weight-bold">معلومات عن المرضى موضوع المساعدة</h1></th>
+          <th colspan="8"><h1 style="font-size: 25px;">معلومات عن المرضى موضوع المساعدة</h1></th>
         </tr>
         <tr>
           <th>اسم المريض</th>
           <th>تاريخ الولادة</th>
           <th>درجة القرابة للمنتسب</th>
-          <th colspan="2">
-            <bdi>تاريخ ابتداء وانتهاء العلاج</bdi>
-            <v-layout row justify-space-around>
-              <bdi>الابتداء</bdi>
-              <bdi>الانتهاء</bdi>
-            </v-layout>
-          </th>
+          <th>تاريخ إبتداء العلاج</th>
+          <th>تاريخ إنتهاء العلاج</th>
         </tr>
         <tr v-for="medicData in doc.medicalData" :key="medicData.name">
           <td>{{ medicData.name }}</td>
@@ -134,13 +125,13 @@
           <td>{{ ConvertToArabicDate(medicData.medicalEndDate) }}</td>
         </tr>
       </table>
-    </v-layout><br>
+    </v-layout>
 
     <!-- section 7 -->
-    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
+    <v-layout row class="mt-1 fontsize" style="page-break-inside: avoid;">
         <table class="t" dir="rtl">
           <tr>
-            <th colspan="8"><h1 class="display-1 font-weight-bold">نفقات المعالجة حسب نوعها (ل.ل)</h1></th>
+            <th colspan="8"><h1 style="font-size: 25px;">نفقات المعالجة حسب نوعها (ل.ل)</h1></th>
           </tr>
           <tr>
               <th>اسم المريض</th>
@@ -153,51 +144,51 @@
               <th>قيمة المساعدة المستحقة</th>
           </tr>
           <tr v-for="medicCost in doc.medicalCostsData" :key="medicCost.name">
-              <td style="width: 100px;">{{ medicCost.name }}</td>
-              <td>{{ ConvertToArabicNum(medicCost.doctorsCost) }} </td>
-              <td>{{ ConvertToArabicNum(medicCost.medicineCost) }} </td>
-              <td>{{ ConvertToArabicNum(medicCost.otherCosts) }} </td>
-              <td>{{ ConvertToArabicNum(medicCost.costsSum) }} </td>
-              <td>{{ ConvertToArabicNum(medicCost.externalHelpValue) }} </td>
+              <td style="width: 110px;">{{ medicCost.name }}</td>
+              <td>{{ ConvertToArabicNumMoney(medicCost.doctorsCost) }} </td>
+              <td>{{ ConvertToArabicNumMoney(medicCost.medicineCost) }} </td>
+              <td>{{ ConvertToArabicNumMoney(medicCost.otherCosts) }} </td>
+              <td>{{ ConvertToArabicNumMoney(medicCost.costsSum) }} </td>
+              <td>{{ ConvertToArabicNumMoney(medicCost.externalHelpValue) }} </td>
               <td></td>
               <td></td>
           </tr>
         </table>
-    </v-layout><br>
+    </v-layout>
 
     <!-- section 8 -->
-    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
-        <table dir="rtl" style="width: 100%;">
-            <tr>
-              <th colspan="2"><h1 class="display-1 font-weight-bold">المستندات المرافقة</h1></th>
-            </tr>
-            <tr> <td>١-</td> <td class="rightborder">٥-</td> </tr>
-            <tr> <td>٢-</td> <td class="rightborder">٦-</td> </tr>
-            <tr> <td>٣-</td> <td class="rightborder">٧-</td> </tr>
-            <tr> <td>٤-</td> <td class="rightborder">٨-</td> </tr>
-        </table>
-    </v-layout><br>
+    <v-layout row class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <table dir="rtl" style="width: 100%;">
+          <tr>
+            <th colspan="2"><h1 style="font-size: 25px;">المستندات المرافقة</h1></th>
+          </tr>
+          <tr> <td>١-</td> <td class="rightborder">٥-</td> </tr>
+          <tr> <td>٢-</td> <td class="rightborder">٦-</td> </tr>
+          <tr> <td>٣-</td> <td class="rightborder">٧-</td> </tr>
+          <tr> <td>٤-</td> <td class="rightborder">٨-</td> </tr>
+      </table>
+    </v-layout>
 
     <!-- section 9 -->
-    <v-layout row class="mt-4" style="font-size: 18px; page-break-inside: avoid;">
-        <table style="border: 0px; margin-top: -20px; font-weight: bold;" width="100%;" dir="rtl">
-          <tr>
-            <td>
-              التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
-            </td>
-            <td>
-              الاسم : <br><br>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              توقيع المنتسب :
-            </td>
-            <td>
-              ختم وتوقيع الرئيس المباشر :
-            </td>
-          </tr>
-        </table>
+    <v-layout row class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <table style="border: 0px; font-weight: bold;" width="100%;" dir="rtl">
+        <tr>
+          <td>
+            التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }} <br><br>
+          </td>
+          <td>
+            الاسم : <br><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            توقيع المنتسب :
+          </td>
+          <td>
+            ختم وتوقيع الرئيس المباشر :
+          </td>
+        </tr>
+      </table>
     </v-layout>
 
   </v-container>
@@ -248,6 +239,15 @@ export default{
       return 0
     },
 
+    getGender (flag) {
+      if (flag === 1) {
+        return this.doc.gender === 'ذكر' ? 'إفادة بعمل الزّوجة' : 'إفادة بعمل الزّوج'
+      } else if (flag === 2) {
+        return this.doc.gender === 'ذكر' ? 'إن الزّوجة' : 'إن الزّوج'
+      }
+      return this.doc.gender === 'ذكر' ? 'زوجتي' : 'زوجي'
+    },
+
     ConvertToArabicNum (nn) {
       if (!nn) {
         return ''
@@ -257,6 +257,23 @@ export default{
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {
         ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabicNumMoney (nn) {
+      if (!nn) {
+        return ''
+      }
+      var q = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      var n = q.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        if (element === ',') {
+          ar += '،'
+        } else {
+          ar += arnum[element]
+        }
       })
       return ar
     },
@@ -313,19 +330,18 @@ export default{
 
 <style scoped>
 
+  .fontsize {
+    font-size: 15px;
+  }
+
   table {
     border-collapse: collapse;
     border: 2px solid black;
   }
 
   td {
-    padding: 5px;
+    padding: 3px;
   }
-
-  /*table tr{
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-  }*/
 
   .t {
     border: 2px solid black;
@@ -336,8 +352,8 @@ export default{
 
   .t td, .t th {
     border: 2px solid black;
-    height: 35px;
-    padding: 5px;
+    height: 28px;
+    padding: 3px;
   }
 
   .icons{

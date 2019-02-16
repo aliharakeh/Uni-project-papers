@@ -171,24 +171,6 @@ export default {
 
       this.doc = doc
 
-      // doc.partners.forEach(partner => {
-      //   this.family.push({
-      //     name: partner.name,
-      //     birthDate: partner.birthDate,
-      //     rangeOfAcquaintance: 'زوجته / زوجها',
-      //     address: doc.address
-      //   })
-      // })
-
-      // doc.children.forEach(child => {
-      //   this.family.push({
-      //     name: child.name,
-      //     birthDate: child.birthDate,
-      //     rangeOfAcquaintance: 'ابنه / ابنته',
-      //     address: doc.address
-      //   })
-      // })
-
       doc.family.forEach(member => {
         this.family.push({
           name: member.name,
