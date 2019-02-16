@@ -2,36 +2,34 @@
   <v-container fluid style="width: 21cm; height: 29cm;">
     
     <!-- section 1 -->
-    <v-layout row justify-space-between class="mt-2">
+    <v-layout row justify-space-between class="mt-1">
       <div dir="rtl">
         <h1>الجمهورية اللبنانية</h1>
-        <h3>صندوق تعاضد أفراد الهيئة</h3>
-        <h3>التعليميّة في الجامعة اللبنانية</h3>
+        <h3>صندوق تعاضد</h3>
       </div>
         <div dir="rtl" style="text-align: center;border: 2px solid black;" class="px-4 py-3">
-          <h4>نموذج رقم<br>(٤)<br>تعليم</h4>
+          <h4>نموذج رقم<br>(٨)<br>وفاة</h4>
         </div>
     </v-layout>
 
     <!-- section 2 -->
-    <v-layout column class="mt-2">
+    <v-layout column class="mt-1">
       <v-flex xs6 offset-xs-3>
         <div style="text-align:center;">
-          <h1 style="font-size: 29px;">طلب منحة تعليم</h1>
-          <h1 style="font-size: 29px;">عن العام الدراسي &nbsp;&nbsp;&nbsp; ٢٠ - &nbsp;&nbsp;&nbsp; ٢٠</h1>
-        </div>
+          <h1 style="font-size: 30px;">طلب مساعدة بسبب وفاة أحد أفراد عائلة المنتسب أو ذوي عهدته</h1>
+         </div>
       </v-flex>
     </v-layout>
 
     <!-- section 3 -->
-    <v-layout row justify-space-between class="mt-2 fontsize">
-      <div>
+    <v-layout row justify-space-between class="mt-1 fontsize">
+        <div>
         <table dir="rtl">
           <tr>
-            <th style="text-align: center; padding: 2px;">رقم الانتساب</th>
+            <th style="width: 200px; text-align: center; padding: 2px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
+            <td style="text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -51,7 +49,7 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-2 fontsize">
+    <v-layout row class="mt-1 fontsize">
       <table style="width: 100%;" dir="rtl">
         <tr>
           <td style="width: 15%;"></td>
@@ -66,48 +64,11 @@
       </table>
     </v-layout>
 
-    <!-- section 5 -->
-		<div style="text-align:center; margin-top: 10px;">
-			<h1 style="font-size: 25px;">أسماء الأولاد المستفيدين </h1>
-		</div>
-    <v-layout row class="mt-2 fontsize" style="page-break-inside: avoid;">
-      <table class="t" dir="rtl">
-        <tr>
-          <th>اسم الولد</th>
-          <th>تاريخ الولادة</th>
-          <th>اسم المدرسة أو الجامعة</th>
-          <th>نوع التعليم</th>
-					<th>مرحلة التعليم</th>
-					<th>الصف</th>
-          <th colspan="2" style="padding: 1px;">
-            <table width="100%">
-              <tr>
-                <td colspan="2"> حقل مخصص لإدارة الصندوق </td>
-              </tr>
-              <tr>
-                <td style="width: 120px;">قيمة المنحة المقبوضة من مصادر أخرى</td>
-                <td style="width: 120px;">قيمة المنحة المستحقة</td>
-              </tr>
-            </table>
-          </th>
-			  </tr>
-        <tr v-for="childrenData in doc.childrenData" :key="childrenData.name">
-          <td>{{ childrenData.name }}</td>
-          <td>{{ ConvertToArabicDate(childrenData.birthDate) }}</td>
-          <td>{{ childrenData.educationPlace }}</td>
-          <td>{{ childrenData.educationType }}</td>
-          <td>{{ childrenData.educationLevel }}</td>
-					<td>{{ childrenData.class }}</td>
-					<td></td><td></td>
-        </tr>
-      </table>
-    </v-layout>
-
-    <!-- section 6 --> <!-- <i class="material-icons icons">check_box</i> --> <!-- <i class="material-icons icons">check_box</i></bdi> -->
+    <!-- section 5 --> <!-- <i class="material-icons icons">check_box</i> --> <!-- <i class="material-icons icons">check_box</i></bdi> -->
     <div style="text-align:center; margin-top: 10px;">
       <h1 style="font-size: 25px;">{{ getGender(1) }}</h1>
     </div>
-    <v-layout column class="mt-2 fontsize" style="page-break-inside: avoid;">
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
       <table style="width: 100%;" dir="rtl" class="mb-2" 
           v-for="partner in doc.partners" :key="partner.name">
 
@@ -141,37 +102,79 @@
       </table>
     </v-layout>
 
-		<!-- section 7 -->
-		<v-layout column class="mt-2 fontsize" style="margin-bottom: 10px; page-break-inside: avoid;">
-			<p>
-			-	أصرّح على مسؤوليّتي الشّخصية والقانونية بأن أولادي المذكورة أسماؤهم في هذا الطلب لا يتعاطون أي عمل مأجور ولا زالوا في عهدتي ولا أزال أتقاضى التعويض العائلي عنهم ، ولا أستفيد من أية منحة دراسية عنهم من مصادر أخرى في التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -	<b>التوقيع : </b>
-			</p>
-		</v-layout>
+    <!-- section 6 -->
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <table style="width: 100%;" dir="rtl">
+        <tr>
+          <td colspan="2">
+            - أرجو إعطائي منحة وفاة عن  <b>{{ doc.relative }}</b> ، المنصوص عنها في المادة ١٢ من المرسوم رقم ٨٦٨١ من نظام المنافع والخدمات التي يقدمها الصندوق.
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            - إني أصرّح على مسؤوليّتي بأني <b>{{ checkPapers() }}</b> أنا أو {{ getGender(3) }} منحة ولادة من أي مصدر آخر.
+          </td>
+        </tr>
+        <tr v-if="checkPapers() === 'أتقاضى'">
+          <td colspan="2">
+            - قيمة المبلغ المقبوض من المصدر الآخر : <b> {{ ConvertToArabicNumMoney(doc.money) }} ل.ل </b> &nbsp;-&nbsp; في تاريخ : {{ ConvertToArabicDate(doc.date) }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align: left; padding-bottom: 40px; padding-left: 100px;">
+             توقيع <b>طالب المنحة</b>
+          </td>
+        </tr>
+      </table>
+    </v-layout>
 
-		<!-- section 8 -->
-    <v-layout row class="mt-2 fontsize" style="page-break-inside: avoid;">
-        <table dir="rtl" style="width: 100%;">
-					<tr>
-						<td style="border: 2px solid black; width: 50%;">
-							<u><b>المستندات المرفقة :</b></u><br>
-							١- <br>
-							٢- <br>
-							٣- <br>
-							٤- <br>
-							٥- <br>
-							٦- 
-						</td>
-						<td>
-							<p>
-							-	مع التأكيد أن الدكتور : <b>{{ doc.name }}</b> <br>
-							-	كان في الخدمة الفعلية خلال العام الدراسي موضوع هذا الطلب. <br>
-							-	<b>الرئيس المباشر :</b><br><br>
-							-	<b>التوقيع :</b><br><br>
-							</p>
-						</td>
-					</tr>
-        </table>
+    <!-- section 7 -->
+   <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+     <table style="width: 100%;" dir="rtl" class="mb-2">
+       <tr>
+         <td colspan="2">
+            - يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : 
+         </td>
+       </tr>
+       <tr>
+         <td>
+           - إن الراتب الأساسي الشهري للأستاذ : 
+         </td>
+         <td>
+           <div style="width: 450px;height: 30px; border: 1px solid black;">
+            <p style="text-align: left;">ل.ل &nbsp;</p>
+          </div>
+         </td>
+       </tr>
+       <tr>
+         <td>
+           - تاريخ حصول الوفاة : {{ ConvertToArabicDate(doc.deathdate) }}
+         </td>
+         <td style="text-align: center;">
+           التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}
+         </td>
+       </tr>
+       <tr>
+         <td style="padding-bottom: 45px;">
+           - <b> الإسم : </b>
+         </td>
+         <td style="text-align: center; padding-bottom: 45px;">
+           توقيع <b>الرئيس المباشر </b>
+         </td>
+       </tr>
+     </table>
+    </v-layout>
+
+    <!-- section 8 -->
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+      <div style="margin-right: 25px;">
+        <u><b>المستندات المطلوبة : </b></u>
+        <ul>
+          <li>وثيقة وفاة ، إخراج قيد عائلي جديد غیره من المستندات عند الاقتضاء.</li>
+          <li>مستند عدم استفادة عن الزوج (الزوجة) من المرجع المسؤول عن عمله.</li>
+          <li>مستند عن قيمة المبلغ المقبوض من المرجع الآخر.</li>
+        </ul>
+      </div>
     </v-layout>
 
   </v-container>
@@ -222,11 +225,20 @@ export default{
       return 0
     },
 
+    checkPapers () {
+      if (this.doc.prevOrOutsidePaper === '1') {
+        return 'أتقاضى'
+      }
+      return 'لم أتقاض'
+    },
+
     getGender (flag) {
       if (flag === 1) {
         return this.doc.gender === 'ذكر' ? 'إفادة بعمل الزّوجة' : 'إفادة بعمل الزّوج'
+      } else if (flag === 2) {
+        return this.doc.gender === 'ذكر' ? 'إن الزّوجة' : 'إن الزّوج'
       }
-      return this.doc.gender === 'ذكر' ? 'إن الزّوجة' : 'إن الزّوج'
+      return this.doc.gender === 'ذكر' ? 'زوجتي' : 'زوجي'
     },
 
     ConvertToArabicNum (nn) {
@@ -241,6 +253,24 @@ export default{
       })
       return ar
     },
+
+    ConvertToArabicNumMoney (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        if (element === ',') {
+          ar += '،'
+        } else {
+          ar += arnum[element]
+        }
+      })
+      return ar
+    },
+
     ConvertToArabicDate (date) {
       if (!date) {
         return ''
@@ -294,7 +324,7 @@ export default{
 
 <style scoped>
 
-  .fontsize {
+  .fontsize{
     font-size: 15px;
   }
 
@@ -307,11 +337,6 @@ export default{
     padding: 3px;
   }
 
-  /*table tr{
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-  }*/
-
   .t {
     border: 2px solid black;
     border-collapse: collapse;
@@ -321,7 +346,7 @@ export default{
 
   .t td, .t th {
     border: 2px solid black;
-    height: 25px;
+    height: 28px;
     padding: 3px;
   }
 

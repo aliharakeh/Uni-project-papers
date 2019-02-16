@@ -75,8 +75,7 @@
             alert(err.message)
           } else {
             doc = JSON.parse(data)
-            name = doc.name + '_' + doc.number + '_' + doc.type + '.pdf'
-            // console.log(name)
+            name = doc.name + '_' + this.ConvertToArabicNum(doc.number) + '_' + doc.type + '.pdf'
             this.show = false
             remote.getCurrentWindow().webContents.printToPDF({ // try print function
               pageSize: 'A4',
@@ -116,6 +115,18 @@
             })
           }
         })
+      },
+      ConvertToArabicNum (nn) {
+        if (!nn) {
+          return ''
+        }
+        var n = nn.split('')
+        var ar = ''
+        var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+        n.forEach(element => {
+          ar += arnum[element]
+        })
+        return ar
       }
     }
   }
