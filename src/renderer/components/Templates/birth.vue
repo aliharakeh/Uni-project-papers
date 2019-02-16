@@ -49,13 +49,13 @@
       <!-- Partners Work -->
       <v-card class="mt-4">
         <v-card-title>
-          <h1>معلومات عن الزوج او الزوجة</h1>
+          <h1>{{ getGender() }}</h1>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
           <v-layout row wrap v-for="(person, i) in doc.partners" :key="i">
             <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم : </span>
+              <span class="headline font-weight-bold">- الاسم : </span>
               <span class="title">{{ person.name }}</span>
             </v-flex>
             <v-flex xs12 sm5>
@@ -214,6 +214,9 @@ export default {
 
   methods: {
 
+    getGender () {
+      return this.doc.gender === 'ذكر' ? 'معلومات عن الزّوجة' : 'معلومات عن الزّوج'
+    },
     workPlace (person) {
       if (person.workSector === '') {
         return 'لا يعمل'
@@ -227,20 +230,20 @@ export default {
     },
     saveToJsonCheck () {
       if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
+        if (this.child === null || this.birthdate === null) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        } else if (this.prevOrOutsidePaper === null) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        } else if (this.prevOrOutsidePaper === '1' && (!this.money || !this.date)) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        }
         this.saveToJson()
       }
     },
     saveToJson () {
-      if (this.child === null || this.birthdate === null) {
-        alert('لم يتم ملئ كل الخانات بعد')
-        return
-      } else if (this.prevOrOutsidePaper === null) {
-        alert('لم يتم ملئ كل الخانات بعد')
-        return
-      } else if (this.prevOrOutsidePaper === '1' && (!this.money || !this.date)) {
-        alert('لم يتم ملئ كل الخانات بعد')
-        return
-      }
       this.loading = true
       const data = {
         number: this.doc.number,

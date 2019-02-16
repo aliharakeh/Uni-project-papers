@@ -49,13 +49,13 @@
       <!-- Partners Work -->
       <v-card class="mt-4">
         <v-card-title>
-          <h1>معلومات عن الزوج او الزوجة</h1>
+          <h1>{{ getGender() }}</h1>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
           <v-layout row wrap v-for="(person, i) in partners" :key="i">
             <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم : </span>
+              <span class="headline font-weight-bold">- الاسم : </span>
               <span class="title">{{ person.name }}</span>
             </v-flex>
             <v-flex xs12 sm5>
@@ -76,7 +76,7 @@
               </h1>
             </v-flex>
             <v-flex xs12 sm5 v-if="person.prevOrOutsidePaper === '1'" class="ml-4">
-              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="number" v-model="person.money"></v-text-field>
+              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="text" v-model="person.money"></v-text-field>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -197,7 +197,6 @@ export default {
       loading: false,
       doc: null,
       partners: null,
-      batata: 0,
       dialog: false,
       headers: [
         { text: 'اسم الولد', sortable: false, align: 'center', class: 'font-weight-bold' },
@@ -262,6 +261,10 @@ export default {
     }
   },
   methods: {
+
+    getGender () {
+      return this.doc.gender === 'ذكر' ? 'معلومات عن الزّوجة' : 'معلومات عن الزّوج'
+    },
     workPlace (person) {
       if (person.workSector === '') {
         return 'لا يعمل'
@@ -331,6 +334,16 @@ export default {
     },
     saveToJsonCheck () {
       if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
+        if (!this.childrenData.length) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        }
+        for (var i in this.partners) {
+          if (this.partners[i].prevOrOutsidePaper === null || (this.partners[i].prevOrOutsidePaper === '1' && this.partners[i].money === null)) {
+            alert('لم يتم ملئ كل المعلومات بعد')
+            return
+          }
+        }
         this.saveToJson()
       }
     },

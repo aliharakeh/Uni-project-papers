@@ -52,7 +52,7 @@
       <!-- Partners Work -->
       <v-card class="mt-4">
         <v-card-title>
-          <h1>معلومات عن الزوج او الزوجة</h1>
+          <h1>{{ getGender() }}</h1>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
@@ -385,6 +385,9 @@ export default {
     }
   },
   methods: {
+    getGender () {
+      return this.doc.gender === 'ذكر' ? 'معلومات عن الزّوجة' : 'معلومات عن الزّوج'
+    },
     workPlace (person) {
       if (person.workSector === '') {
         return 'لا يعمل'
@@ -493,6 +496,16 @@ export default {
     },
     saveToJsonCheck () {
       if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
+        if (!this.linkedFamily.length || !this.medicalData.length) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        }
+        for (var property in this.medicalCostsData) {
+          if (this.medicalCostsData[property] === null) {
+            alert('لم يتم ملئ كل المعلومات بعد')
+            return
+          }
+        }
         this.saveToJson()
       }
     },

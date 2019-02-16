@@ -80,7 +80,7 @@
 					<th>مرحلة التعليم</th>
 					<th>الصف</th>
           <th colspan="2" style="padding: 1px;">
-            <table>
+            <table width="100%">
               <tr>
                 <td colspan="2"> حقل مخصص لإدارة الصندوق </td>
               </tr>
@@ -154,7 +154,7 @@
         <table dir="rtl" style="width: 100%;">
 					<tr>
 						<td style="border: 2px solid black; width: 50%;">
-							<u><b>المستندات المرافقة :</b></u><br>
+							<u><b>المستندات المرفقة :</b></u><br>
 							١- <br>
 							٢- <br>
 							٣- <br>
@@ -164,7 +164,7 @@
 						</td>
 						<td>
 							<p>
-							-	مع التأكيد أن الدكتور : {{ doc.name }} <br>
+							-	مع التأكيد أن الدكتور : <b>{{ doc.name }}</b> <br>
 							-	كان في الخدمة الفعلية خلال العام الدراسي موضوع هذا الطلب. <br>
 							-	<b>الرئيس المباشر :</b><br><br>
 							-	<b>التوقيع :</b><br><br>

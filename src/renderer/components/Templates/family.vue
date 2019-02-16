@@ -236,6 +236,10 @@ export default {
     },
     saveToJsonCheck () {
       if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
+        if (!this.data.length) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        }
         this.saveToJson()
       }
     },

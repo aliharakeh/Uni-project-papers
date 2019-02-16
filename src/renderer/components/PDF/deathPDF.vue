@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="width: 21cm; height: 29.7cm;">
+  <v-container fluid style="width: 21cm; height: 29cm;">
     
     <!-- section 1 -->
     <v-layout row justify-space-between class="mt-2">
@@ -13,23 +13,23 @@
     </v-layout>
 
     <!-- section 2 -->
-    <v-layout column class="mt-4">
+    <v-layout column class="mt-2">
       <v-flex xs6 offset-xs-3>
         <div style="text-align:center;">
-          <h1 class="display-1 font-weight-bold">طلب مساعدة بسبب وفاة منتسب</h1>
+          <h1 style="font-size: 31px;">طلب مساعدة بسبب وفاة منتسب</h1>
          </div>
       </v-flex>
     </v-layout>
 
     <!-- section 3 -->
-    <v-layout row justify-space-between class="mt-4" style="font-size: 18px;">
+    <v-layout row justify-space-between class="mt-2 fontsize">
         <div>
         <table dir="rtl">
           <tr>
-            <th style="height: 35px;width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
+            <th style="width: 200px; text-align: center; padding: 5px;">رقم الانتساب</th>
           </tr>
           <tr style=" border: 2px solid black;">
-            <td style="height: 35px;width: 200px; text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
+            <td style="text-align: center">{{ ConvertToArabicNum(doc.number) }}</td>
           </tr>
         </table>
       </div>
@@ -49,25 +49,28 @@
     </v-layout>
 
     <!-- section 4 -->
-    <v-layout row class="mt-3" style="font-size: 20px;">
+    <v-layout row class="mt-2 fontsize">
       <table style="width: 100%;" dir="rtl">
         <tr>
-          <td style=" text-align: center;">اسم المنتسب وشهرته : {{ doc.name }}</td>
-          <td>الهاتف : {{ ConvertToArabicNum(doc.phone) }}</td>
+          <td style="width: 15%;"></td>
+          <td>اسم المنتسب وشهرته : <b>{{ doc.name }}</b></td>
+          <td>الهاتف : <b>{{ ConvertToArabicNum(doc.phone) }}</b></td>
         </tr>
         <tr>
-          <td style=" text-align: center;">الكلية/المعهد : {{ doc.faculty }}</td>
-          <td>الفرع : {{ doc.facultySection }}</td>
+          <td style="width: 15%;"></td>
+          <td>الكلية/المعهد : <b>{{ doc.faculty }}</b></td>
+          <td>الفرع : <b>{{ doc.facultySection }}</b></td>
         </tr>
       </table>
     </v-layout>
 
     <!-- section 5 -->
-    <v-layout column class="mt-4" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-2 fontsize" style="page-break-inside: avoid;">
       <table dir="rtl" class="t">
         <tr>
-          <td colspan="3">
-            
+          <td colspan="3" style="text-align : right;">
+            - نحن الموقعين أدناه أفراد عائلة المرحوم : <b>{{ doc.name }}</b> ، من الكلية/المعهد : <b>{{ doc.faculty }}</b> ، الفرع : <b>{{ doc.facultySection }}</b> <br>
+            - نرجو إعطائنا مساعدة الوفاة المنصوص في المادّة ١١ من المرسوم رقم ٨٦٨١ تاريخ ١٩٩٦/٦/٩ من نظام المنافع والخدمات التي يقدمها الصندوق وذلك بالإستناد إلى المستندات المرفقة في تاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}
           </td>
         </tr>
         <tr>
@@ -77,30 +80,54 @@
         </tr>
         <tr v-for="deadMembers in doc.deadMembers" :key="deadMembers.name">
             <td> {{ deadMembers.name }} </td>
-            <td> {{ deadMembers.rangeOfAcquaintance }} </td>
-            <td></td>
+            <td style="width: 33%;"> {{ deadMembers.rangeOfAcquaintance }} </td>
+            <td style="width: 33%;"></td>
         </tr>
       </table>
     </v-layout>
 
-    <!-- section 6 -->
-    <v-layout column class="mt-3" style="font-size: 20px; page-break-inside: avoid;">
-        <div style="border: 2px solid black; padding: 10px;">
-          يحال لجانب ادارة صندوق التعاضد مع الإفادة بما يلي : <br>
-          - ان المرحوم ............. المتوفي بتاريخ {{ ConvertToArabicDate(doc.deathDate) }} <br>
-          كان أستاذ ...... في كلية/معهد ............. الفرع ............... حتى وفاته <br>
-          - ان الراتب الأساسي الصافي للأستاذ المتوفي بتاريخ حصول الوفاة هو : 
-          <div style="width: 450px;height: 40px; border: 1px solid black;">
+   <!-- section 6 -->
+   <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
+    <table style="width: 100%;" dir="rtl" class="mb-2">
+       <tr>
+         <td colspan="2">
+            - يحال لجانب ادارة صندوق التعاضد مع الافادة بما يلي : 
+         </td>
+       </tr>
+       <tr>
+         <td colspan="2">
+          - إن المرحوم : <b>{{ doc.name }}</b> ، المتوفي بتاريخ : {{ ConvertToArabicDate(doc.deathDate) }} ، كان أستاذ في الكلية/المعهد : <b>{{ doc.faculty }}</b> ، الفرع : <b>{{ doc.facultySection }}</b> حتى تاريخ وفاته.
+         </td>
+       </tr>
+       <tr>
+         <td>
+           - إن الراتب الأساسي الصافي للأستاذ المتوفي بتاريخ حصول الوفاة هو : 
+         </td>
+         <td>
+           <div style="width: 380px;height: 30px; border: 1px solid black;">
             <p style="text-align: left;">ل.ل &nbsp;</p>
           </div>
-          التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}<br>
-          الاسم : <br><br>
-          توقيع <b>الرئيس المباشر :</b><br><br>
-        </div>
-    </v-layout><br>
+         </td>
+       </tr>
+       <tr>
+          <td>
+           - <b> الإسم : </b>
+         </td>
+         <td style="text-align: center;">
+           التاريخ : {{ ConvertToArabicDate(GetDateToday(date)) }}
+         </td>
+       </tr>
+       <tr>
+         <td></td>
+         <td style="text-align: center; padding-bottom: 45px;">
+           توقيع <b>الرئيس المباشر </b>
+         </td>
+       </tr>
+     </table>
+    </v-layout>
 
     <!-- section 7 -->
-    <v-layout column class="mt-2" style="font-size: 20px; page-break-inside: avoid;">
+    <v-layout column class="mt-1 fontsize" style="page-break-inside: avoid;">
         <div style="margin-right: 25px;">
           <u><b>المستندات المطلوبة : </b></u>
           <ul>
@@ -230,19 +257,18 @@ export default{
 
 <style scoped>
 
+  .fontsize {
+    font-size: 15px;
+  }
+
   table {
     border-collapse: collapse;
     border: 2px solid black;
   }
 
   td {
-    padding: 5px;
+    padding: 3px;
   }
-
-  /*table tr{
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-  }*/
 
   .t {
     border: 2px solid black;
@@ -253,8 +279,8 @@ export default{
 
   .t td, .t th {
     border: 2px solid black;
-    height: 35px;
-    padding: 5px;
+    height: 28px;
+    padding: 3px;
   }
 
   .icons{

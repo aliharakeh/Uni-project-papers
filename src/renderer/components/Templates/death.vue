@@ -149,8 +149,8 @@
       </v-card>
 
       <v-layout row justify-center align-center class="mt-2">
-        <v-btn color="primary" @click="saveToJson">حفظ</v-btn>
-        <v-btn color="error" to="/">الغاء</v-btn>
+        <v-btn color="primary" @click="saveToJsonCheck">حفظ</v-btn>
+        <v-btn color="error" @click="goBack">الغاء</v-btn>
       </v-layout>
 
     </div>
@@ -194,6 +194,8 @@ export default {
     }
   },
   created () {
+    var rangeOfAcquaintance = ''
+    var childAcquaintance = ''
     this.loading = true
     this.$db.findOne({_id: this.id}, (err, doc) => {
       if (err) {
@@ -203,20 +205,22 @@ export default {
 
       this.doc = doc
 
+      this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
       doc.partners.forEach(partner => {
         this.family.push({
           name: partner.name,
           birthDate: partner.birthDate,
-          rangeOfAcquaintance: 'زوجته / زوجها',
+          rangeOfAcquaintance: rangeOfAcquaintance,
           address: doc.address
         })
       })
 
       doc.children.forEach(child => {
+        child.gender === 'ذكر' ? childAcquaintance = 'ابنه' : childAcquaintance = 'ابنته'
         this.family.push({
           name: child.name,
           birthDate: child.birthDate,
-          rangeOfAcquaintance: 'ابنه / ابنته',
+          rangeOfAcquaintance: childAcquaintance,
           address: doc.address
         })
       })
@@ -270,11 +274,26 @@ export default {
       }
       this.close()
     },
+    goBack () {
+      if (confirm('هل انت متاكد من الخروج من هذه الصفحة ؟')) {
+        this.$router.push('/')
+      }
+    },
+    saveToJsonCheck () {
+      if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
+        if (!this.data.length || !this.deathDate) {
+          alert('لم يتم ملئ كل المعلومات بعد')
+          return
+        }
+        this.saveToJson()
+      }
+    },
     saveToJson () {
       this.loading = true
       const data = {
         number: this.doc.number,
         name: this.doc.name,
+        gender: this.doc.gender,
         type: 'مساعدة_وفاة',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
@@ -309,53 +328,6 @@ export default {
         ar += arnum[element]
       })
       return ar
-    },
-    ConvertToArabicDate (date) {
-      if (!date) {
-        return ''
-      }
-      var dd = date.split('-')
-      var year = ''
-      var month = ''
-      var day = ''
-      // var flag = 0
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-
-      var y = dd[0].split('') // year
-      y.forEach(element => {
-        year += arnum[element]
-      })
-
-      var m = dd[1].split('') // month
-      if (dd[1] !== '10') {
-        m.forEach(element => {
-          if (element !== '0') {
-            month += arnum[element]
-          }
-        })
-      } else {
-        month += '١٠'
-      }
-
-      var d = dd[2].split('') // day
-      if (dd[2] !== '10' && dd[2] !== '20' && dd[2] !== '30') {
-        d.forEach(element => {
-          if (element !== '0') {
-            day += arnum[element]
-          }
-        })
-      } else {
-        if (dd[2] === '10') {
-          day += '١٠'
-        }
-        if (dd[2] === '20') {
-          day += '٢٠'
-        }
-        if (dd[2] === '30') {
-          day += '٣٠'
-        }
-      }
-      return year + '/' + month + '/' + day
     }
   }
 }

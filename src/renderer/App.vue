@@ -103,11 +103,11 @@
                     if (err) {
                       alert(err.message)
                       this.show = true
-                      this.$router.push('/')
+                      // this.$router.push('/')
                     } else {
                       alert('PDF saved !!')
                       this.show = true
-                      // this.$router.push('/')
+                      this.$router.push('/')
                     }
                   })
                 }

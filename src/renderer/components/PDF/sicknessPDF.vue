@@ -160,7 +160,7 @@
     <v-layout row class="mt-1 fontsize" style="page-break-inside: avoid;">
       <table dir="rtl" style="width: 100%;">
           <tr>
-            <th colspan="2"><h1 style="font-size: 25px;">المستندات المرافقة</h1></th>
+            <th colspan="2"><h1 style="font-size: 25px;">المستندات المرفقة</h1></th>
           </tr>
           <tr> <td>١-</td> <td class="rightborder">٥-</td> </tr>
           <tr> <td>٢-</td> <td class="rightborder">٦-</td> </tr>
