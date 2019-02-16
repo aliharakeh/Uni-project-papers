@@ -80,6 +80,12 @@ export default new Router({
       props: true,
       component: require('@/components/Templates/deathfamily').default
     },
+    {
+      path: '/statement/:id',
+      name: 'statement help',
+      props: true,
+      component: require('@/components/Templates/statement').default
+    },
 
     // PDF files path //
     {
@@ -129,6 +135,12 @@ export default new Router({
       name: 'deathfamily pdf',
       props: true,
       component: require('@/components/PDF/deathfamilyPDF').default
+    },
+    {
+      path: '/PDFstatement',
+      name: 'statement pdf',
+      props: true,
+      component: require('@/components/PDF/statementPDF').default
     },
     //
 
