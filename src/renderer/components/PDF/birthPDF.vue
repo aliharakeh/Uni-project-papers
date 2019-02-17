@@ -97,7 +97,7 @@
         <tr v-if="partner.externalHelp === '1'">
           <td colspan="2">
            - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
-            قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
+            قيمتها : <b>{{ ConvertToArabicNumMoney(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
       </table>
@@ -118,7 +118,7 @@
         </tr>
         <tr v-if="checkPapers() === 'أتقاضى'">
           <td colspan="2">
-            - قيمة المبلغ المقبوض من المصدر الآخر : <b> {{ ConvertToArabicNumMoney(doc.money) }} ل.ل </b> &nbsp;-&nbsp; في تاريخ : {{ ConvertToArabicDate(doc.date) }}
+            - قيمة المبلغ المقبوض من المصدر الآخر : <b> {{ doc.money }} ل.ل </b> &nbsp;-&nbsp; في تاريخ : {{ ConvertToArabicDate(doc.date) }}
           </td>
         </tr>
         <tr>
@@ -260,7 +260,8 @@ export default{
       if (!nn) {
         return ''
       }
-      var n = nn.split('')
+      var t = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      var n = t.split('')
       var ar = ''
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {

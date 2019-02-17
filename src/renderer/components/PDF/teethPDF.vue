@@ -98,7 +98,7 @@
         <tr v-if="partner.externalHelp === '1'">
           <td colspan="2">
            - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
-            قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
+            قيمتها : <b>{{ ConvertToArabicNumMoney(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
       </table>

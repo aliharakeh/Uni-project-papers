@@ -98,7 +98,7 @@
         <tr v-if="partner.externalHelp === '1'">
           <td colspan="2">
            - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
-            قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
+            قيمتها : <b>{{ ConvertToArabicNumMoney(partner.externalHelpMoney) }} ل.ل</b>
           </td>
         </tr>
       </table>
@@ -264,8 +264,8 @@ export default{
       if (!nn) {
         return ''
       }
-      var q = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      var n = q.split('')
+      var t = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      var n = t.split('')
       var ar = ''
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {

@@ -130,12 +130,16 @@
           <td v-if="checkWork(partner) === 'متعاقد' && !checkWorkSector(partner, 'قطاع خاص')">
            - رقم الانتساب للتعاونيّة أو للضمان الاجتماعي : <b>{{ ConvertToArabicNum(partner.insuranceNum) }} </b>
           </td>
+          <td v-else></td>
         </tr>
-
-        <tr v-if="partner.externalHelp === '1'">
+        <tr>
           <td colspan="2">
-           - المساعدة من مصادر أخرى : <b>{{ partner.externalHelpSource }}</b> &nbsp;&nbsp;-&nbsp;&nbsp; 
-            قيمتها : <b>{{ ConvertToArabicNum(partner.externalHelpMoney) }} ل.ل</b>
+            - <b>{{ checkPapers(partner) }}</b> مساعدة أو منحة تعليم عن أولادي أو عن أحدهم المذكورة أسماؤهم أعلاه.
+          </td>
+        </tr>
+        <tr v-if="checkPapers(partner) === 'أتقاضى'">
+          <td colspan="2">
+            - قيمة المبلغ المقبوض  : <b> {{ partner.money }} ل.ل </b>
           </td>
         </tr>
       </table>
@@ -222,6 +226,13 @@ export default{
       return 0
     },
 
+    checkPapers (partner) {
+      if (partner.prevOrOutsidePaper === '1') {
+        return 'أتقاضى'
+      }
+      return 'لم أتقاض'
+    },
+
     getGender (flag) {
       if (flag === 1) {
         return this.doc.gender === 'ذكر' ? 'إفادة بعمل الزّوجة' : 'إفادة بعمل الزّوج'
@@ -238,6 +249,23 @@ export default{
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {
         ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabicNumMoney (nn) {
+      if (!nn) {
+        return ''
+      }
+      var t = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      var n = t.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        if (element === ',') {
+          ar += '،'
+        } else {
+          ar += arnum[element]
+        }
       })
       return ar
     },

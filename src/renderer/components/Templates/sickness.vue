@@ -204,16 +204,16 @@
                   <v-container grid-list-md>
                     <v-layout wrap>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.doctorsCost" label="اجور اطباء"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem2.doctorsCost" label="اجور اطباء" @input="editedItem2.doctorsCost = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.medicineCost" label="ثمن ادوية"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem2.medicineCost" label="ثمن ادوية" @input="editedItem2.medicineCost = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.otherCosts" label="مختلف"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem2.otherCosts" label="مختلف" @input="editedItem2.otherCosts = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem2.externalHelpValue" label="قيمة المساعدة من مصدر اخر" @input="editedItem2.externalHelpValue = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -467,6 +467,7 @@ export default {
     },
     save2 () {
       var flag = 0
+      var tempsum = ''
       for (var property in this.editedItem2) {
         if (property !== 'costsSum' && this.editedItem2[property] === null) {
           flag = 1
@@ -478,11 +479,11 @@ export default {
         return
       }
 
-      this.editedItem2.costsSum = Number(this.editedItem2.doctorsCost) +
-                                  Number(this.editedItem2.otherCosts) +
-                                  Number(this.editedItem2.medicineCost)
+      tempsum = Number(this.removecommas(this.editedItem2.doctorsCost)) +
+                Number(this.removecommas(this.editedItem2.otherCosts)) +
+                Number(this.removecommas(this.editedItem2.medicineCost)) + ''
 
-      this.editedItem2.costsSum += ''
+      this.editedItem2.costsSum = tempsum.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       if (this.editedIndex2 > -1) {
         Object.assign(this.medicalCostsData[this.editedIndex2], this.editedItem2)
       }
@@ -538,7 +539,19 @@ export default {
         }
       )
     },
-
+    removecommas (num) {
+      if (!num) {
+        return ''
+      }
+      var n = num.split('')
+      var newnum = ''
+      n.forEach(element => {
+        if (element !== ',') {
+          newnum += element
+        }
+      })
+      return newnum
+    },
     ConvertToArabicNum (nn) {
       if (!nn) {
         return ''
@@ -555,8 +568,7 @@ export default {
       if (!nn) {
         return ''
       }
-      var q = nn.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      var n = q.split('')
+      var n = nn.split('')
       var ar = ''
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {

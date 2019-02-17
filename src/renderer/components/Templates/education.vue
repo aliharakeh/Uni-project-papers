@@ -32,7 +32,7 @@
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ ConvertToArabicNum(doc.phone) }}</span>
+              <span class="title">{{ ConvertToArabicNum(doc.phone, -1) }}</span>
             </v-flex>
             <v-flex xs12 sm5>
               <span class="headline font-weight-bold">الكلية / المعهد : </span>
@@ -64,7 +64,7 @@
             </v-flex>
             <v-flex xs12 sm5 v-if="person.insuranceNumSection">
               <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ ConvertToArabicNum(person.insuranceNum) }}</span>
+              <span class="title">{{ ConvertToArabicNum(person.insuranceNum, -1) }}</span>
             </v-flex>
             <v-flex xs12 class="mt-4">
               <h2>هل تم تقاضي هذه المنحة سابقا او من اي مصدر اخر؟</h2>
@@ -76,7 +76,7 @@
               </h1>
             </v-flex>
             <v-flex xs12 sm5 v-if="person.prevOrOutsidePaper === '1'" class="ml-4">
-              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="text" v-model="person.money"></v-text-field>
+              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="text" @input="person.money = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" @change="ConvertToArabicNum($event, i)" v-model="person.money"></v-text-field>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -376,16 +376,27 @@ export default {
       )
     },
 
-    ConvertToArabicNum (nn) {
+    ConvertToArabicNum (nn, flag) {
       if (!nn) {
         return ''
       }
       var n = nn.split('')
       var ar = ''
+      var ennum = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
       var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
       n.forEach(element => {
-        ar += arnum[element]
+        if (ennum.includes(element)) {
+          ar += arnum[element]
+        } else if (element === ',') {
+          ar += '،'
+        } else {
+          ar += element
+        }
       })
+      if (flag !== -1) {
+        this.partners[flag].money = ar
+        return
+      }
       return ar
     },
     ConvertToArabicDate (date) {
