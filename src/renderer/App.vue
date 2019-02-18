@@ -62,7 +62,7 @@
               var route = this.$route.path
               var docID = data[0]._id
               var pageName = route.substr(4, route.length)
-              this.$router.push('/' + pageName + '/' + docID)
+              this.$router.push('/' + pageName + '/' + docID + '/-1')
             })
           }
         })

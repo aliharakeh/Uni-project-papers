@@ -163,22 +163,44 @@ export default {
   },
   created () {
     this.loading = true
-    this.$db.findOne({_id: this.id}, (err, doc) => {
+    var pp = this.$route.path
+    var p = pp.split('/')
+    console.log(pp)
+
+    this.$db.findOne({_id: this.id}, (err, data1) => {
       if (err) {
         console.log(err.message)
         return
       }
+      if (p[3] === '-1') { // get data from data.json
+        fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data2) => {
+          if (err) throw err
 
-      this.doc = doc
-
-      doc.family.forEach(member => {
-        this.family.push({
-          name: member.name,
-          birthDate: member.birthDate,
-          rangeOfAcquaintance: member.type,
-          address: member.address
+          this.doc = JSON.parse(data2)
+          this.data = this.doc.family
+          console.log(data1)
+          data1.family.forEach(member => {
+            this.family.push({
+              name: member.name,
+              birthDate: member.birthDate,
+              rangeOfAcquaintance: member.type,
+              address: member.address
+            })
+          })
         })
-      })
+        console.log('done1')
+      } else {
+        this.doc = data1
+        this.doc.family.forEach(member => {
+          this.family.push({
+            name: member.name,
+            birthDate: member.birthDate,
+            rangeOfAcquaintance: member.type,
+            address: member.address
+          })
+        })
+        console.log('done2')
+      }
 
       this.loading = false
     })

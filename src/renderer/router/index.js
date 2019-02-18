@@ -56,6 +56,14 @@ export default new Router({
       props: true,
       component: require('@/components/Templates/family').default
     },
+    //
+    {
+      path: '/family/:id/-1',
+      name: 'family edit',
+      props: true,
+      component: require('@/components/Templates/family').default
+    },
+    //
     {
       path: '/death/:id',
       name: 'death help',
