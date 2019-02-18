@@ -53,7 +53,6 @@
             alert(err.message)
           } else {
             doc = JSON.parse(data)
-            // console.log(doc)
             this.$db.find({name: doc.name, number: doc.number}, {}, (err, data) => {
               if (err) {
                 alert('لم يتم العثور على الاساتذة')

@@ -339,42 +339,82 @@ export default {
     var rangeOfAcquaintance = ''
     var childAcquaintance = ''
     this.loading = true
-    this.$db.findOne({_id: this.id}, (err, doc) => {
-      if (err) {
-        console.log(err.message)
-        return
-      }
+    var pp = this.$route.path
+    var p = pp.split('/')
+    console.log(pp)
 
-      this.doc = doc
+    if (p[3] === '-1') { // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data2) => {
+        if (err) throw err
 
-      this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
-      doc.partners.forEach(partner => {
-        this.family.push({
-          name: partner.name,
-          birthDate: partner.birthDate,
-          rangeOfAcquaintance: rangeOfAcquaintance
+        this.doc = JSON.parse(data2)
+        this.medicalData = this.doc.medicalData
+        this.medicalCostsData = this.doc.medicalCostsData
+        this.linkedFamily = this.doc.linkedFamily
+        this.$db.findOne({_id: this.id}, (err, data3) => {
+          if (err) {
+            console.log(err.message)
+            return
+          }
+          this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
+          data3.partners.forEach(partner => {
+            this.family.push({
+              name: partner.name,
+              birthDate: partner.birthDate,
+              rangeOfAcquaintance: rangeOfAcquaintance
+            })
+          })
+          data3.children.forEach(child => {
+            child.gender === 'ذكر' ? childAcquaintance = 'ابنه' : childAcquaintance = 'ابنته'
+            this.family.push({
+              name: child.name,
+              birthDate: child.birthDate,
+              rangeOfAcquaintance: childAcquaintance
+            })
+          })
+          data3.family.forEach(member => {
+            this.family.push({
+              name: member.name,
+              rangeOfAcquaintance: member.type
+            })
+          })
         })
+        this.loading = false
       })
-
-      doc.children.forEach(child => {
-        child.gender === 'ذكر' ? childAcquaintance = 'ابنه' : childAcquaintance = 'ابنته'
-        this.family.push({
-          name: child.name,
-          birthDate: child.birthDate,
-          rangeOfAcquaintance: childAcquaintance
+    } else {
+      this.$db.findOne({_id: this.id}, (err, doc) => {
+        if (err) {
+          console.log(err.message)
+          return
+        }
+        this.doc = doc
+        this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
+        doc.partners.forEach(partner => {
+          this.family.push({
+            name: partner.name,
+            birthDate: partner.birthDate,
+            rangeOfAcquaintance: rangeOfAcquaintance,
+            address: doc.address
+          })
         })
-      })
-
-      doc.family.forEach(member => {
-        this.family.push({
-          name: member.name,
-          birthDate: member.birthDate,
-          rangeOfAcquaintance: member.type
+        doc.children.forEach(child => {
+          child.gender === 'ذكر' ? childAcquaintance = 'ابنه' : childAcquaintance = 'ابنته'
+          this.family.push({
+            name: child.name,
+            birthDate: child.birthDate,
+            rangeOfAcquaintance: childAcquaintance,
+            address: doc.address
+          })
         })
+        doc.family.forEach(member => {
+          this.family.push({
+            name: member.name,
+            rangeOfAcquaintance: member.type
+          })
+        })
+        this.loading = false
       })
-
-      this.loading = false
-    })
+    }
   },
   watch: {
     dialog (val) {
@@ -523,7 +563,8 @@ export default {
         address: this.doc.address,
         partners: this.doc.partners,
         medicalData: this.medicalData,
-        medicalCostsData: this.medicalCostsData
+        medicalCostsData: this.medicalCostsData,
+        linkedFamily: this.linkedFamily
       }
       console.log(data)
       fs.writeFile(path.join(remote.app.getPath('documents'), '/data.json'),

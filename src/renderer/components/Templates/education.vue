@@ -234,21 +234,41 @@ export default {
   },
   created () {
     this.loading = true
-    this.$db.findOne({_id: this.id}, (err, doc) => {
-      if (err) {
-        console.log(err.message)
-        return
-      }
+    var pp = this.$route.path
+    var p = pp.split('/')
+    console.log(pp)
 
-      this.doc = doc
-      this.partners = doc.partners
-      this.partners.forEach(partner => {
-        this.$set(partner, 'money', null)
-        this.$set(partner, 'prevOrOutsidePaper', null)
+    if (p[3] === '-1') { // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+        if (err) throw err
+
+        this.doc = JSON.parse(data)
+        this.$db.findOne({_id: this.id}, (err, data1) => {
+          if (err) {
+            console.log(err.message)
+            return
+          }
+          this.doc.children = data1.children
+          this.childrenData = this.doc.childrenData
+          this.partners = this.doc.partners
+        })
+        this.loading = false
       })
-
-      this.loading = false
-    })
+    } else {
+      this.$db.findOne({_id: this.id}, (err, doc) => {
+        if (err) {
+          console.log(err.message)
+          return
+        }
+        this.doc = doc
+        this.partners = doc.partners
+        this.partners.forEach(partner => {
+          this.$set(partner, 'money', null)
+          this.$set(partner, 'prevOrOutsidePaper', null)
+        })
+        this.loading = false
+      })
+    }
   },
   computed: {
     formTitle () {

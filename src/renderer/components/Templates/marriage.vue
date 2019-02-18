@@ -184,14 +184,33 @@ export default {
   },
   created () {
     this.loading = true
-    this.$db.findOne({_id: this.id}, (err, doc) => {
-      if (err) {
-        console.log(err.message)
-        return
-      }
-      this.doc = doc
-      this.loading = false
-    })
+    var pp = this.$route.path
+    var p = pp.split('/')
+    console.log(pp)
+
+    if (p[3] === '-1') { // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+        if (err) throw err
+
+        this.doc = JSON.parse(data)
+        this.marriageDate = this.doc.marriageDate
+        this.prevOrOutsidePaper = this.doc.prevOrOutsidePaper
+        if (this.prevOrOutsidePaper === '1') {
+          this.money = this.doc.money
+          this.date = this.doc.date
+        }
+        this.loading = false
+      })
+    } else {
+      this.$db.findOne({_id: this.id}, (err, data2) => {
+        if (err) {
+          console.log(err.message)
+          return
+        }
+        this.doc = data2
+        this.loading = false
+      })
+    }
   },
 
   methods: {

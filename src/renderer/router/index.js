@@ -56,14 +56,6 @@ export default new Router({
       props: true,
       component: require('@/components/Templates/family').default
     },
-    //
-    {
-      path: '/family/:id/-1',
-      name: 'family edit',
-      props: true,
-      component: require('@/components/Templates/family').default
-    },
-    //
     {
       path: '/death/:id',
       name: 'death help',
@@ -94,6 +86,63 @@ export default new Router({
       props: true,
       component: require('@/components/Templates/statement').default
     },
+
+    // goBack Pages (Edit Data) //
+    {
+      path: '/family/:id/-1',
+      name: 'family edit',
+      props: true,
+      component: require('@/components/Templates/family').default
+    },
+    {
+      path: '/teeth/:id/-1',
+      name: 'teeth edit',
+      props: true,
+      component: require('@/components/Templates/teeth').default
+    },
+    {
+      path: '/sickness/:id/-1',
+      name: 'sickness edit',
+      props: true,
+      component: require('@/components/Templates/sickness').default
+    },
+    {
+      path: '/marriage/:id/-1',
+      name: 'marriage edit',
+      props: true,
+      component: require('@/components/Templates/marriage').default
+    },
+    {
+      path: '/death/:id/-1',
+      name: 'death edit',
+      props: true,
+      component: require('@/components/Templates/death').default
+    },
+    {
+      path: '/birth/:id/-1',
+      name: 'birth edit',
+      props: true,
+      component: require('@/components/Templates/birth').default
+    },
+    {
+      path: '/education/:id/-1',
+      name: 'education edit',
+      props: true,
+      component: require('@/components/Templates/education').default
+    },
+    {
+      path: '/deathfamily/:id/-1',
+      name: 'deathfamily edit',
+      props: true,
+      component: require('@/components/Templates/deathfamily').default
+    },
+    {
+      path: '/statement/:id/-1',
+      name: 'statement edit',
+      props: true,
+      component: require('@/components/Templates/statement').default
+    },
+    //
 
     // PDF files path //
     {

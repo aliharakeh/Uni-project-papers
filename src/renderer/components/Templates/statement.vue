@@ -102,14 +102,28 @@ export default {
   },
   created () {
     this.loading = true
-    this.$db.findOne({_id: this.id}, (err, doc) => {
-      if (err) {
-        console.log(err.message)
-        return
-      }
-      this.doc = doc
-      this.loading = false
-    })
+    var pp = this.$route.path
+    var p = pp.split('/')
+    console.log(pp)
+
+    if (p[3] === '-1') { // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+        if (err) throw err
+        this.doc = JSON.parse(data)
+        this.ifede = this.doc.ifede
+        this.text = this.doc.text
+        this.loading = false
+      })
+    } else {
+      this.$db.findOne({_id: this.id}, (err, data1) => {
+        if (err) {
+          console.log(err.message)
+          return
+        }
+        this.doc = data1
+        this.loading = false
+      })
+    }
   },
   methods: {
     goBack () {

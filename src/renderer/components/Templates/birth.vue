@@ -193,16 +193,41 @@ export default {
   },
   created () {
     this.loading = true
-    this.$db.findOne({_id: this.id}, (err, doc) => {
-      if (err) {
-        console.log(err.message)
-        return
-      }
+    var pp = this.$route.path
+    var p = pp.split('/')
+    console.log(pp)
 
-      this.doc = doc
+    if (p[3] === '-1') { // get data from data.json
+      fs.readFile(path.join(remote.app.getPath('documents')) + '/data.json', 'utf8', (err, data) => {
+        if (err) throw err
 
-      this.loading = false
-    })
+        this.doc = JSON.parse(data)
+        this.birthdate = this.doc.birthdate
+        this.prevOrOutsidePaper = this.doc.prevOrOutsidePaper
+        if (this.prevOrOutsidePaper === '1') {
+          this.money = this.doc.money
+          this.date = this.doc.date
+        }
+        this.$db.findOne({_id: this.id}, (err, data1) => {
+          if (err) {
+            console.log(err.message)
+            return
+          }
+          this.doc.children = data1.children
+          this.child = this.doc.child
+        })
+        this.loading = false
+      })
+    } else {
+      this.$db.findOne({_id: this.id}, (err, data2) => {
+        if (err) {
+          console.log(err.message)
+          return
+        }
+        this.doc = data2
+        this.loading = false
+      })
+    }
   },
 
   methods: {
