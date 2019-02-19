@@ -35,7 +35,7 @@
           >
             <v-card-title>
               <v-layout columns justify-center>
-                <h3 class="headline mr-4 font-weight-bold">{{ template.title }}</h3>
+                <h1 class="headline font-weight-bold">{{ template.title }}</h1>
               </v-layout>
             </v-card-title>
           </v-card>

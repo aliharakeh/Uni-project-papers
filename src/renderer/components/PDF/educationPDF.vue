@@ -82,7 +82,7 @@
           <th colspan="2" style="padding: 1px;">
             <table width="100%">
               <tr>
-                <td colspan="2"> حقل مخصص لإدارة الصندوق </td>
+                <td colspan="2"> حقل مخصص لإدارة الصندوق (ل.ل)</td>
               </tr>
               <tr>
                 <td style="width: 120px;">قيمة المنحة المقبوضة من مصادر أخرى</td>
