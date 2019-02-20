@@ -12,13 +12,18 @@
         <v-btn flat to="/doctors">
           <h2>الأساتذة</h2>
         </v-btn>
-        <v-btn color="error" v-if="showButton" @click="goBack">
+      </v-toolbar-items>
+      <v-speed-dial absolute bottom left direction="bottom" v-if="showButton">
+        <v-btn fab dark color="green" slot="activator">
+          <h1>خيارات</h1>
+        </v-btn>
+        <v-btn dark fab color="error" @click="goBack">
           <h1>رجوع</h1>
         </v-btn>
-        <v-btn absolute dark fab bottom left color="primary" v-if="showButton" @click="pdf()">
+        <v-btn dark fab color="primary" @click="pdf()">
           <h1>حفظ</h1>
         </v-btn>
-      </v-toolbar-items>
+      </v-speed-dial>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
