@@ -55,12 +55,7 @@
         <v-card-text>
           <v-layout row wrap>
             <v-flex xs12 sm5>
-              <v-select
-                :items="ifede_array"
-                item-text="name"
-                label="طلب الإفادة"
-                v-model="ifede"
-              ></v-select>
+              <v-text-field label="طلب إفادة عن" type="text" v-model="ifede"></v-text-field>
             </v-flex>
           </v-layout>
           <v-layout wrap>
@@ -96,8 +91,7 @@ export default {
       loading: false,
       doc: null,
       ifede: null,
-      text: 'أرجو إعطائي إفادة تثبت أن ',
-      ifede_array: ['مساعدة مرضية', 'مساعدة أسنان', 'منحة زواج', 'منحة ولادة', 'منحة تعليم', 'مساعدة بسبب وفاة منتسب', 'تعهد من المنتسب حول ذوي عهدته', 'مساعدة بسبب وفاة أحد أفراد عائلة المنتسب أو ذوي عهدته']
+      text: 'أرجو إعطائي إفادة تثبت أن '
     }
   },
   created () {

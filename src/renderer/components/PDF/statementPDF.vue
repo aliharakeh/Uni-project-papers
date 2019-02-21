@@ -4,9 +4,9 @@
     <!-- section 1 -->
     <v-layout row justify-space-between class="mt-2">
       <div dir="rtl">
-          <h2>الجمهورية اللّبنانية</h2>
-          <h3>صندوق التعاضد أفراد الهيئة</h3>
-          <h3>التعليمية في الجامعة اللّبنانية</h3>
+        <h2>الجمهورية اللّبنانية</h2>
+        <h3>صندوق التعاضد أفراد الهيئة</h3>
+        <h3>التعليمية في الجامعة اللّبنانية</h3>
       </div>
     </v-layout>
 
@@ -21,29 +21,31 @@
 
     <!-- section 3 -->
     <v-layout row justify-space-between class="mt-4" style="font-size: 18px;">
+      <table dir="rtl" style="width: 100%; text-align: right;">
+        <tr>
+          <td>- المستدعي : <b>{{ doc.name }}</b></td>
+          <td>- الموضوع : طلب إفادة  <b>{{ doc.ifede }}</b></td>
+        </tr>
+      </table>
+    </v-layout>
+
+    <!-- section 4 -->
+    <v-layout row justify-space-between class="mt-3" style="font-size: 18px;">
       <table dir="rtl" class="t" width="100%">
         <tr>
           <td>
-            - المستدعي : <b>{{ doc.name }}</b>
-          </td>
-          <td>
-            - الموضوع : <b>{{ doc.ifede }}</b>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
            - أنا الموقع أدنا الدكتور(ة) : <b>{{ doc.name }}</b> ، أستاذ في كلية : <b>{{ doc.faculty }}</b> ، الفرع : <b>{{ doc.facultySection }}</b> ، رقم الإنتساب إلى الصندوق : <b>{{ ConvertToArabicNum(doc.number) }}</b>
           </td>
         </tr>
         <tr>
-          <td colspan="2">
+          <td>
             - {{ doc.text }}
           </td>
         </tr>
       </table>
     </v-layout>
 
-    <!-- section 4 -->
+    <!-- section 5 -->
     <v-layout row class="mt-3" style="font-size: 18px;">
       <table style="font-weight: bold;" width="100%" dir="rtl">
         <tr>
