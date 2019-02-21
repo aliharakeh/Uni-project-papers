@@ -34,7 +34,7 @@
               <v-btn slot="activator" color="primary" dark class="mb-2">ادخال معلومات</v-btn>
               <v-card>
                 <v-card-title>
-                  <span class="headline">يشيسشي</span>
+                  <span class="headline"> إدخال المعلومات</span>
                 </v-card-title>
                 <v-card-text>
                   <v-container grid-list-md>
@@ -65,22 +65,22 @@
                           ></v-text-field>
                           <v-date-picker v-model="editedItem.date" scrollable locale="ar-lb">
                             <v-spacer></v-spacer>
-                            <v-btn flat color="primary" @click="editedItem.modal = false">Cancel</v-btn>
+                            <v-btn flat color="error" @click="editedItem.modal = false">Cancel</v-btn>
                             <v-btn flat color="primary" @click="$refs.dialog.save(editedItem.date)">OK</v-btn>
                           </v-date-picker>
                         </v-dialog>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem.num" label="رقم المعاملة"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem.num" label="رقم المعاملة"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem.totalValue" label="المبلغ الكلي"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem.totalValue" label="المبلغ الكلي" @input="editedItem.totalValue = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.decision" label="قرار القبض"></v-text-field>
+                        <v-text-field v-model="editedItem.decision" label="قرار القبض" @input="editedItem.decision = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field type="number" v-model="editedItem.returnedValue" label="المبلغ المعوض"></v-text-field>
+                        <v-text-field type="text" v-model="editedItem.returnedValue" label="المبلغ المعوض" @input="editedItem.returnedValue = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -88,8 +88,8 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click.native="close">الغاء</v-btn>
-                  <v-btn color="blue darken-1" flat @click.native="save">حفظ</v-btn>
+                  <v-btn color="primary" @click.native="save" class="mx-2">حفظ</v-btn>
+                  <v-btn color="error" @click.native="close">الغاء</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -103,11 +103,11 @@
           >
             <template slot="items" slot-scope="props">
               <td class="text-xs-center">{{ props.item.type }}</td>
-              <td class="text-xs-center">{{ props.item.date }}</td>
-              <td class="text-xs-center">{{ props.item.num }}</td>
-              <td class="text-xs-center">{{ props.item.totalValue }}</td>
-              <td class="text-xs-center">{{ props.item.decision }}</td>
-              <td class="text-xs-center">{{ props.item.returnedValue }}</td>
+              <td class="text-xs-center">{{ ConvertToArabicDate(props.item.date) }}</td>
+              <td class="text-xs-center">{{ ConvertToArabicNum(props.item.num) }}</td>
+              <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.totalValue) }} ل.ل</td>
+              <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.decision) }} ل.ل</td>
+              <td class="text-xs-center">{{ ConvertToArabicNumMoney(props.item.returnedValue) }} ل.ل</td>
               <td class="text-xs-center">
                 <v-btn icon @click="editItem(props.item)">
                   <v-icon color="info">edit</v-icon>
@@ -148,12 +148,12 @@ export default {
       },
       dialog: false,
       headers: [
-        { text: 'نوع المعاملة', sortable: true, align: 'center', class: 'font-weight-bold' },
-        { text: 'تاريخ المعاملة', sortable: true, align: 'center', class: 'font-weight-bold' },
-        { text: 'رقم المعاملة', sortable: true, align: 'center', class: 'font-weight-bold' },
-        { text: 'المبلغ الكلي', sortable: true, align: 'center', class: 'font-weight-bold' },
-        { text: 'قرار القبض', sortable: true, align: 'center', class: 'font-weight-bold' },
-        { text: 'المبلغ المعوض', sortable: true, align: 'center', class: 'font-weight-bold' },
+        { text: 'نوع المعاملة', value: 'type', sortable: true, align: 'center', class: 'font-weight-bold' },
+        { text: 'تاريخ المعاملة', value: 'date', sortable: true, align: 'center', class: 'font-weight-bold' },
+        { text: 'رقم المعاملة', value: 'num', sortable: true, align: 'center', class: 'font-weight-bold' },
+        { text: 'المبلغ الكلي', value: 'totalValue', sortable: true, align: 'center', class: 'font-weight-bold' },
+        { text: 'قرار القبض', value: 'decision', sortable: true, align: 'center', class: 'font-weight-bold' },
+        { text: 'المبلغ المعوض', value: 'returnedValue', sortable: true, align: 'center', class: 'font-weight-bold' },
         { text: 'خيارات', sortable: false, align: 'center', class: 'font-weight-bold' }
       ],
       editedIndex: -1,
@@ -172,7 +172,8 @@ export default {
         'تعهد من المنتسب حول ذوي عهدته',
         'طلب منحة زواج', 'طلب منحة ولادة',
         'طلب مساعدة بسبب وفاة منتسب',
-        'طلب منحة تعليم'
+        'طلب منحة تعليم', 'طلب إفادة',
+        'طلب مساعدة بسبب وفاة أحد أفراد عائلة المنتسب أو ذوي عهدته'
       ],
       loading: false,
       search: ''
@@ -203,7 +204,8 @@ export default {
     },
     deleteItem (item) {
       const index = this.logs.indexOf(item)
-      confirm('هل انت متاكد من الغاء هذا الارشيف؟') && this.logs.splice(index, 1)
+      confirm('هل انت متاكد من الغاء هذا الارشيف ؟') && this.logs.splice(index, 1)
+      this.beforeDestroy()
     },
     close () {
       this.dialog = false
@@ -213,33 +215,119 @@ export default {
       }, 300)
     },
     save () {
+      var flag = 0
+      for (var property in this.editedItem) {
+        if (this.editedItem[property] === '' || this.editedItem[property] === null) {
+          flag = 1
+        }
+      }
+
+      if (flag === 1) {
+        alert('لم يتم ملئ كل الخانات بعد')
+        return
+      }
       if (this.editedIndex > -1) {
         Object.assign(this.logs[this.editedIndex], this.editedItem)
       } else {
         this.logs.push(this.editedItem)
       }
+      this.beforeDestroy()
       this.close()
-    }
-  },
-  beforeDestroy () {
-    this.loading = true
-    this.$db.update({
-      _id: this.id
     },
-    {
-      $set:
+    beforeDestroy () {
+      this.loading = true
+      this.$db.update({
+        _id: this.id
+      },
       {
-        logs: this.logs
-      }
+        $set:
+        {
+          logs: this.logs
+        }
+      },
+      {},
+      (err, numReplaced) => {
+        if (err) {
+          console.log(err.message)
+          return
+        }
+        this.loading = false
+      })
     },
-    {},
-    (err, numReplaced) => {
-      if (err) {
-        console.log(err.message)
-        return
+    ConvertToArabicNum (nn) {
+      if (!nn) {
+        return ''
       }
-      this.loading = false
-    })
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        ar += arnum[element]
+      })
+      return ar
+    },
+    ConvertToArabicNumMoney (nn) {
+      if (!nn) {
+        return ''
+      }
+      var n = nn.split('')
+      var ar = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      n.forEach(element => {
+        if (element === ',') {
+          ar += '،'
+        } else {
+          ar += arnum[element]
+        }
+      })
+      return ar
+    },
+    ConvertToArabicDate (date) {
+      if (!date) {
+        return ''
+      }
+      var dd = date.split('-')
+      var year = ''
+      var month = ''
+      var day = ''
+      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+
+      var y = dd[0].split('') // year
+      y.forEach(element => {
+        year += arnum[element]
+      })
+
+      var m = dd[1].split('') // month
+      if (dd[1] !== '10') {
+        m.forEach(element => {
+          if (element !== '0') {
+            month += arnum[element]
+          }
+        })
+      } else {
+        month += '١٠'
+      }
+
+      var d = dd[2].split('') // day
+      if (dd[2] !== '10' && dd[2] !== '20' && dd[2] !== '30') {
+        d.forEach(element => {
+          if (element !== '0') {
+            day += arnum[element]
+          }
+        })
+      } else {
+        if (dd[2] === '10') {
+          day += '١٠'
+        }
+        if (dd[2] === '20') {
+          day += '٢٠'
+        }
+        if (dd[2] === '30') {
+          day += '٣٠'
+        }
+      }
+      return year + '/' + month + '/' + day
+    }
   }
 }
 </script>
