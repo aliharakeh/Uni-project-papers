@@ -24,7 +24,7 @@
       <table dir="rtl" style="width: 100%; text-align: right;">
         <tr>
           <td>- المستدعي : <b>{{ doc.name }}</b></td>
-          <td>- الموضوع : طلب إفادة  <b>{{ doc.ifede }}</b></td>
+          <td>- الموضوع : <b>طلب إفادة {{ doc.ifede }}</b></td>
         </tr>
       </table>
     </v-layout>

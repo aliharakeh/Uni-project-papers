@@ -80,7 +80,7 @@ export default {
       headers: [
         {
           text: 'الرقم',
-          value: 'id',
+          value: 'number',
           align: 'center',
           sortable: true,
           class: 'title'
@@ -101,7 +101,7 @@ export default {
         },
         {
           text: 'الفرع',
-          value: 'section',
+          value: 'facultySection',
           align: 'center',
           sortable: true,
           class: 'title'
