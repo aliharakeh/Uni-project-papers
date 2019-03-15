@@ -54,11 +54,12 @@
           <v-btn
             color="primary"
             @click="doc.partners.push(Object.assign({}, defaultPartner))"
-          >اضافة خانة</v-btn>
+          >{{ partnerGender2(0) }}</v-btn>
         </h1>
-        <div v-for="(partner, i) in doc.partners" :key="i">
+        <div v-for="(partner, i) in doc.partners" :key="i" style="border: 1px solid black">
+          <!-- معلومات عن الزوجة -->
           <h2 class="mr-4">
-            ({{ i + 1 }})
+            {{ showGender(0) }} ({{ i + 1 }})
             <v-btn icon @click="remove(0, i)">
               <v-icon color="error">delete</v-icon>
             </v-btn>
@@ -108,10 +109,10 @@
             <v-flex xs5 v-if="partner.insuranceNumSection && partner.isWorking">
               <v-text-field type="number" label="رقم الضمان" v-model="partner.insuranceNum"></v-text-field>
             </v-flex>
-            <v-flex xs12>
+            <v-flex xs12 class="mr-4">
               <h1>هل تم تقاضي اي مساعدة من اي مصدر اخر؟</h1>
             </v-flex>
-            <v-flex xs12>
+            <v-flex xs12 class="mr-4">
               <h1>
                 <v-radio-group v-model="partner.externalHelp">
                   <v-radio label="نعم" value='1'></v-radio>
@@ -128,7 +129,7 @@
           </v-layout>
         </div>
 
-        <v-divider class="my-3"></v-divider>
+        <v-divider class="my-4"></v-divider>
 
         <!-- children -->
         <h1 class="mr-4">
@@ -136,11 +137,12 @@
           <v-btn
           color="primary"
           @click="doc.children.push(Object.assign({}, defaultChild))"
-          >اضافة خانة</v-btn>
+          >{{ partnerGender2(1) }}</v-btn>
         </h1>
-        <div v-for="(child, j) in doc.children" :key="'child' + j">
+        <div v-for="(child, j) in doc.children" :key="'child' + j" style="border: 1px solid black">
+          <!-- معلومات عن الاولاد -->
           <h2 class="mr-4">
-            ({{ j + 1 }})
+            {{ showGender(1) }} ({{ j + 1 }})
             <v-btn icon @click="remove(1, j)">
               <v-icon color="error">delete</v-icon>
             </v-btn>
@@ -183,7 +185,7 @@
           </v-layout>
         </div>
 
-        <v-divider class="my-3"></v-divider>
+        <v-divider class="my-4"></v-divider>
 
         <!-- family -->
         <h1 class="mr-4">
@@ -191,11 +193,12 @@
           <v-btn
           color="primary"
           @click="doc.family.push(Object.assign({}, defaultFamily))"
-          >اضافة خانة</v-btn>
+          >{{ partnerGender2(2) }}</v-btn>
         </h1>
-        <div v-for="(member, k) in doc.family" :key="'member' + k">
+        <div v-for="(member, k) in doc.family" :key="'member' + k" style="border: 1px solid black">
+          <!-- معلومات عن العائلة -->
           <h2 class="mr-4">
-            ({{ k + 1 }})
+            {{ showGender(2) }} ({{ k + 1 }})
             <v-btn icon @click="remove(2, k)">
               <v-icon color="error">delete</v-icon>
             </v-btn>
@@ -243,7 +246,7 @@
 
         <v-layout row wrap justify-center class="mt-3">
           <v-btn color="primary" @click="save">حفظ</v-btn>
-          <v-btn color="error" to="/doctors">الغاء</v-btn>
+          <v-btn color="error" @click="goBack">الغاء</v-btn>
         </v-layout>
 
       </v-card-text>
@@ -267,7 +270,7 @@ export default {
         faculty: '',
         facultySection: '',
         address: '',
-        gender: '',
+        gender: 'ذكر',
         partners: [],
         children: [],
         family: [],
@@ -310,9 +313,48 @@ export default {
         return 'معلومات عن الزوجة'
       }
       return 'معلومات عن الزوج'
+    },
+    partnerGender () {
+      if (this.doc.gender === this.genders[0]) {
+        return 'هذه الزوجة'
+      }
+      return 'هذا الزوج'
     }
   },
   methods: {
+    showGender (type) {
+      if (type === 0) {
+        if (this.doc.gender === this.genders[0]) {
+          return 'زوجة رقم'
+        }
+        return 'زوج رقم'
+      } else if (type === 1) {
+        return 'ولد رقم'
+      } else {
+        return 'فرد رقم'
+      }
+    },
+    partnerGender2 (index) {
+      var text = ''
+      switch (index) {
+        case 0:
+          if (this.doc.gender === this.genders[0]) {
+            text = 'اضافة زوجة'
+          } else {
+            text = 'اضافة زوج'
+          }
+          break
+        case 1:
+          text = 'اضافة ولد'
+          break
+        case 2:
+          text = 'اضافة فرد عائلة'
+          break
+        default:
+          break
+      }
+      return text
+    },
     checkWorkState (selectedValue, partnerIndex) {
       this.doc.partners[partnerIndex].workState = selectedValue
       if (selectedValue === this.workStates[0]) {
@@ -376,46 +418,60 @@ export default {
       return true
     },
     save () {
-      var flag = true
-      for (var property in this.doc) {
-        if (property === 'partners' || property === 'family' || property === 'logs' || property === 'children') {
-          flag = this.confirm(property)
-          if (flag === false) {
+      if (confirm('هل انت متاكد من حفظ المعلومات ؟')) {
+        var flag = true
+        for (var property in this.doc) {
+          if (property === 'partners' || property === 'family' || property === 'logs' || property === 'children') {
+            flag = this.confirm(property)
+            if (flag === false) {
+              break
+            }
+          } else if (this.doc[property] === '' || this.doc[property] === null) {
+            flag = false
             break
           }
-        } else if (this.doc[property] === '' || this.doc[property] === null) {
-          flag = false
-          break
         }
-      }
-      if (flag === false) {
-        alert('لم يتم ملئ كل الخانات بعد')
-        return
-      }
-
-      this.loading = true
-      this.$db.insert(this.doc, (err, newDoc) => {
-        if (err) {
-          alert('لم يتم حفظ الاستاذ! الرجاء اعادة الحفظ')
+        if (flag === false) {
+          alert('لم يتم ملئ كل الخانات بعد')
           return
         }
-        this.loading = false
-        this.$router.push('/doctors')
-      })
+
+        this.loading = true
+        this.$db.insert(this.doc, (err, newDoc) => {
+          if (err) {
+            alert('لم يتم حفظ الاستاذ !! الرجاء اعادة الحفظ')
+            return
+          }
+          this.loading = false
+          alert('تم حفظ اللأستاذ بنجاح !!')
+          this.$router.push('/doctors')
+        })
+      }
     },
     remove (type, index) {
       switch (type) {
         case 0:
-          this.doc.partners.splice(index, 1)
+          if (confirm('هل انت متاكد من إلغاء ' + this.partnerGender + ' ؟')) {
+            this.doc.partners.splice(index, 1)
+          }
           break
         case 1:
-          this.doc.children.splice(index, 1)
+          if (confirm('هل انت متاكد من إلغاء هذا الولد ؟')) {
+            this.doc.children.splice(index, 1)
+          }
           break
         case 2:
-          this.doc.family.splice(index, 1)
+          if (confirm('هل انت متاكد من إلغاء هذا الفرد من العائلة ؟')) {
+            this.doc.family.splice(index, 1)
+          }
           break
         default:
           break
+      }
+    },
+    goBack () {
+      if (confirm('هل انت متاكد من الخروج ؟')) {
+        this.$router.push('/doctors')
       }
     }
   }
