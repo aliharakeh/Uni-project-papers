@@ -20,9 +20,5 @@ Vue.config.productionTip = false
 new Vue({
   components: { App },
   router,
-  // store,
   template: '<App/>'
-  // created () {
-  //   this.$store.dispatch('loadDocs')
-  // }
 }).$mount('#app')

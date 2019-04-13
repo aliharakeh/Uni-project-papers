@@ -2,15 +2,10 @@
   <v-container>
 
     <!-- loading while getting data -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <Loading v-if="loading"/>
 
     <!-- Content -->
     <div v-else>
-
       <!-- title -->
       <v-layout row wrap class="mb-2">
         <v-flex xs12 class="text-xs-center">
@@ -22,56 +17,10 @@
       </v-layout>
 
       <!-- Doctor Info -->
-      <v-card>
-        <v-card-title>
-          <h1>معلومات عن الاستاذ</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم الثلاثي : </span>
-              <span class="title">{{ doc.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ ConvertToArabicNum(doc.phone) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الكلية / المعهد : </span>
-              <span class="title">{{ doc.faculty }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الفرع : </span>
-              <span class="title">{{ doc.facultySection }}</span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <DoctorInfoCard :doc="doc" />
 
-      <!-- Partners Work -->
-      <v-card class="mt-4">
-        <v-card-title>
-          <h1>{{ getGender() }}</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap v-for="(person, i) in doc.partners" :key="i">
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">- الاسم : </span>
-              <span class="title">{{ person.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">قطاع العمل : </span>
-              <span class="title">{{ workPlace(person) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5 v-if="person.insuranceNum">
-              <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ ConvertToArabicNum(person.insuranceNum) }}</span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <!-- Partners -->
+      <PartnerInfoCard :doc="doc" />
 
       <!-- Medical Data -->
       <v-card class="mt-4">
@@ -264,8 +213,16 @@
 import fs from 'fs'
 import path from 'path'
 import { remote } from 'electron'
+import Loading from "@/components/Loading"
+import DoctorInfoCard from "@/components/Doctor/DoctorInfoCard"
+import PartnerInfoCard from "@/components/Partner/PartnerInfoCard"
 
 export default {
+  components: {
+    Loading,
+    DoctorInfoCard,
+    PartnerInfoCard
+  },
   props: ['id'],
   data () {
     return {
