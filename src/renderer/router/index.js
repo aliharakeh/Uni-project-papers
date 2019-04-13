@@ -36,13 +36,13 @@ export default new Router({
       path: '/teeth/:id',
       name: 'teeth help',
       props: true,
-      component: require('@/Views/Templates/teeth').default
+      component: require('@/Views/Templates/teeth&sickness').default
     },
     {
       path: '/sickness/:id',
       name: 'sickness help',
       props: true,
-      component: require('@/Views/Templates/sickness').default
+      component: require('@/Views/Templates/teeth&sickness').default
     },
     {
       path: '/marriage/:id',
@@ -98,13 +98,13 @@ export default new Router({
       path: '/teeth/:id/-1',
       name: 'teeth edit',
       props: true,
-      component: require('@/Views/Templates/teeth').default
+      component: require('@/Views/Templates/teeth&sickness').default
     },
     {
       path: '/sickness/:id/-1',
       name: 'sickness edit',
       props: true,
-      component: require('@/Views/Templates/sickness').default
+      component: require('@/Views/Templates/teeth&sickness').default
     },
     {
       path: '/marriage/:id/-1',
@@ -199,8 +199,6 @@ export default new Router({
       props: true,
       component: require('@/Views/PDF/statementPDF').default
     },
-    //
-
     {
       path: '*',
       redirect: '/'

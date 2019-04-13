@@ -1,47 +1,39 @@
 <template>
   <v-container>
-
     <!-- loading while getting data -->
     <Loading v-if="loading"/>
 
     <!-- Content -->
     <div v-else>
-
       <!-- title -->
       <v-layout row wrap class="mb-2">
         <v-flex xs12 class="text-xs-center">
-          <h1>طلب مساعدة بسب وفاة منتسب</h1>
+          <h1>{{ title }}</h1>
+        </v-flex>
+        <v-flex xs12 class="text-xs-center">
+          <h1>Demande d'aide medicale dentaire</h1>
         </v-flex>
       </v-layout>
 
       <!-- Doctor Info -->
       <DoctorInfoCard :doc="doc" />
 
-      <!-- family Data -->
-      <familyData
-        :data="data"
+      <!-- Partners -->
+      <PartnerInfoCard :doc="doc" />
+
+      <!-- Medical Data -->
+      <medical
         :family="family"
-        @updateItem="updateItem($event)"
+        :medicalData="medicalData"
         @insertItem="insertItem($event)"
         @deleteItem="deleteItem($event)"
       />
 
-      <!-- death date -->
-      <v-card class="mt-4">
-        <v-card-title>
-          <h1>تاريخ الوفاة</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-container>
-            <v-layout>
-              <v-flex xs12 sm6>
-                <date label="تاريخ الوفاة" @ready="deathDate = $event" />
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-      </v-card>
+      <!-- Medical Costs -->
+      <medicalCosts
+        :medicalCostsData="medicalCostsData"
+        @editItem="editItem($event)"
+      />
 
       <v-layout row justify-center align-center class="mt-2">
         <v-btn color="primary" @click="saveToJsonCheck">حفظ</v-btn>
@@ -49,7 +41,6 @@
       </v-layout>
 
     </div>
-
   </v-container>
 </template>
 
@@ -59,26 +50,31 @@ import path from 'path'
 import { remote } from 'electron'
 import Loading from "@/components/Loading"
 import DoctorInfoCard from "@/components/Doctor/DoctorInfoCard"
-import familyData from "@/components/Family/FamilyData"
-import date from "@/components/DatePicker"
+import PartnerInfoCard from "@/components/Partner/PartnerInfoCard"
+import medical from "@/components/MedicalData"
+import medicalCosts from "@/components/MedicalCostsData"
 export default {
   components: {
     Loading,
     DoctorInfoCard,
-    familyData,
-    date
+    PartnerInfoCard,
+    medical,
+    medicalCosts
   },
   props: ['id'],
-  data () {
+  data() {
     return {
-      loading: false,
+      title: null,
       doc: null,
+      loading: false,
+      medicalData: [],
       family: [],
-      data: [],
-      deathDate: null
+      medicalCostsData: [],
+      linkedFamily: []
     }
   },
-  created () {
+  created() {
+    this.title = this.$route.path.includes('teeth') ? 'طلب مساعدة اسنان' : 'طلب مساعدة مرضية'
     var rangeOfAcquaintance = ''
     var childAcquaintance = ''
     this.loading = true
@@ -91,8 +87,9 @@ export default {
         if (err) throw err
 
         this.doc = JSON.parse(data2)
-        this.data = this.doc.deadMembers
-        this.deathDate = this.doc.deathDate
+        this.medicalData = this.doc.medicalData
+        this.medicalCostsData = this.doc.medicalCostsData
+        this.linkedFamily = this.doc.linkedFamily
         this.$db.findOne({_id: this.id}, (err, data3) => {
           if (err) {
             console.log(err.message)
@@ -117,6 +114,7 @@ export default {
           data3.family.forEach(member => {
             this.family.push({
               name: member.name,
+              birthDate: member.birthDate,
               rangeOfAcquaintance: member.type
             })
           })
@@ -151,6 +149,7 @@ export default {
         doc.family.forEach(member => {
           this.family.push({
             name: member.name,
+            birthDate: member.birthDate,
             rangeOfAcquaintance: member.type
           })
         })
@@ -159,26 +158,46 @@ export default {
     }
   },
   methods: {
-    deleteItem (index) {
-      this.data.splice(index, 1)
+    deleteItem(index) {
+      this.medicalData.splice(index, 1)
+      const name = this.linkedFamily[index].name
+      this.linkedFamily.splice(index, 1)
+      const memberIndex = this.medicalCostsData.findIndex(member => member.name === name)
+      this.medicalCostsData.splice(memberIndex, 1)
     },
-    updateItem(item){
-      Object.assign(this.data[item.index], item.editedItem)
+    insertItem(editedItem) {
+      this.medicalData.push(editedItem)
+      this.linkedFamily.push({
+        name: editedItem.name,
+        birthDate: editedItem.birthDate,
+        rangeOfAcquaintance: editedItem.rangeOfAcquaintance
+      })
+      this.medicalCostsData.push({
+        name: editedItem.name,
+        doctorsCost: null,
+        medicineCost: null,
+        otherCosts: null,
+        costsSum: null,
+        externalHelpValue: null
+      })
     },
-    insertItem(item) {
-      this.data.push(item)
+    editItem(data){
+      Object.assign(this.medicalCostsData[data.index], data.editedItem)
     },
     goBack () {
-      if (confirm('هل انت متاكد من الخروج من هذه الصفحة ؟')) {
-        this.$router.push('/')
-      }
+      return confirm('هل انت متاكد من الخروج من هذه الصفحة ؟') && this.$router.push('/')
     },
     saveToJsonCheck () {
       if (confirm('هل انت متاكد من حفظ هذه المعلومات ؟')) {
-        if (!this.data.length || !this.deathDate) {
+        if (!this.linkedFamily.length || !this.medicalData.length) {
           alert('لم يتم ملئ كل المعلومات بعد')
           return
         }
+        for (var property in this.medicalCostsData)
+          if (this.medicalCostsData[property] === null) {
+            alert('لم يتم ملئ كل المعلومات بعد')
+            return
+          }
         this.saveToJson()
       }
     },
@@ -188,13 +207,15 @@ export default {
         number: this.doc.number,
         name: this.doc.name,
         gender: this.doc.gender,
-        type: 'مساعدة_وفاة',
+        type: this.title.includes('أسنان') ? 'مساعدة_أسنان' : 'مساعدة_مرضية',
         phone: this.doc.phone,
         faculty: this.doc.faculty,
         facultySection: this.doc.facultySection,
         address: this.doc.address,
-        deadMembers: this.data,
-        deathDate: this.deathDate
+        partners: this.doc.partners,
+        medicalData: this.medicalData,
+        medicalCostsData: this.medicalCostsData,
+        linkedFamily: this.linkedFamily
       }
       console.log(data)
       fs.writeFile(path.join(remote.app.getPath('documents'), '/data.json'),
@@ -206,10 +227,13 @@ export default {
             console.log(err.message)
             return
           }
-          this.$router.push('/PDFdeath')
+          this.title.includes('أسنان') ? this.$router.push('/PDFteeth') : this.$router.push('/PDFsickness')
         }
       )
     }
   }
 }
 </script>
+
+
+

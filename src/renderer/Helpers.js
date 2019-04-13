@@ -73,8 +73,23 @@ function ConvertToArabicDate (date) {
   return year + '/' + month + '/' + day
 }
 
+function removeCommas(num) {
+  if (!num) {
+    return ''
+  }
+  var n = num.split('')
+  var newnum = ''
+  n.forEach(element => {
+    if (element !== ',') {
+      newnum += element
+    }
+  })
+  return newnum
+}
+
 export {
   ConvertToArabicNum,
   ConvertToArabicNumMoney,
-  ConvertToArabicDate
+  ConvertToArabicDate,
+  removeCommas
 }

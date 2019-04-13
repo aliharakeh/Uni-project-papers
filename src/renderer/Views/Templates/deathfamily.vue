@@ -2,11 +2,7 @@
   <v-container>
 
     <!-- loading while getting data -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <Loading v-if="loading"/>
 
     <!-- Content -->
     <div v-else>
@@ -19,56 +15,10 @@
       </v-layout>
 
       <!-- Doctor Info -->
-      <v-card>
-        <v-card-title>
-          <h1>معلومات عن الاستاذ</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم الثلاثي : </span>
-              <span class="title">{{ doc.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ ConvertToArabicNum(doc.phone, 0) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الكلية / المعهد : </span>
-              <span class="title">{{ doc.faculty }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الفرع : </span>
-              <span class="title">{{ doc.facultySection }}</span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <DoctorInfoCard :doc="doc" />
 
-      <!-- Partners Work -->
-      <v-card class="mt-4">
-        <v-card-title>
-          <h1>{{ getGender() }}</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap v-for="(person, i) in doc.partners" :key="i">
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">- الاسم : </span>
-              <span class="title">{{ person.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">قطاع العمل : </span>
-              <span class="title">{{ workPlace(person) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5 v-if="person.insuranceNumSection">
-              <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ ConvertToArabicNum(person.insuranceNum, 0) }}</span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <!-- Partners -->
+      <PartnerInfoCard :doc="doc" />
 
       <!-- relative needing the certificate -->
       <v-card class="mt-4">
@@ -110,28 +60,7 @@
               <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" @input="money = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" @change="ConvertToArabicNum($event, 1)" type="text" v-model="money"></v-text-field>
             </v-flex>
             <v-flex xs12 sm5 v-if="prevOrOutsidePaper === '1'">
-              <v-dialog
-                  ref="dialog"
-                  v-model="dateModal"
-                  :return-value.sync="date"
-                  persistent
-                  lazy
-                  full-width
-                  width="290px"
-                >
-                  <v-text-field
-                    slot="activator"
-                    v-model="date"
-                    label="التاريخ"
-                    prepend-icon="event"
-                    readonly
-                  ></v-text-field>
-                  <v-date-picker v-model="date" scrollable locale="ar-lb">
-                    <v-spacer></v-spacer>
-                    <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
-                    <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
-                  </v-date-picker>
-                </v-dialog>
+              <date label="التاريخ" @ready="date = $event" />
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -147,28 +76,7 @@
           <v-container>
             <v-layout>
               <v-flex xs12 sm6>
-                <v-dialog
-                  ref="dialogA"
-                  v-model="deathdateModal"
-                  :return-value.sync="deathdate"
-                  persistent
-                  lazy
-                  full-width
-                  width="290px"
-                >
-                  <v-text-field
-                    slot="activator"
-                    v-model="deathdate"
-                    label="تاريخ الوفاة"
-                    prepend-icon="event"
-                    readonly
-                  ></v-text-field>
-                  <v-date-picker v-model="deathdate" scrollable locale="ar-lb">
-                    <v-spacer></v-spacer>
-                    <v-btn flat color="primary" @click="deathdateModal = false">Cancel</v-btn>
-                    <v-btn flat color="primary" @click="$refs.dialogA.save(deathdate)">OK</v-btn>
-                  </v-date-picker>
-                </v-dialog>
+                <date label="تاريخ الوفاة" @ready="deathdate = $event" />
               </v-flex>
             </v-layout>
           </v-container>
@@ -189,8 +97,17 @@
 import fs from 'fs'
 import path from 'path'
 import { remote } from 'electron'
-
+import Loading from "@/components/Loading"
+import DoctorInfoCard from "@/components/Doctor/DoctorInfoCard"
+import PartnerInfoCard from "@/components/Partner/PartnerInfoCard"
+import date from "@/components/DatePicker"
 export default {
+  components: {
+    Loading,
+    DoctorInfoCard,
+    PartnerInfoCard,
+    date
+  },
   props: ['id'],
   data () {
     return {
@@ -200,8 +117,6 @@ export default {
       money: null,
       date: null,
       deathdate: null,
-      deathdateModal: false,
-      dateModal: false,
       relative: null,
       family: ['أب', 'أم', 'أخت', 'أخ', 'أبن', 'أبنة', 'زوج', 'زوجة']
     }
@@ -236,18 +151,7 @@ export default {
       })
     }
   },
-
   methods: {
-
-    getGender () {
-      return this.doc.gender === 'ذكر' ? 'معلومات عن الزّوجة' : 'معلومات عن الزّوج'
-    },
-    workPlace (person) {
-      if (person.workSector === '') {
-        return 'لا يعمل'
-      }
-      return person.workSector
-    },
     goBack () {
       if (confirm('هل انت متاكد من الخروج من هذه الصفحة ؟')) {
         this.$router.push('/')
@@ -300,7 +204,6 @@ export default {
         }
       )
     },
-
     ConvertToArabicNum (nn, flag) {
       if (!nn) {
         return ''
