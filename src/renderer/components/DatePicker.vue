@@ -24,11 +24,11 @@
 
 <script>
 export default {
-  props: ['label', 'dialog'],
+  props: ['label', 'dialog', 'value'],
   data() {
     return {
       menu: false,
-      date: null
+      date: this.value
     }
   },
   watch: {

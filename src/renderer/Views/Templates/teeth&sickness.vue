@@ -5,13 +5,14 @@
 
     <!-- Content -->
     <div v-else>
+
       <!-- title -->
       <v-layout row wrap class="mb-2">
         <v-flex xs12 class="text-xs-center">
           <h1>{{ title }}</h1>
         </v-flex>
         <v-flex xs12 class="text-xs-center">
-          <h1>Demande d'aide medicale dentaire</h1>
+          <h1>{{ frenchTitle }}</h1>
         </v-flex>
       </v-layout>
 
@@ -64,8 +65,9 @@ export default {
   props: ['id'],
   data() {
     return {
-      title: null,
-      doc: null,
+      title: '',
+      frenchTitle: '',
+      doc: {},
       loading: false,
       medicalData: [],
       family: [],
@@ -75,6 +77,7 @@ export default {
   },
   created() {
     this.title = this.$route.path.includes('teeth') ? 'طلب مساعدة اسنان' : 'طلب مساعدة مرضية'
+    this.frenchTitle = this.$route.path.includes('teeth') ? 'Demande d\'aide medicale dentaire': 'Demande d\'aide medicale';
     var rangeOfAcquaintance = ''
     var childAcquaintance = ''
     this.loading = true

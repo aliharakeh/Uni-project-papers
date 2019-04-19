@@ -60,7 +60,7 @@
               <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" @input="money = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" @change="ConvertToArabicNum($event, 1)" type="text" v-model="money"></v-text-field>
             </v-flex>
             <v-flex xs12 sm5 v-if="prevOrOutsidePaper === '1'">
-              <date label="التاريخ" @ready="date = $event" />
+              <date label="التاريخ" @ready="date = $event" :value="date"/>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -76,7 +76,7 @@
           <v-container>
             <v-layout>
               <v-flex xs12 sm6>
-                <date label="تاريخ الوفاة" @ready="deathdate = $event" />
+                <date label="تاريخ الوفاة" @ready="deathdate = $event" :value="deathdate"/>
               </v-flex>
             </v-layout>
           </v-container>

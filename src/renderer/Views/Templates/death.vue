@@ -36,7 +36,7 @@
           <v-container>
             <v-layout>
               <v-flex xs12 sm6>
-                <date label="تاريخ الوفاة" @ready="deathDate = $event" />
+                <date label="تاريخ الوفاة" @ready="deathDate = $event" :value="deathDate"/>
               </v-flex>
             </v-layout>
           </v-container>
@@ -59,7 +59,7 @@ import path from 'path'
 import { remote } from 'electron'
 import Loading from "@/components/Loading"
 import DoctorInfoCard from "@/components/Doctor/DoctorInfoCard"
-import familyData from "@/components/Family/FamilyData"
+import familyData from "@/components/Family/FamilyData(Death)"
 import date from "@/components/DatePicker"
 export default {
   components: {
