@@ -2,11 +2,7 @@
   <v-container>
 
     <!-- loading while getting data -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <Loading v-if="loading"/>
 
     <!-- Content -->
     <div v-else>
@@ -19,68 +15,10 @@
       </v-layout>
 
       <!-- Doctor Info -->
-      <v-card>
-        <v-card-title>
-          <h1>معلومات عن الاستاذ</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم الثلاثي : </span>
-              <span class="title">{{ doc.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ ConvertToArabicNum(doc.phone, -1) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الكلية / المعهد : </span>
-              <span class="title">{{ doc.faculty }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الفرع : </span>
-              <span class="title">{{ doc.facultySection }}</span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <DoctorInfoCard :doc="doc" />
 
-      <!-- Partners Work -->
-      <v-card class="mt-4">
-        <v-card-title>
-          <h1>{{ getGender() }}</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap v-for="(person, i) in partners" :key="i">
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">- الاسم : </span>
-              <span class="title">{{ person.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">قطاع العمل : </span>
-              <span class="title">{{ workPlace(person) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5 v-if="person.insuranceNumSection">
-              <span class="headline font-weight-bold">رقم الضمان : </span>
-              <span class="title">{{ ConvertToArabicNum(person.insuranceNum, -1) }}</span>
-            </v-flex>
-            <v-flex xs12 class="mt-4">
-              <h2>هل تم تقاضي هذه المنحة سابقا او من اي مصدر اخر؟</h2>
-              <h1>
-                <v-radio-group v-model="person.prevOrOutsidePaper">
-                  <v-radio label="نعم" value='1'></v-radio>
-                  <v-radio label="لا" value='0'></v-radio>
-                </v-radio-group>
-              </h1>
-            </v-flex>
-            <v-flex xs12 sm5 v-if="person.prevOrOutsidePaper === '1'" class="ml-4">
-              <v-text-field label="قيمة المبلغ المقبوض من المصدر الاخر" type="text" @input="person.money = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" @change="ConvertToArabicNum($event, i)" v-model="person.money"></v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <!-- Partners -->
+      <PartnerInfoCard :doc="doc" />
 
       <!-- children data -->
       <v-card class="mt-4">
@@ -189,8 +127,16 @@
 import fs from 'fs'
 import path from 'path'
 import { remote } from 'electron'
-
+import Loading from "@/components/Loading"
+import DoctorInfoCard from "@/components/Doctor/DoctorInfoCard"
+import PartnerInfoCard from "@/components/Partner/PartnerInfoCard"
+import {ConvertToArabicDate} from "@/Helpers.js"
 export default {
+  components: {
+    Loading,
+    DoctorInfoCard,
+    PartnerInfoCard
+  },
   props: ['id'],
   data () {
     return {
@@ -281,15 +227,8 @@ export default {
     }
   },
   methods: {
-
-    getGender () {
-      return this.doc.gender === 'ذكر' ? 'معلومات عن الزّوجة' : 'معلومات عن الزّوج'
-    },
-    workPlace (person) {
-      if (person.workSector === '') {
-        return 'لا يعمل'
-      }
-      return person.workSector
+    ConvertToArabicDate (data){
+      return ConvertToArabicDate(data)
     },
     editItem (item) {
       this.editedIndex = this.childrenData.indexOf(item)
@@ -322,12 +261,10 @@ export default {
           flag = 1
         }
       }
-
       if (flag === 1) {
         alert('لم يتم ملئ كل الخانات بعد')
         return
       }
-
       if (this.editedIndex > -1) {
         Object.assign(this.childrenData[this.editedIndex], this.editedItem)
       } else {
@@ -357,12 +294,6 @@ export default {
         if (!this.childrenData.length) {
           alert('لم يتم ملئ كل المعلومات بعد')
           return
-        }
-        for (var i in this.partners) {
-          if (this.partners[i].prevOrOutsidePaper === null || (this.partners[i].prevOrOutsidePaper === '1' && this.partners[i].money === null)) {
-            alert('لم يتم ملئ كل المعلومات بعد')
-            return
-          }
         }
         this.saveToJson()
       }
@@ -394,81 +325,7 @@ export default {
           this.$router.push('/PDFeducation')
         }
       )
-    },
-
-    ConvertToArabicNum (nn, flag) {
-      if (!nn) {
-        return ''
-      }
-      var n = nn.split('')
-      var ar = ''
-      var ennum = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-      n.forEach(element => {
-        if (ennum.includes(element)) {
-          ar += arnum[element]
-        } else if (element === ',') {
-          ar += '،'
-        } else {
-          ar += element
-        }
-      })
-      if (flag !== -1) {
-        this.partners[flag].money = ar
-        return
-      }
-      return ar
-    },
-    ConvertToArabicDate (date) {
-      if (!date) {
-        return ''
-      }
-      var dd = date.split('-')
-      var year = ''
-      var month = ''
-      var day = ''
-      // var flag = 0
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-
-      var y = dd[0].split('') // year
-      y.forEach(element => {
-        year += arnum[element]
-      })
-
-      var m = dd[1].split('') // month
-      if (dd[1] !== '10') {
-        m.forEach(element => {
-          if (element !== '0') {
-            month += arnum[element]
-          }
-        })
-      } else {
-        month += '١٠'
-      }
-
-      var d = dd[2].split('') // day
-      if (dd[2] !== '10' && dd[2] !== '20' && dd[2] !== '30') {
-        d.forEach(element => {
-          if (element !== '0') {
-            day += arnum[element]
-          }
-        })
-      } else {
-        if (dd[2] === '10') {
-          day += '١٠'
-        }
-        if (dd[2] === '20') {
-          day += '٢٠'
-        }
-        if (dd[2] === '30') {
-          day += '٣٠'
-        }
-      }
-      return year + '/' + month + '/' + day
     }
   }
 }
 </script>
-
-
-

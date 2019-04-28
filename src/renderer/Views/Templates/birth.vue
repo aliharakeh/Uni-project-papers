@@ -1,6 +1,6 @@
 <template>
   <v-container>
-     <!-- loading while getting data -->
+    <!-- loading while getting data -->
     <Loading v-if="loading"/>
 
     <!-- Content -->

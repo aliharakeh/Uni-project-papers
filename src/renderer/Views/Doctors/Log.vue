@@ -1,12 +1,8 @@
 <template>
   <v-container>
 
-    <!-- no content yet - getting/saving data from/into db -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <!-- loading while getting data -->
+    <Loading v-if="loading"/>
 
     <!-- content is available -->
     <v-card class="mt-4" v-else>
@@ -47,28 +43,7 @@
                         ></v-select>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-dialog
-                          ref="dialog"
-                          v-model="editedItem.modal"
-                          :return-value.sync="editedItem.date"
-                          persistent
-                          lazy
-                          full-width
-                          width="290px"
-                        >
-                          <v-text-field
-                            slot="activator"
-                            v-model="editedItem.date"
-                            label="تاريخ المعاملة"
-                            prepend-icon="event"
-                            readonly
-                          ></v-text-field>
-                          <v-date-picker v-model="editedItem.date" scrollable locale="ar-lb">
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="error" @click="editedItem.modal = false">Cancel</v-btn>
-                            <v-btn flat color="primary" @click="$refs.dialog.save(editedItem.date)">OK</v-btn>
-                          </v-date-picker>
-                        </v-dialog>
+                        <date label="التاريخ" @ready="editedItem.date = $event" :value="editedItem.date"/>
                       </v-flex>
                       <v-flex xs12 sm6>
                         <v-text-field type="text" v-model="editedItem.num" label="رقم المعاملة"></v-text-field>
@@ -132,7 +107,16 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading"
+import date from "@/components/DatePicker"
+import {ConvertToArabicDate} from "@/Helpers.js"
+import {ConvertToArabicNum} from "@/Helpers.js"
+import {ConvertToArabicNumMoney} from "@/Helpers.js"
 export default {
+  components: {
+    Loading,
+    date
+  },
   props: ['id'],
   data () {
     return {
@@ -143,8 +127,7 @@ export default {
         num: '',
         totalValue: '',
         decision: '',
-        returnedValue: '',
-        modal: false
+        returnedValue: ''
       },
       dialog: false,
       headers: [
@@ -163,8 +146,7 @@ export default {
         num: '',
         totalValue: '',
         decision: '',
-        returnedValue: '',
-        modal: false
+        returnedValue: ''
       },
       selectOptions: [
         'طلب مساعدة مرضية',
@@ -255,79 +237,14 @@ export default {
       })
     },
     ConvertToArabicNum (nn) {
-      if (!nn) {
-        return ''
-      }
-      var n = nn.split('')
-      var ar = ''
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-      n.forEach(element => {
-        ar += arnum[element]
-      })
-      return ar
+      return ConvertToArabicNum(nn)
     },
     ConvertToArabicNumMoney (nn) {
-      if (!nn) {
-        return ''
-      }
-      var n = nn.split('')
-      var ar = ''
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-      n.forEach(element => {
-        if (element === ',') {
-          ar += '،'
-        } else {
-          ar += arnum[element]
-        }
-      })
-      return ar
+      return ConvertToArabicNumMoney(nn)
     },
-    ConvertToArabicDate (date) {
-      if (!date) {
-        return ''
-      }
-      var dd = date.split('-')
-      var year = ''
-      var month = ''
-      var day = ''
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-
-      var y = dd[0].split('') // year
-      y.forEach(element => {
-        year += arnum[element]
-      })
-
-      var m = dd[1].split('') // month
-      if (dd[1] !== '10') {
-        m.forEach(element => {
-          if (element !== '0') {
-            month += arnum[element]
-          }
-        })
-      } else {
-        month += '١٠'
-      }
-
-      var d = dd[2].split('') // day
-      if (dd[2] !== '10' && dd[2] !== '20' && dd[2] !== '30') {
-        d.forEach(element => {
-          if (element !== '0') {
-            day += arnum[element]
-          }
-        })
-      } else {
-        if (dd[2] === '10') {
-          day += '١٠'
-        }
-        if (dd[2] === '20') {
-          day += '٢٠'
-        }
-        if (dd[2] === '30') {
-          day += '٣٠'
-        }
-      }
-      return year + '/' + month + '/' + day
-    }
+    ConvertToArabicDate (date){
+      return ConvertToArabicDate(date)
+    },
   }
 }
 </script>

@@ -1,15 +1,10 @@
 <template>
   <v-container>
-
     <!-- loading while getting data -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <Loading v-if="loading"/>
 
     <!-- Content -->
-    <div v-else>
+    <div v-else>  
 
       <!-- title -->
       <v-layout row wrap class="mb-2">
@@ -19,32 +14,7 @@
       </v-layout>
 
       <!-- Doctor Info -->
-      <v-card>
-        <v-card-title>
-          <h1>معلومات عن الاستاذ</h1>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-          <v-layout row wrap>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الاسم الثلاثي : </span>
-              <span class="title">{{ doc.name }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الهاتف : </span>
-              <span class="title">{{ ConvertToArabicNum(doc.phone) }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الكلية / المعهد : </span>
-              <span class="title">{{ doc.faculty }}</span>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <span class="headline font-weight-bold">الفرع : </span>
-              <span class="title">{{ doc.facultySection }}</span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
+      <DoctorInfoCard :doc="doc" />
 
       <!-- ifede Data -->
       <v-card class="mt-4">
@@ -83,8 +53,14 @@
 import fs from 'fs'
 import path from 'path'
 import { remote } from 'electron'
+import Loading from "@/components/Loading"
+import DoctorInfoCard from "@/components/Doctor/DoctorInfoCard"
 
 export default {
+  components: {
+    Loading,
+    DoctorInfoCard
+  },
   props: ['id'],
   data () {
     return {
@@ -160,19 +136,6 @@ export default {
           this.$router.push('/PDFstatement')
         }
       )
-    },
-
-    ConvertToArabicNum (nn) {
-      if (!nn) {
-        return ''
-      }
-      var n = nn.split('')
-      var ar = ''
-      var arnum = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-      n.forEach(element => {
-        ar += arnum[element]
-      })
-      return ar
     }
   }
 }

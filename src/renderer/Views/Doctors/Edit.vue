@@ -1,12 +1,7 @@
 <template>
   <v-container>
-
     <!-- loading while getting data -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <Loading v-if="loading"/>
 
     <!-- content to show -->
     <v-card v-else>
@@ -54,7 +49,7 @@
           <v-btn
             color="primary"
             @click="doc.partners.push(Object.assign({}, defaultPartner))"
-          >{{ partnerGender2(0) }}</v-btn>
+          >{{ GenderSelection(0) }}</v-btn>
         </h1>
         <div v-for="(partner, i) in doc.partners" :key="i" style="border: 1px solid black">
           <!-- معلومات عن الزوجة -->
@@ -69,28 +64,7 @@
               <v-text-field label="الاسم" v-model="partner.name"></v-text-field>
             </v-flex>
             <v-flex xs5>
-              <v-dialog
-                ref="dialogA"
-                v-model="partner.modal"
-                :return-value.sync="partner.birthDate"
-                persistent
-                lazy
-                full-width
-                width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="partner.birthDate"
-                  label="تاريخ الولادة"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-                <v-date-picker v-model="partner.birthDate" scrollable locale="ar-lb">
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="partner.modal = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="saveDate('dialogA', i, partner.birthDate)">OK</v-btn>
-                </v-date-picker>
-              </v-dialog>
+              <date label="تاريخ الولادة" @ready="partner.birthDate = $event" :value="partner.birthDate"/>
             </v-flex>
             <v-flex xs5>
               <v-select
@@ -139,7 +113,7 @@
           <v-btn
           color="primary"
           @click="doc.children.push(Object.assign({}, defaultChild))"
-          >{{ partnerGender2(1) }}</v-btn>
+          >{{ GenderSelection(1) }}</v-btn>
         </h1>
         <div v-for="(child, j) in doc.children" :key="'child' + j" style="border: 1px solid black">
           <!-- معلومات عن الاولاد -->
@@ -154,28 +128,7 @@
               <v-text-field label="الاسم" v-model="child.name"></v-text-field>
             </v-flex>
             <v-flex xs5>
-              <v-dialog
-                ref="dialogB"
-                v-model="child.modal"
-                :return-value.sync="child.birthDate"
-                persistent
-                lazy
-                full-width
-                width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="child.birthDate"
-                  label="تاريخ الولادة"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-                <v-date-picker v-model="child.birthDate" scrollable locale="ar-lb">
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="child.modal = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="saveDate('dialogB', j, child.birthDate)">OK</v-btn>
-                </v-date-picker>
-              </v-dialog>
+              <date label="تاريخ الولادة" @ready="child.birthDate = $event" :value="child.birthDate"/>
             </v-flex>
             <v-flex xs5>
               <v-select
@@ -195,7 +148,7 @@
           <v-btn
           color="primary"
           @click="doc.family.push(Object.assign({}, defaultFamily))"
-          >{{ partnerGender2(2) }}</v-btn>
+          >{{ GenderSelection(2) }}</v-btn>
         </h1>
         <div v-for="(member, k) in doc.family" :key="'member' + k" style="border: 1px solid black">
           <h2 class="mr-4">
@@ -209,28 +162,7 @@
               <v-text-field label="الاسم" v-model="member.name"></v-text-field>
             </v-flex>
             <v-flex xs5>
-              <v-dialog
-                ref="dialogC"
-                v-model="member.modal"
-                :return-value.sync="member.birthDate"
-                persistent
-                lazy
-                full-width
-                width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="member.birthDate"
-                  label="تاريخ الولادة"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-                <v-date-picker v-model="member.birthDate" scrollable locale="ar-lb">
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="member.modal = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="saveDate('dialogC', k, member.birthDate)">OK</v-btn>
-                </v-date-picker>
-              </v-dialog>
+              <date label="تاريخ الولادة" @ready="member.birthDate = $event" :value="member.birthDate"/>
             </v-flex>
             <v-flex xs5>
               <v-select
@@ -249,20 +181,23 @@
           <v-btn color="primary" @click="update">حفظ</v-btn>
           <v-btn color="error" @click="goBack">الغاء</v-btn>
         </v-layout>
-
       </v-card-text>
     </v-card>
-
   </v-container>
 </template>
 
 <script>
+import Loading from "@/components/Loading"
+import date from "@/components/DatePicker"
 export default {
+   components: {
+    Loading,
+    date
+  },
   props: ['id'],
   data () {
     return {
       loading: false,
-      loadingDialog: false,
       doc: null,
       genders: ['ذكر', 'انثى'],
       workStates: ['متعاقد', 'لا يعمل'],
@@ -275,7 +210,6 @@ export default {
         workSector: '',
         insuranceNum: null,
         insuranceNumSection: true,
-        modal: false,
         externalHelp: '0',
         externalHelpSource: '',
         externalHelpMoney: null
@@ -283,16 +217,14 @@ export default {
       defaultChild: {
         name: '',
         gender: '',
-        birthDate: null,
-        modal: false
+        birthDate: null
       },
       family: ['اب', 'ام', 'اخت', 'اخ'],
       defaultFamily: {
         name: '',
         address: '',
         birthDate: null,
-        type: '',
-        modal: false
+        type: ''
       }
     }
   },
@@ -335,7 +267,7 @@ export default {
         return 'فرد رقم'
       }
     },
-    partnerGender2 (index) {
+    GenderSelection (index) {
       var text = ''
       switch (index) {
         case 0:

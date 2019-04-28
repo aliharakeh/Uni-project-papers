@@ -2,11 +2,7 @@
   <v-container>
 
     <!-- loading while getting data -->
-    <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
-    </v-layout>
+    <Loading v-if="loading"/>
 
     <!-- content to show -->
     <v-card class="mt-4" v-else>
@@ -74,7 +70,11 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading"
 export default {
+   components: {
+    Loading
+  },
   data () {
     return {
       headers: [
