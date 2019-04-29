@@ -22,7 +22,7 @@
       <!-- child needing the certificate -->
       <v-card class="mt-4">
         <v-card-title>
-          <h1>اعطاء المنحة عن</h1>
+          <h1>إعطاء المنحة عن</h1>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
@@ -36,7 +36,7 @@
               ></v-select>
             </v-flex>
             <v-flex xs12 sm5>
-              <date label="التاريخ" @ready="birthdate = $event" :value="birthdate"/>
+              <date label="تاريخ إعطاء المنحة" @ready="birthdate = $event" :value="birthdate"/>
             </v-flex>
           </v-layout>
         </v-card-text>

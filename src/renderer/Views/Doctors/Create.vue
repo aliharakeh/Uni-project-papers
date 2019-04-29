@@ -51,7 +51,7 @@
             @click="doc.partners.push(Object.assign({}, defaultPartner))"
           >{{ GenderSelection(0) }}</v-btn>
         </h1>
-        <div v-for="(partner, i) in doc.partners" :key="i" style="border: 1px solid black">
+        <div v-for="(partner, i) in doc.partners" :key="i" style="border: 2px solid black">
           <!-- معلومات عن الزوجة -->
           <h2 class="mr-4">
             {{ showGender(0) }} ({{ i + 1 }})
@@ -113,7 +113,7 @@
           @click="doc.children.push(Object.assign({}, defaultChild))"
           >{{ GenderSelection(1) }}</v-btn>
         </h1>
-        <div v-for="(child, j) in doc.children" :key="'child' + j" style="border: 1px solid black">
+        <div v-for="(child, j) in doc.children" :key="'child' + j" style="border: 2px solid black">
           <!-- معلومات عن الاولاد -->
           <h2 class="mr-4">
             {{ showGender(1) }} ({{ j + 1 }})
@@ -148,7 +148,7 @@
           @click="doc.family.push(Object.assign({}, defaultFamily))"
           >{{ GenderSelection(2) }}</v-btn>
         </h1>
-        <div v-for="(member, k) in doc.family" :key="'member' + k" style="border: 1px solid black">
+        <div v-for="(member, k) in doc.family" :key="'member' + k" style="border: 2px solid black">
           <!-- معلومات عن العائلة -->
           <h2 class="mr-4">
             {{ showGender(2) }} ({{ k + 1 }})

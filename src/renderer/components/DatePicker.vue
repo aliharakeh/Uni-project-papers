@@ -18,7 +18,7 @@
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker @input="valueChanged($event)"></v-date-picker>
+    <v-date-picker locale="ar-lb" @input="valueChanged($event)"></v-date-picker>
   </v-menu>
 </template>
 

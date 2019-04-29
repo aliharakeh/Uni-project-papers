@@ -109,9 +109,7 @@
 <script>
 import Loading from "@/components/Loading"
 import date from "@/components/DatePicker"
-import {ConvertToArabicDate} from "@/Helpers.js"
-import {ConvertToArabicNum} from "@/Helpers.js"
-import {ConvertToArabicNumMoney} from "@/Helpers.js"
+import {ConvertToArabicDate, ConvertToArabicNumMoney, ConvertToArabicNum} from "@/Helpers.js"
 export default {
   components: {
     Loading,
@@ -248,4 +246,3 @@ export default {
   }
 }
 </script>
-
