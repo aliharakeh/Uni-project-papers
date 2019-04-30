@@ -52,7 +52,7 @@
           <v-btn
             v-if="doc.partners.length === 0"
             color="primary"
-            @click="setOnFocus('partner')"
+            @click="setOnFocus('p')"
           >{{ GenderSelection(0) }}</v-btn>
         </h1>
         <div v-for="(partner, i) in doc.partners" :key="i" :id="'p' + i" style="border: 2px solid black">
@@ -65,12 +65,12 @@
             <v-btn
               v-if="doc.partners.length === i+1"
               color="primary"
-              @click="setOnFocus('partner')"
+              @click="setOnFocus('p')"
             >{{ GenderSelection(0) }}</v-btn>
           </h2>
           <v-layout row wrap justify-space-around>
             <v-flex xs5>
-              <v-text-field type="text" label="الاسم" v-model="partner.name" ></v-text-field>
+              <v-text-field type="text" label="الاسم" v-model="partner.name" :ref="'p' + i"></v-text-field>
             </v-flex>
             <v-flex xs5>
               <date label="تاريخ الولادة" @ready="partner.birthDate = $event" :value="partner.birthDate"/>
@@ -118,21 +118,27 @@
         <h1 class="mr-4">
           معلومات عن الاولاد
           <v-btn
+          v-if="doc.children.length === 0"
           color="primary"
-          @click="doc.children.push(Object.assign({}, defaultChild))"
+          @click="setOnFocus('c')"
           >{{ GenderSelection(1) }}</v-btn>
         </h1>
-        <div v-for="(child, j) in doc.children" :key="'child' + j" style="border: 2px solid black">
+        <div v-for="(child, j) in doc.children" :id="'c' + j" :key="'child' + j" style="border: 2px solid black">
           <!-- معلومات عن الاولاد -->
           <h2 class="mr-4">
             {{ showGender(1) }} ({{ j + 1 }})
             <v-btn icon @click="remove(1, j)">
               <v-icon color="error">delete</v-icon>
             </v-btn>
+            <v-btn
+              v-if="doc.children.length === j+1"
+              color="primary"
+              @click="setOnFocus('c')"
+            >{{ GenderSelection(1) }}</v-btn>
           </h2>
           <v-layout row wrap justify-space-around>
             <v-flex xs5>
-              <v-text-field label="الاسم" v-model="child.name"></v-text-field>
+              <v-text-field label="الاسم" v-model="child.name" :ref="'c' + j"></v-text-field>
             </v-flex>
             <v-flex xs5>
               <date label="تاريخ الولادة" @ready="child.birthDate = $event" :value="child.birthDate"/>
@@ -153,21 +159,27 @@
         <h1 class="mr-4">
            معلومات عن العائلة
           <v-btn
-          color="primary"
-          @click="doc.family.push(Object.assign({}, defaultFamily))"
+            v-if="doc.family.length === 0"
+            color="primary"
+            @click="setOnFocus('f')"
           >{{ GenderSelection(2) }}</v-btn>
         </h1>
-        <div v-for="(member, k) in doc.family" :key="'member' + k" style="border: 2px solid black">
+        <div v-for="(member, k) in doc.family" :id="'f' + k" :key="'member' + k" style="border: 2px solid black">
           <!-- معلومات عن العائلة -->
           <h2 class="mr-4">
             {{ showGender(2) }} ({{ k + 1 }})
             <v-btn icon @click="remove(2, k)">
               <v-icon color="error">delete</v-icon>
             </v-btn>
+            <v-btn
+              v-if="doc.family.length === k+1"
+              color="primary"
+              @click="setOnFocus('f')"
+            >{{ GenderSelection(2) }}</v-btn>
           </h2>
           <v-layout row wrap justify-space-around>
             <v-flex xs5>
-              <v-text-field label="الاسم" v-model="member.name"></v-text-field>
+              <v-text-field label="الاسم" v-model="member.name" :ref="'f' + k"></v-text-field>
             </v-flex>
             <v-flex xs5>
               <date label="تاريخ الولادة" @ready="member.birthDate = $event" :value="member.birthDate"/>
@@ -251,6 +263,8 @@ export default {
   },
   created () {
     this.doc.partners.push(Object.assign({}, this.defaultPartner))
+    this.doc.children.push(Object.assign({}, this.defaultChild))
+    this.doc.family.push(Object.assign({}, this.defaultFamily))
   },
   computed: {
     partnerTitle () {
@@ -268,16 +282,41 @@ export default {
   },
   methods: {
      setOnFocus (name) {
-      this.doc.partners.push(Object.assign({}, this.defaultPartner))
-       setTimeout(() => {
-         var length = this.doc.partners.length - 1
-         var index = name + length
-         // console.log(this.$refs)
-         // console.log(index)
-         // console.log(this.$refs[index])
-         // this.$refs[index][0].focus()
-         window.location.hash = 'p' + length
-       }, 50)
+       var length = 0
+      switch (name)
+      {
+        case 'p':
+          this.doc.partners.push(Object.assign({}, this.defaultPartner))
+          length = this.doc.partners.length - 1
+          break
+        case 'c':
+          this.doc.children.push(Object.assign({}, this.defaultChild))
+          length = this.doc.children.length - 1
+          break
+        case 'f':
+          this.doc.family.push(Object.assign({}, this.defaultFamily))
+          length = this.doc.family.length - 1
+          break
+      }
+      //  setTimeout(() => {
+      //   window.location.hash = name + length
+      //  }, 50)
+      setTimeout(() => {
+        var index = name + length
+        this.$refs[index][0].focus()
+        switch (name)
+        {
+          case 'p':
+            window.scrollBy(0, -85); // Scroll (left or right, up or down)
+            break
+          case 'c':
+            window.scrollBy(0, 50); // Scroll (left or right, up or down)
+            break
+          case 'f':
+            window.scrollBy(0, 300); // Scroll (left or right, up or down)
+            break
+        }
+      }, 50)
     },
     showGender (type) {
       if (type === 0) {
