@@ -99,6 +99,11 @@ export default {
             return
           }
           this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
+          this.family.push({
+            name: doc.name,
+            birthdate: doc.birthDate,
+            rangeOfAcquaintance: 'الاستاذ نفسه'
+          })
           data3.partners.forEach(partner => {
             this.family.push({
               name: partner.name,
@@ -132,6 +137,11 @@ export default {
         }
         this.doc = doc
         this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
+        this.family.push({
+          name: doc.name,
+          birthdate: doc.birthDate,
+          rangeOfAcquaintance: 'الاستاذ نفسه'
+        })
         doc.partners.forEach(partner => {
           this.family.push({
             name: partner.name,

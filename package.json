@@ -2,7 +2,7 @@
   "name": "project2",
   "version": "1.0.0",
   "author": "darkside",
-  "description": "An app to write/save novel summaries",
+  "description": "an app for the uni",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {

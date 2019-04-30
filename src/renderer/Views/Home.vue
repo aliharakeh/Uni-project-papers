@@ -17,6 +17,7 @@
           :item-text="comboBoxText"
           item-value="_id"
           label="اختيار استاذ"
+          @change="updateDocNum"
         >
         </v-combobox>
       </v-flex>
@@ -46,6 +47,7 @@
 </template>
 
 <script>
+  import {getCurrentDoc, setCurrentDoc} from '../global'
   export default {
     data () {
       return {
@@ -102,9 +104,15 @@
         this.docs = docs
         this.loading = false
       })
+      if(getCurrentDoc() !== -1){
+        this.docID = getCurrentDoc();
+      }
     },
     methods: {
-      comboBoxText: item => item.name + ' - ' + item.number
+      comboBoxText: item => item.name + ' - ' + item.number,
+      updateDocNum(new_num) {
+        setCurrentDoc(new_num)
+      }
     }
   }
 </script>

@@ -39,6 +39,9 @@
               v-model="doc.gender"
             ></v-select>
           </v-flex>
+          <v-flex xs5>
+            <date label="تاريخ الولادة" @ready="doc.birthDate = $event" :value="doc.birthDate"/>
+          </v-flex>
         </v-layout>
 
         <v-divider class="my-3"></v-divider>
@@ -201,6 +204,7 @@ export default {
       doc: {
         number: null,
         name: '',
+        birthDate: '',
         phone: '',
         faculty: '',
         facultySection: '',
