@@ -50,8 +50,9 @@
         <h1 class="mr-4">
           {{ partnerTitle }}
           <v-btn
+            v-if="doc.partners.length === 0"
             color="primary"
-            @click="doc.partners.push(Object.assign({}, defaultPartner))"
+            @click="setOnFocus('partner')"
           >{{ GenderSelection(0) }}</v-btn>
         </h1>
         <div v-for="(partner, i) in doc.partners" :key="i" style="border: 2px solid black">
@@ -61,10 +62,15 @@
             <v-btn icon @click="remove(0, i)">
               <v-icon color="error">delete</v-icon>
             </v-btn>
+            <v-btn
+              v-if="doc.partners.length === i+1"
+              color="primary"
+              @click="setOnFocus('partner')"
+            >{{ GenderSelection(0) }}</v-btn>
           </h2>
           <v-layout row wrap justify-space-around>
             <v-flex xs5>
-              <v-text-field label="الاسم" v-model="partner.name"></v-text-field>
+              <v-text-field type="text" label="الاسم" v-model="partner.name" :ref="'partner' + i"></v-text-field>
             </v-flex>
             <v-flex xs5>
               <date label="تاريخ الولادة" @ready="partner.birthDate = $event" :value="partner.birthDate"/>
@@ -243,6 +249,9 @@ export default {
       }
     }
   },
+  created () {
+    this.doc.partners.push(Object.assign({}, this.defaultPartner))
+  },
   computed: {
     partnerTitle () {
       if (this.doc.gender === this.genders[0]) {
@@ -258,6 +267,15 @@ export default {
     }
   },
   methods: {
+     setOnFocus (name) {
+      this.doc.partners.push(Object.assign({}, this.defaultPartner))
+      var length = this.doc.partners.length - 2
+      var index = name + length
+      console.log(this.$refs)
+      console.log(index)
+      console.log(this.$refs[index])
+      this.$refs[index]['0'].focus()
+    },
     showGender (type) {
       if (type === 0) {
         if (this.doc.gender === this.genders[0]) {
@@ -310,9 +328,6 @@ export default {
       } else {
         this.doc.partners[partnerIndex].insuranceNumSection = true
       }
-    },
-    saveDate (refKey, refIndex, date) {
-      this.$refs[refKey][refIndex].save(date)
     },
     confirm (propertyName) {
       if (propertyName === 'partners') {
@@ -413,4 +428,3 @@ export default {
   }
 }
 </script>
-
