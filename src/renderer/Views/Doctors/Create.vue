@@ -298,25 +298,22 @@ export default {
           length = this.doc.family.length - 1
           break
       }
-      //  setTimeout(() => {
-      //   window.location.hash = name + length
-      //  }, 50)
-      setTimeout(() => {
+       setTimeout(() => {
         var index = name + length
+        window.location.hash = index
         this.$refs[index][0].focus()
         switch (name)
         {
           case 'p':
-            window.scrollBy(0, -85); // Scroll (left or right, up or down)
+            window.scrollBy(0, -220); // Scroll (left or right, up or down)
             break
           case 'c':
-            window.scrollBy(0, 50); // Scroll (left or right, up or down)
+            window.scrollBy(0, -200); // Scroll (left or right, up or down)
             break
-          case 'f':
-            window.scrollBy(0, 300); // Scroll (left or right, up or down)
+          default:
             break
         }
-      }, 50)
+       }, 50)
     },
     showGender (type) {
       if (type === 0) {
