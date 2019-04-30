@@ -55,7 +55,7 @@
             @click="setOnFocus('partner')"
           >{{ GenderSelection(0) }}</v-btn>
         </h1>
-        <div v-for="(partner, i) in doc.partners" :key="i" style="border: 2px solid black">
+        <div v-for="(partner, i) in doc.partners" :key="i" :id="'p' + i" style="border: 2px solid black">
           <!-- معلومات عن الزوجة -->
           <h2 class="mr-4">
             {{ showGender(0) }} ({{ i + 1 }})
@@ -70,7 +70,7 @@
           </h2>
           <v-layout row wrap justify-space-around>
             <v-flex xs5>
-              <v-text-field type="text" label="الاسم" v-model="partner.name" :ref="'partner' + i"></v-text-field>
+              <v-text-field type="text" label="الاسم" v-model="partner.name" ></v-text-field>
             </v-flex>
             <v-flex xs5>
               <date label="تاريخ الولادة" @ready="partner.birthDate = $event" :value="partner.birthDate"/>
@@ -272,12 +272,12 @@ export default {
        setTimeout(() => {
          var length = this.doc.partners.length - 1
          var index = name + length
-         console.log(this.$refs)
-         console.log(index)
-         console.log(this.$refs[index])
-         this.$refs[index][0].focus()
+         // console.log(this.$refs)
+         // console.log(index)
+         // console.log(this.$refs[index])
+         // this.$refs[index][0].focus()
+         window.location.hash = 'p' + length
        }, 50)
-
     },
     showGender (type) {
       if (type === 0) {
