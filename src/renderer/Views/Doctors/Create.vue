@@ -269,12 +269,15 @@ export default {
   methods: {
      setOnFocus (name) {
       this.doc.partners.push(Object.assign({}, this.defaultPartner))
-      var length = this.doc.partners.length - 2
-      var index = name + length
-      console.log(this.$refs)
-      console.log(index)
-      console.log(this.$refs[index])
-      this.$refs[index]['0'].focus()
+       setTimeout(() => {
+         var length = this.doc.partners.length - 1
+         var index = name + length
+         console.log(this.$refs)
+         console.log(index)
+         console.log(this.$refs[index])
+         this.$refs[index][0].focus()
+       }, 50)
+
     },
     showGender (type) {
       if (type === 0) {
