@@ -1,7 +1,8 @@
 import db from '../../database'
 
 const state = {
-  docs: []
+  docs: [],
+  selectedDoc: null
 }
 
 const mutations = {
@@ -15,6 +16,9 @@ const mutations = {
       faculty: docObj.faculty,
       facultySection: docObj.facultySection
     })
+  },
+  saveSelectedDoc (state, selectedDoc) {
+    state.selectedDoc = selectedDoc
   }
 }
 
@@ -46,6 +50,9 @@ const actions = {
 const getters = {
   docs (state) {
     return state.docs
+  },
+  selectedDoc (state) {
+    return state.selectedDoc
   }
 }
 

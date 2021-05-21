@@ -36,8 +36,8 @@
                 <v-card-title>
                   <span class="headline"> إدخال المعلومات</span>
                 </v-card-title>
-                <v-card-text>
-                  <v-container grid-list-md>
+                <v-card-text style="padding-top: 0">
+                  <v-container grid-list-md style="padding-top: 0">
                     <v-layout wrap>
                       <v-flex xs12 sm6>
                         <v-select

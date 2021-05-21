@@ -7,6 +7,7 @@ import 'vuetify/dist/vuetify.min.css'
 import Vuetify from 'vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import db from './database'
+import store from './store'
 
 Vue.prototype.$db = db
 
@@ -20,7 +21,7 @@ Vue.config.productionTip = false
 new Vue({
   components: { App },
   router,
-  // store,
+  store,
   template: '<App/>'
   // created () {
   //   this.$store.dispatch('loadDocs')

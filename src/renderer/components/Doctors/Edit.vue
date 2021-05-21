@@ -44,6 +44,30 @@
               v-model="doc.gender"
             ></v-select>
           </v-flex>
+          <v-flex xs5>
+            <v-dialog
+                ref="dialogDoc"
+                v-model="docModal"
+                :return-value.sync="doc.birthDate"
+                persistent
+                lazy
+                full-width
+                width="290px"
+            >
+              <v-text-field
+                  slot="activator"
+                  v-model="doc.birthDate"
+                  label="تاريخ الولادة"
+                  prepend-icon="event"
+                  readonly
+              ></v-text-field>
+              <v-date-picker v-model="doc.birthDate" scrollable locale="ar-lb">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="docModal = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="saveDate('dialogDoc', null, doc.birthDate)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+          </v-flex>
         </v-layout>
 
         <v-divider class="my-3"></v-divider>
@@ -263,6 +287,7 @@ export default {
     return {
       loading: false,
       loadingDialog: false,
+      docModal: false,
       doc: null,
       genders: ['ذكر', 'انثى'],
       workStates: ['متعاقد', 'لا يعمل'],
@@ -376,7 +401,11 @@ export default {
       }
     },
     saveDate (refKey, refIndex, date) {
-      this.$refs[refKey][refIndex].save(date)
+      if (refIndex) {
+        this.$refs[refKey][refIndex].save(date)
+      } else {
+        this.$refs[refKey].save(date)
+      }
     },
     confirm (propertyName) {
       if (propertyName === 'partners') {
@@ -446,6 +475,7 @@ export default {
             name: this.doc.name,
             phone: this.doc.phone,
             faculty: this.doc.faculty,
+            birthDate: this.doc.birthDate,
             facultySection: this.doc.facultySection,
             gender: this.doc.gender,
             partners: this.doc.partners,

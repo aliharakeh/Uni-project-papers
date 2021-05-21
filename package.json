@@ -1,12 +1,14 @@
 {
-  "name": "project2",
-  "version": "1.0.0",
+  "name": "uni-papers",
+  "version": "1.1.0",
   "author": "darkside",
   "description": "An app to write/save novel summaries",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
+    "build:current": "node .electron-vue/build.js && electron-builder",
+    "build:winx32": "node .electron-vue/build.js && electron-builder --win --ia32",
+    "build:winx64": "node .electron-vue/build.js && electron-builder --win --x64",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -19,10 +21,10 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "project2",
+    "productName": "UniPapers",
     "appId": "com.darkside",
     "directories": {
-      "output": "build"
+      "output": "build_${platform}_${arch}"
     },
     "files": [
       "dist/electron/**/*"

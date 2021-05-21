@@ -3,9 +3,9 @@
 
     <!-- loading while getting data -->
     <v-layout row v-if="loading" class="mt-5">
-        <v-flex xs12 class="text-xs-center">
-            <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </v-flex>
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
+      </v-flex>
     </v-layout>
 
     <!-- content to show -->
@@ -39,10 +39,34 @@
           </v-flex>
           <v-flex xs5>
             <v-select
-              :items="genders"
-              label="الجنس"
-              v-model="doc.gender"
+                :items="genders"
+                label="الجنس"
+                v-model="doc.gender"
             ></v-select>
+          </v-flex>
+          <v-flex xs5>
+            <v-dialog
+                ref="dialogDoc"
+                v-model="docModal"
+                :return-value.sync="doc.birthDate"
+                persistent
+                lazy
+                full-width
+                width="290px"
+            >
+              <v-text-field
+                  slot="activator"
+                  v-model="doc.birthDate"
+                  label="تاريخ الولادة"
+                  prepend-icon="event"
+                  readonly
+              ></v-text-field>
+              <v-date-picker v-model="doc.birthDate" scrollable locale="ar-lb">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="docModal = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="saveDate('dialogDoc', null, doc.birthDate)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
           </v-flex>
         </v-layout>
 
@@ -52,9 +76,10 @@
         <h1 class="mr-4">
           {{ partnerTitle }}
           <v-btn
-            color="primary"
-            @click="doc.partners.push(Object.assign({}, defaultPartner))"
-          >{{ partnerGender2(0) }}</v-btn>
+              color="primary"
+              @click="doc.partners.push(Object.assign({}, defaultPartner))"
+          >{{ partnerGender2(0) }}
+          </v-btn>
         </h1>
         <div v-for="(partner, i) in doc.partners" :key="i" style="border: 1px solid black">
           <!-- معلومات عن الزوجة -->
@@ -70,20 +95,20 @@
             </v-flex>
             <v-flex xs5>
               <v-dialog
-                ref="dialogA"
-                v-model="partner.modal"
-                :return-value.sync="partner.birthDate"
-                persistent
-                lazy
-                full-width
-                width="290px"
+                  ref="dialogA"
+                  v-model="partner.modal"
+                  :return-value.sync="partner.birthDate"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
               >
                 <v-text-field
-                  slot="activator"
-                  v-model="partner.birthDate"
-                  label="تاريخ الولادة"
-                  prepend-icon="event"
-                  readonly
+                    slot="activator"
+                    v-model="partner.birthDate"
+                    label="تاريخ الولادة"
+                    prepend-icon="event"
+                    readonly
                 ></v-text-field>
                 <v-date-picker v-model="partner.birthDate" scrollable locale="ar-lb">
                   <v-spacer></v-spacer>
@@ -94,16 +119,16 @@
             </v-flex>
             <v-flex xs5>
               <v-select
-                :items="workStates"
-                label="العمل"
-                @change="checkWorkState($event, i)"
+                  :items="workStates"
+                  label="العمل"
+                  @change="checkWorkState($event, i)"
               ></v-select>
             </v-flex>
             <v-flex xs5 v-if="partner.isWorking">
               <v-select
-                :items="workSector"
-                label="قطاع العمل"
-                @change="checkWorkSector($event, i)"
+                  :items="workSector"
+                  label="قطاع العمل"
+                  @change="checkWorkSector($event, i)"
               ></v-select>
             </v-flex>
             <v-flex xs5 v-if="partner.insuranceNumSection && partner.isWorking">
@@ -135,9 +160,10 @@
         <h1 class="mr-4">
           معلومات عن الاولاد
           <v-btn
-          color="primary"
-          @click="doc.children.push(Object.assign({}, defaultChild))"
-          >{{ partnerGender2(1) }}</v-btn>
+              color="primary"
+              @click="doc.children.push(Object.assign({}, defaultChild))"
+          >{{ partnerGender2(1) }}
+          </v-btn>
         </h1>
         <div v-for="(child, j) in doc.children" :key="'child' + j" style="border: 1px solid black">
           <!-- معلومات عن الاولاد -->
@@ -153,20 +179,20 @@
             </v-flex>
             <v-flex xs5>
               <v-dialog
-                ref="dialogB"
-                v-model="child.modal"
-                :return-value.sync="child.birthDate"
-                persistent
-                lazy
-                full-width
-                width="290px"
+                  ref="dialogB"
+                  v-model="child.modal"
+                  :return-value.sync="child.birthDate"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
               >
                 <v-text-field
-                  slot="activator"
-                  v-model="child.birthDate"
-                  label="تاريخ الولادة"
-                  prepend-icon="event"
-                  readonly
+                    slot="activator"
+                    v-model="child.birthDate"
+                    label="تاريخ الولادة"
+                    prepend-icon="event"
+                    readonly
                 ></v-text-field>
                 <v-date-picker v-model="child.birthDate" scrollable locale="ar-lb">
                   <v-spacer></v-spacer>
@@ -177,9 +203,9 @@
             </v-flex>
             <v-flex xs5>
               <v-select
-                :items="genders"
-                label="الجنس"
-                v-model="child.gender"
+                  :items="genders"
+                  label="الجنس"
+                  v-model="child.gender"
               ></v-select>
             </v-flex>
           </v-layout>
@@ -189,11 +215,12 @@
 
         <!-- family -->
         <h1 class="mr-4">
-           معلومات عن العائلة
+          معلومات عن العائلة
           <v-btn
-          color="primary"
-          @click="doc.family.push(Object.assign({}, defaultFamily))"
-          >{{ partnerGender2(2) }}</v-btn>
+              color="primary"
+              @click="doc.family.push(Object.assign({}, defaultFamily))"
+          >{{ partnerGender2(2) }}
+          </v-btn>
         </h1>
         <div v-for="(member, k) in doc.family" :key="'member' + k" style="border: 1px solid black">
           <!-- معلومات عن العائلة -->
@@ -209,20 +236,20 @@
             </v-flex>
             <v-flex xs5>
               <v-dialog
-                ref="dialogC"
-                v-model="member.modal"
-                :return-value.sync="member.birthDate"
-                persistent
-                lazy
-                full-width
-                width="290px"
+                  ref="dialogC"
+                  v-model="member.modal"
+                  :return-value.sync="member.birthDate"
+                  persistent
+                  lazy
+                  full-width
+                  width="290px"
               >
                 <v-text-field
-                  slot="activator"
-                  v-model="member.birthDate"
-                  label="تاريخ الولادة"
-                  prepend-icon="event"
-                  readonly
+                    slot="activator"
+                    v-model="member.birthDate"
+                    label="تاريخ الولادة"
+                    prepend-icon="event"
+                    readonly
                 ></v-text-field>
                 <v-date-picker v-model="member.birthDate" scrollable locale="ar-lb">
                   <v-spacer></v-spacer>
@@ -233,9 +260,9 @@
             </v-flex>
             <v-flex xs5>
               <v-select
-                :items="family"
-                label="درجة القرابة"
-                v-model="member.type"
+                  :items="family"
+                  label="درجة القرابة"
+                  v-model="member.type"
               ></v-select>
             </v-flex>
             <v-flex xs5>
@@ -263,11 +290,13 @@ export default {
       loading: false,
       loadingDialog: false,
       genders: ['ذكر', 'انثى'],
+      docModal: false,
       doc: {
         number: null,
         name: '',
         phone: '',
         faculty: '',
+        birthDate: '',
         facultySection: '',
         address: '',
         gender: 'ذكر',
@@ -376,7 +405,11 @@ export default {
       }
     },
     saveDate (refKey, refIndex, date) {
-      this.$refs[refKey][refIndex].save(date)
+      if (refIndex) {
+        this.$refs[refKey][refIndex].save(date)
+      } else {
+        this.$refs[refKey].save(date)
+      }
     },
     confirm (propertyName) {
       if (propertyName === 'partners') {
@@ -477,4 +510,3 @@ export default {
   }
 }
 </script>
-

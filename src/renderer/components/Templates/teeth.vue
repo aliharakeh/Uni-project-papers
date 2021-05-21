@@ -88,8 +88,8 @@
                   <v-card-title>
                     <span class="headline">ادخال خانة جديدة</span>
                   </v-card-title>
-                  <v-card-text>
-                    <v-container grid-list-md>
+                  <v-card-text style="padding-top: 0">
+                    <v-container grid-list-md style="padding-top: 0">
                       <v-layout wrap>
                         <v-flex xs12 sm6>
                           <v-select
@@ -169,8 +169,8 @@
             >
               <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.name }}</td>
-                <td class="text-xs-center">{{ ConvertToArabicDate(props.item.birthDate) }}</td>
-                <td class="text-xs-center">{{ props.item.rangeOfAcquaintance }}</td>
+                <td class="text-xs-center">{{ ConvertToArabicDate(props.item.birthDate) || '-'}}</td>
+                <td class="text-xs-center">{{ props.item.rangeOfAcquaintance || '-' }}</td>
                 <td class="text-xs-center">{{ ConvertToArabicDate(props.item.medicalStartDate) }}</td>
                 <td class="text-xs-center">{{ ConvertToArabicDate(props.item.medicalEndDate) }}</td>
                 <td class="text-xs-center">
@@ -199,9 +199,11 @@
               <v-card>
                 <v-card-title>
                   <span class="headline">تعديل خانة</span>
+                  <span class="mx-2">-</span>
+                  <span class="headline">{{ editedItem2.name }}</span>
                 </v-card-title>
-                <v-card-text>
-                  <v-container grid-list-md>
+                <v-card-text style="padding-top: 0">
+                  <v-container grid-list-md style="padding-top: 0">
                     <v-layout wrap>
                       <v-flex xs12 sm6>
                         <v-text-field type="text" v-model="editedItem2.doctorsCost" label="اجور اطباء" @input="editedItem2.doctorsCost = $event.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')" ></v-text-field>
@@ -353,6 +355,10 @@ export default {
             console.log(err.message)
             return
           }
+          this.family.push({
+            name: this.doc.name,
+            birthDate: this.doc.birthDate
+          })
           this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
           data3.partners.forEach(partner => {
             this.family.push({
@@ -385,6 +391,10 @@ export default {
           return
         }
         this.doc = doc
+        this.family.push({
+          name: this.doc.name,
+          birthDate: this.doc.birthDate
+        })
         this.doc.gender === 'ذكر' ? rangeOfAcquaintance = 'زوجته' : rangeOfAcquaintance = 'زوجها'
         doc.partners.forEach(partner => {
           this.family.push({

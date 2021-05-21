@@ -62,8 +62,8 @@
                     <span class="headline">{{ formTitle }}</span>
                   </v-card-title>
 
-                  <v-card-text>
-                    <v-container grid-list-md>
+                  <v-card-text style="padding-top: 0">
+                    <v-container grid-list-md style="padding-top: 0">
                       <v-layout wrap justify-center>
                         <v-flex xs12 sm6>
                           <v-select
